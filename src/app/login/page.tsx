@@ -1,7 +1,9 @@
 import React from "react";
 
 function page() {
-  return <div>Diogo</div>;
+  return <div>
+    <h1>Hassan page</h1>
+  </div>;
 }
 
 export default page;
