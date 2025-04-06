@@ -1,6 +1,6 @@
 export type UserFull = {
   id: string;
-  userName: string;
+  name: string;
   email: string;
   password: string;
   image: string;
@@ -13,7 +13,7 @@ export type UserFull = {
 
 interface User {
   id: string;
-  userName: string;
+  name: string;
   email: string;
   image: string;
   role: string;
@@ -70,9 +70,13 @@ export type ReviewT = {
   id: string;
 };
 
-export type LoginCredentials = Pick<
-  UserFull,
-  "userName" | "password" | "email"
->; // Attention '|' means 'and' here
+export type LoginCredentials = Pick<UserFull, "name" | "password" | "email">; // Attention '|' means 'and' here
 
 export type RegisterCredentials = Omit<UserFull, "id">;
+
+export type JWTToken = {
+  id: string;
+  name?: string;
+  email?: string;
+  image?: string;
+};

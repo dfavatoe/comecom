@@ -1,9 +1,12 @@
-function page() {
+import { SignIn } from "@/components/sign-in";
+import React from "react";
+
+function Login() {
   return (
-    <div>
-      Diogo !<h2>Maria added something</h2>
-    </div>
+    <>
+      <SignIn />
+    </>
   );
 }
 
-export default page;
+export default Login;
