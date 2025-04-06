@@ -16,9 +16,9 @@ const addressSchema = new Schema<Address>({
 
 const usersSchema = new Schema<UserFull>(
   {
-    userName: {
+    name: {
       type: String,
-      required: true,
+      required: [true, "Name is required"],
       validate: {
         validator: function (v: string) {
           return v.length > 2;
@@ -27,10 +27,19 @@ const usersSchema = new Schema<UserFull>(
           `User name "${props.value}" should be longer than 2 characters!`,
       },
     },
-    email: { type: String, required: true, unique: true },
+    email: {
+      type: String,
+      unique: true,
+      required: [true, "Email is required"],
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Email is invalid",
+      ],
+    },
     password: {
       type: String,
       required: true,
+      select: false, // prevents password from being returned by default
     },
 
     address: addressSchema,

@@ -11,6 +11,8 @@ import {
   NavDropdown,
   Spinner,
 } from "react-bootstrap";
+import { SignOut } from "./sign-out";
+import { useSession } from "next-auth/react";
 
 // import { AuthContext } from "../context/AuthContext";
 // import { Link } from "react-router";
@@ -19,6 +21,7 @@ import {
 function NavBar() {
   // const { logout, user } = useContext(AuthContext);
   // const { loading } = useUserStatus();
+  const { data: session } = useSession();
 
   return (
     <>
@@ -54,7 +57,15 @@ function NavBar() {
                   Sign up
                 </NavDropdown.Item>
               </NavDropdown>
+              <SignOut />
             </Nav>
+            <div>
+              {session?.user?.id ? (
+                <p> Hello {session.user.name}!</p>
+              ) : (
+                <p>Hello!</p>
+              )}
+            </div>
             {/* <div className="d-lg-flex justify-content-end align-items-center">
                 {loading ? (
                   <>

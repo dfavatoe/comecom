@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { roboto } from "@/app/ui/fonts";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
 import NavBar from "@/components/NavBar";
 
 export const metadata: Metadata = {
@@ -16,8 +17,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <NavBar />
-        {children}
+        <SessionProvider>
+          <NavBar />
+          {children}
+        </SessionProvider>
       </body>
     </html>
   );

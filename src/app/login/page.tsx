@@ -1,12 +1,12 @@
+import { SignIn } from "@/components/sign-in";
 import React from "react";
 
-function page() {
+function Login() {
   return (
     <>
-      <div>Diogo</div>
-      <p>New paragraph from Diogo</p>
+      <SignIn />
     </>
   );
 }
 
-export default page;
+export default Login;
