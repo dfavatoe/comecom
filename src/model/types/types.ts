@@ -39,7 +39,7 @@ export interface ProductT {
   height: number;
   depth: number;
   reviews: ReviewT[];
-  id: string;
+  _id: string;
   title: string;
   description: string;
   category: string;
