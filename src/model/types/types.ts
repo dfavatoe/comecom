@@ -1,5 +1,5 @@
 export type UserFull = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   password: string;
@@ -12,7 +12,7 @@ export type UserFull = {
 };
 
 interface User {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   image: string;
