@@ -11,9 +11,15 @@ export async function POST() {
     const hashedPassword = await bcrypt.hash("password123", 10);
 
     const newUser = new UserModel({
-      userName: "test1",
+      name: "test1",
       email: "test1@test.com",
       password: hashedPassword,
+      address: {
+        streetName: "Paper street",
+        streetNumber: "1",
+        city: "Berlin",
+        postalcode: "0400",
+      },
     });
 
     await newUser.save();
