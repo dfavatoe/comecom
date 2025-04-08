@@ -80,3 +80,25 @@ export type JWTToken = {
   email?: string;
   image?: string;
 };
+
+export type Chat = {
+  chatroomId: string;
+  messageText: string;
+  messageId: string;
+  sender: string;
+  participants: [];
+  //   role: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type Message = {
+  messageId: string;
+  messageText: string;
+  chatroomId: string;
+  senderId: string; // SENDER here oder im chat?
+  // participants:[] ;
+  //   role: string;
+  createdAt: string;
+  updatedAt: string;
+};
