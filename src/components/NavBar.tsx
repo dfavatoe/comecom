@@ -42,6 +42,9 @@ function NavBar() {
               <Nav.Link href="/products" as={Link}>
                 Products
               </Nav.Link>
+              <Nav.Link href="/post" as={Link}>
+                Post
+              </Nav.Link>
 
               <Nav.Link href="/account" as={Link}>
                 Account
