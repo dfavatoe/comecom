@@ -1,13 +1,14 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/app/lib/dbConnect";
 import Post from "@/model/postModel";
-import User from "@/model/usersModel";
 
 export async function GET() {
   try {
     await dbConnect();
+
     const posts = await Post.find({})
-      .populate("user", "userName email profilePic")
+      .populate("user", "name email image") 
+      .populate("comments.user", "name _id")
       .sort({ createdAt: -1 });
 
     return NextResponse.json(posts, { status: 200 });
