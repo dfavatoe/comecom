@@ -1,3 +1,5 @@
+import { Dispatch } from "react";
+
 export type UserFull = {
   _id: string;
   name: string;
@@ -79,4 +81,10 @@ export type JWTToken = {
   name?: string;
   email?: string;
   image?: string;
+};
+
+export type ModalAlertProps = {
+  showAlert: boolean;
+  setShowAlert: Dispatch<React.SetStateAction<boolean>>;
+  alertText: string;
 };

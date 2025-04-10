@@ -43,6 +43,5 @@ next-env.d.ts
 post
 
 test
-productsModel.ts
 seed-user
 UserAvatar.tsx

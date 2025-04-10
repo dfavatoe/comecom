@@ -60,6 +60,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     async session({ session, token }) {
+      // console.log("session :>> ", session);
       const typedToken = token as JWTToken;
       if (typedToken?.id) {
         session.user.id = typedToken.id;

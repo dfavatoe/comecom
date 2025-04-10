@@ -3,6 +3,8 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { baseUrl } from "../lib/urls";
 import { ProductT } from "@/model/types/types";
+import { Container } from "react-bootstrap";
+import Grid from "@/components/Grid";
 
 export default function Products() {
   const [products, setProducts] = useState<ProductT[] | null>(null);
@@ -20,14 +22,16 @@ export default function Products() {
 
   return (
     <>
-      <h1 className="m-4" style={{ textAlign: "center" }}>
-        com&com Products
-      </h1>
-      <ul>
-        {products.map((product) => (
-          <li key={product._id}>{product.title}</li>
-        ))}
-      </ul>
+      <Container>
+        <h1 className="m-4" style={{ textAlign: "center" }}>
+          com&com Products
+        </h1>
+        <Container className="justify-content-center">
+          <>
+            <Grid products={products}></Grid>
+          </>
+        </Container>
+      </Container>
     </>
   );
 }
