@@ -2,6 +2,61 @@
 
 import { auth } from "./auth";
 import { baseUrl } from "./urls";
+import dbConnect from "@/app/lib/dbConnect";
+import UserModel from "@/model/usersModel";
+import bcrypt from "bcryptjs";
+import cloudinary from "@/app/lib/cloudinary";
+
+// Registration =============================================================
+
+export const register = async (values: any) => {
+  const { email, password, name, image, role } = values;
+
+  try {
+    await dbConnect();
+
+    // Check if the user already exists
+    const userFound = await UserModel.findOne({ email });
+    if (userFound) {
+      return {
+        error: "Email already exists!",
+      };
+    }
+
+    //Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create and save the user
+    const user = new UserModel({
+      name,
+      email,
+      password: hashedPassword,
+      image,
+      role,
+    });
+    const savedUser = await user.save();
+
+    // Convert the Mongoose document to a plain object
+    const plainUser = savedUser.toObject();
+
+    // Serialize the plain object
+    const serializedUser = {
+      ...plainUser,
+      _id: plainUser._id.toString(), // Convert ObjectId to string
+      created_at: plainUser.created_at.toISOString(), // Convert Date to string
+      updated_at: plainUser.updated_at.toISOString(), // Convert Date to string
+    };
+
+    return { success: true, user: serializedUser };
+  } catch (err) {
+    console.error("Error during registration:", err);
+    return {
+      error: "An error occurred during registration.",
+    };
+  }
+};
+
+// Add Products to the Shopping List =========================================
 
 export async function addProductToList(productId: string): Promise<void> {
   const session = await auth();
