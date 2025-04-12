@@ -84,7 +84,9 @@ export default function Register() {
       setError(null);
       ref.current?.reset();
       setImagePreview(null);
-      router.push("/login");
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
     } catch (err: any) {
       setError(err.message || "An error occurred during registration.");
       setSuccess(null);
@@ -102,19 +104,19 @@ export default function Register() {
         </h1>
         <br />
 
-        {/* {user ? (
-        <div>
-          <h2>Welcome {user.userName}!</h2>
-          <h3>
-            Congratulations, you have successfully created an account!!! 🙌
-          </h3>
-        </div>
-      ) : (
-        <p>
-          Join us today for exclusive deals, fast checkout, and a seamless
-          shopping experience!
-        </p>
-      )} */}
+        {success === null ? (
+          <p>
+            Join us today for exclusive deals, fast checkout, and a seamless
+            shopping experience!
+          </p>
+        ) : (
+          <div>
+            <h2>Welcome!</h2>
+            <h3>
+              Congratulations, you have successfully created an account!!! 🙌
+            </h3>
+          </div>
+        )}
 
         <Form ref={ref} onSubmit={handleSubmit}>
           {imagePreview && (
