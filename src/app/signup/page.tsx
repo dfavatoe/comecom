@@ -76,10 +76,6 @@ export default function Register() {
         throw new Error(result.error);
       }
 
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
       setSuccess("Registration successful!");
       setError(null);
       ref.current?.reset();
