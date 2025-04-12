@@ -39,7 +39,7 @@ function Login() {
 
       // Redirect after login
       setTimeout(() => {
-        router.push("/");
+        router.push("/products");
       }, 5000);
     }
   };
