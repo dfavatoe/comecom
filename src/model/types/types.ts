@@ -1,4 +1,5 @@
 import { Dispatch } from "react";
+import { Role } from "../../../nextauth";
 
 export type UserFull = {
   _id: string;
@@ -81,6 +82,7 @@ export type JWTToken = {
   name?: string;
   email?: string;
   image?: string;
+  role?: Role;
 };
 
 export type ModalAlertProps = {
@@ -88,3 +90,9 @@ export type ModalAlertProps = {
   setShowAlert: Dispatch<React.SetStateAction<boolean>>;
   alertText: string;
 };
+
+export interface UpdateAddressOkResponse {
+  message: string;
+  user: UserFull;
+  error: string;
+}
