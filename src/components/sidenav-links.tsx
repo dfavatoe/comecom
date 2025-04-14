@@ -7,8 +7,8 @@ import { Nav } from "react-bootstrap";
 const links = [
   { name: "Profile", href: "/account", icon: Person2Icon },
   {
-    name: "Add Product",
-    href: "/account/add-product",
+    name: "Products List",
+    href: "/account/products-list",
     icon: ProductionQuantityLimitsIcon,
   },
   {

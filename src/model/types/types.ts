@@ -73,6 +73,27 @@ export type ReviewT = {
   id: string;
 };
 
+export type addProductT = Pick<
+  ProductT,
+  | "title"
+  | "brand"
+  | "description"
+  | "category"
+  | "price"
+  | "stock"
+  | "images"
+  | "warranty"
+  | "returnPolicy"
+  | "reservation"
+  | "minReservationQty"
+  | "reservationTime"
+  | "discountPercentage"
+  | "rating"
+  | "width"
+  | "height"
+  | "depth"
+> & { seller: string };
+
 export type LoginCredentials = Pick<UserFull, "name" | "password" | "email">; // Attention '|' means 'and' here
 
 export type RegisterCredentials = Omit<UserFull, "id">;
