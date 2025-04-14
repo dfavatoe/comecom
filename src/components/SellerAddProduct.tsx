@@ -1,5 +1,4 @@
 "use client";
-
 import { addProductT } from "@/model/types/types";
 import React, { ChangeEvent, FormEvent, MouseEvent, useState } from "react";
 import {
@@ -54,6 +53,8 @@ export default function SellerAddProduct() {
     }
   };
 
+  //?====================================================================
+
   const handleImageUpload = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     console.log("selectedFile :>> ", selectedFile);
@@ -92,38 +93,40 @@ export default function SellerAddProduct() {
   const submitNewProduct = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // if (!token) {
-    //   console.log("user has to log in first");
-    //   setAlertText("You have to log in first.");
-    //   setShowAlert(true);
-    //   return;
-    // }
+    if (!session?.user) {
+      console.log("user has to log in first");
+      alert("user has to log in first");
+      // setAlertText("You have to log in first.");
+      // setShowAlert(true);
+      return;
+    }
 
-    // const requestOptions = {
-    //   method: "PUT",
-    //   headers: {
-    //     Authorization: `Bearer ${token}`,
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(newProduct), // Send as JSON
-    // };
+    const requestOptions = {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct), // Send as JSON
+    };
 
-    // const response = await fetch(
-    //   `${baseUrl}/api/products/add-product`,
-    //   requestOptions
-    // );
+    const response = await fetch(
+      `${baseUrl}/api/products/create-product`,
+      requestOptions
+    );
 
-    // const result = (await response.json()) as PutUpdateResponse;
-    // console.log("add product result :>> ", result);
+    const result = await response.json(); //as PutUpdateResponse;
+    console.log("add product result :>> ", result);
 
-    // if (response.ok) {
-    //   console.log("Product added successfully!");
-    //   setAlertText("Product successfully added!");
-    //   setShowAlert(true);
-    //   setNewProduct(null);
-    // } else {
-    //   console.log(result.error || "Failed to add the product.");
-    // }
+    if (response.ok) {
+      console.log("Product added successfully!");
+      alert("Product added successfully!");
+      // setAlertText("Product successfully added!");
+      // setShowAlert(true);
+      setNewProduct(null);
+    } else {
+      console.log(result.error || "Failed to add the product.");
+      alert("Product added successfully!");
+    }
   };
 
   return (

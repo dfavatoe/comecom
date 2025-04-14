@@ -7,7 +7,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
-  const { id } = params; // Access the id directly
+  const { id } = await params; // Access the id directly
 
   try {
     // Connect to the database
