@@ -117,3 +117,11 @@ export interface UpdateAddressOkResponse {
   user: UserFull;
   error: string;
 }
+
+export interface GetShopInfo {
+  message: string;
+  amount: number;
+  sellerInfo: UserFull;
+  productsBySeller: ProductT[];
+  error: string;
+}

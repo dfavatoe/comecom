@@ -1,9 +1,6 @@
 import { Button, Card, Stack } from "react-bootstrap";
-
 import style from "./productcard.module.css";
-
 import { MouseEvent, useState } from "react";
-
 import ModalAlert from "./ModalAlert";
 import { ProductT } from "@/model/types/types";
 import Link from "next/link";
@@ -17,16 +14,7 @@ function ProductCard({ product }: ProductCardProps) {
   const [alertText, setAlertText] = useState("");
 
   const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    // await addProductToList({
-    //   productId: product._id,
-    //   token,
-    //   baseUrl,
-    //   setUser,
-    //   setShowAlert,
-    //   setAlertText,
-    // });
+    e.preventDefault(); //!get this action from single produt page
   };
 
   return (

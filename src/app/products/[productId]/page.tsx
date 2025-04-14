@@ -1,21 +1,13 @@
 "use client";
 
-import { MouseEvent, useEffect, useRef, useState } from "react";
-// import { Link, useParams } from "react-router";
+import { useEffect, useRef, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
-// import { addProductToList } from "../utils/addProductToList";
-// import Reviews from "../components/Reviews";
-// import "../style/styles.css";
 import ModalAlert from "@/components/ModalAlert";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
-
-// type ComponentProps = {
-//   params: Promise<{ productId: string }>;
-// };
 
 export default function SingleProductPage() {
   const { productId } = useParams<{ productId: string }>();
