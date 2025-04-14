@@ -3,7 +3,6 @@ import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { ProductT } from "@/model/types/types";
 import style from "./productcard.module.css";
 import { MouseEvent, useState } from "react";
-// import { addProductToList } from "../utils/addProductToList";
 import { baseUrl } from "@/app/lib/urls";
 import ModalAlert from "./ModalAlert";
 import Link from "next/link";
@@ -27,19 +26,6 @@ function ProductCardStore({ product }: ProductCardProps) {
       return totalStars;
     }
   };
-
-  // const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
-  //   e.preventDefault();
-  //   //!get this action from single produt page
-  //   // await addProductToList({
-  //   //   productId: product._id,
-  //   //   token,
-  //   //   baseUrl,
-  //   //   setUser,
-  //   //   setShowAlert,
-  //   //   setAlertText,
-  //   // });
-  // };
 
   return (
     <Container className="mt-0">
