@@ -7,6 +7,7 @@ import { MouseEvent, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import ModalAlert from "./ModalAlert";
 import Link from "next/link";
+import AddToShoppingListButton from "./addToShoppingListButton";
 
 type ProductCardProps = {
   product: ProductT;
@@ -27,18 +28,18 @@ function ProductCardStore({ product }: ProductCardProps) {
     }
   };
 
-  const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    //!get this action from single produt page
-    // await addProductToList({
-    //   productId: product._id,
-    //   token,
-    //   baseUrl,
-    //   setUser,
-    //   setShowAlert,
-    //   setAlertText,
-    // });
-  };
+  // const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
+  //   e.preventDefault();
+  //   //!get this action from single produt page
+  //   // await addProductToList({
+  //   //   productId: product._id,
+  //   //   token,
+  //   //   baseUrl,
+  //   //   setUser,
+  //   //   setShowAlert,
+  //   //   setAlertText,
+  //   // });
+  // };
 
   return (
     <Container className="mt-0">
@@ -100,13 +101,8 @@ function ProductCardStore({ product }: ProductCardProps) {
                 </Card.Subtitle>
               </div>
 
-              <Button
-                className="mx-auto"
-                onClick={handleAddProductToList}
-                variant="warning"
-              >
-                Add to list
-              </Button>
+              <AddToShoppingListButton productId={product._id} />
+
               <Container className="d-inline-flex justify-content-left"></Container>
             </Col>
           </Row>

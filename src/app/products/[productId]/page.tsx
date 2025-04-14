@@ -119,7 +119,7 @@ export default function SingleProductPage() {
                     Seller:{" "}
                     <Link
                       className="mb-2"
-                      href={`/seller/${product.seller._id}`}
+                      href={`/store/${product.seller._id}`}
                     >
                       {product.seller.name}
                     </Link>{" "}
