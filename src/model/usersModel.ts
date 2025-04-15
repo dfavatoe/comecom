@@ -1,7 +1,5 @@
-import mongoose, { mongo } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
 import { UserFull, Address } from "@/model/types/types";
-
-const { Schema } = mongoose;
 
 const addressSchema = new Schema<Address>({
   streetName: { type: String, required: true },

@@ -1,4 +1,8 @@
 import { Dispatch } from "react";
+<<<<<<< HEAD
+=======
+import { Role } from "../../../nextauth";
+>>>>>>> 22ff5e7a94cb3ca39dc3ed65e67b25125d191c44
 
 export type UserFull = {
   _id: string;
@@ -72,6 +76,27 @@ export type ReviewT = {
   id: string;
 };
 
+export type addProductT = Pick<
+  ProductT,
+  | "title"
+  | "brand"
+  | "description"
+  | "category"
+  | "price"
+  | "stock"
+  | "images"
+  | "warranty"
+  | "returnPolicy"
+  | "reservation"
+  | "minReservationQty"
+  | "reservationTime"
+  | "discountPercentage"
+  | "rating"
+  | "width"
+  | "height"
+  | "depth"
+> & { seller: string };
+
 export type LoginCredentials = Pick<UserFull, "name" | "password" | "email">; // Attention '|' means 'and' here
 
 export type RegisterCredentials = Omit<UserFull, "id">;
@@ -81,6 +106,7 @@ export type JWTToken = {
   name?: string;
   email?: string;
   image?: string;
+  role?: Role;
 };
 
 export type ModalAlertProps = {
@@ -89,3 +115,20 @@ export type ModalAlertProps = {
   alertText: string;
 };
 
+<<<<<<< HEAD
+=======
+export interface UpdateAddressOkResponse {
+  message: string;
+  user: UserFull;
+  error: string;
+}
+
+export interface GetShopInfo {
+  message: string;
+  amount: number;
+  sellerInfo: UserFull;
+  productsBySeller: ProductT[];
+  error: string;
+}
+
+>>>>>>> 22ff5e7a94cb3ca39dc3ed65e67b25125d191c44
