@@ -1,33 +1,19 @@
 import { Button, Card, Stack } from "react-bootstrap";
 
 import style from "./productcard.module.css";
-
 import { MouseEvent, useState } from "react";
-
 import ModalAlert from "./ModalAlert";
 import { ProductT } from "@/model/types/types";
 import Link from "next/link";
+import AddToShoppingListButton from "./addToShoppingListButton";
 
 type ProductCardProps = {
   product: ProductT;
 };
 
 function ProductCard({ product }: ProductCardProps) {
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertText, setAlertText] = useState("");
-
-  const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
-    // await addProductToList({
-    //   productId: product._id,
-    //   token,
-    //   baseUrl,
-    //   setUser,
-    //   setShowAlert,
-    //   setAlertText,
-    // });
-  };
+  // const [showAlert, setShowAlert] = useState(false);
+  // const [alertText, setAlertText] = useState("");
 
   return (
     <>
@@ -54,21 +40,15 @@ function ProductCard({ product }: ProductCardProps) {
               Learn more
             </Link>
           </Stack>
-          <Button
-            className="mt-auto mx-auto"
-            style={{ maxWidth: "130px" }}
-            variant="warning"
-            onClick={handleAddProductToList}
-          >
-            Add to list
-          </Button>
+
+          <AddToShoppingListButton productId={product._id} />
         </Card.Body>
       </Card>
-      <ModalAlert
+      {/* <ModalAlert
         showAlert={showAlert}
         alertText={alertText}
         setShowAlert={setShowAlert}
-      />
+      /> */}
     </>
   );
 }

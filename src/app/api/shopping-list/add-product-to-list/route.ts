@@ -4,11 +4,6 @@ import UserModel from "@/model/usersModel";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  // const session = await auth();
-
-  // if (!session || !session.user?.id) {
-  //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  // }
 
   try {
     // Connect to the database
