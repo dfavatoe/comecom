@@ -1,4 +1,6 @@
 import { ObjectId } from "mongoose";
+import { Dispatch } from "react";
+import { Role } from "../../../nextauth";
 
 export type UserFull = {
   _id: string;
@@ -41,7 +43,7 @@ export interface ProductT {
   height: number;
   depth: number;
   reviews: ReviewT[];
-  id: string;
+  _id: string;
   title: string;
   description: string;
   category: string;
@@ -72,6 +74,27 @@ export type ReviewT = {
   id: string;
 };
 
+export type addProductT = Pick<
+  ProductT,
+  | "title"
+  | "brand"
+  | "description"
+  | "category"
+  | "price"
+  | "stock"
+  | "images"
+  | "warranty"
+  | "returnPolicy"
+  | "reservation"
+  | "minReservationQty"
+  | "reservationTime"
+  | "discountPercentage"
+  | "rating"
+  | "width"
+  | "height"
+  | "depth"
+> & { seller: string };
+
 export type LoginCredentials = Pick<UserFull, "name" | "password" | "email">; // Attention '|' means 'and' here
 
 export type RegisterCredentials = Omit<UserFull, "id">;
@@ -81,7 +104,28 @@ export type JWTToken = {
   name?: string;
   email?: string;
   image?: string;
+  role?: Role;
 };
+
+export type ModalAlertProps = {
+  showAlert: boolean;
+  setShowAlert: Dispatch<React.SetStateAction<boolean>>;
+  alertText: string;
+};
+
+export interface UpdateAddressOkResponse {
+  message: string;
+  user: UserFull;
+  error: string;
+}
+
+export interface GetShopInfo {
+  message: string;
+  amount: number;
+  sellerInfo: UserFull;
+  productsBySeller: ProductT[];
+  error: string;
+}
 
 export type Chatroom = {
   _id: string;
