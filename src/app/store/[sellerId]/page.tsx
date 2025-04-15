@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import { GetShopInfo, ProductT, UserFull } from "@/model/types/types";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import ProductCardStore from "@/components/ProductCardStore";
-import { TileLayer, MapContainer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import dynamic from "next/dynamic";
+
+const MapClient = dynamic(() => import("@/components/MapClient"), {
+  ssr: false,
+});
 
 export default function Store() {
   const { sellerId } = useParams<{ sellerId: string }>();
@@ -86,47 +89,15 @@ export default function Store() {
                 )}
               </Col>
               <Col>
-                {seller.address ? (
-                  <MapContainer
-                    center={[seller.address.latitude, seller.address.longitude]}
-                    zoom={15}
-                    scrollWheelZoom={false}
-                    style={{ height: "200px" }}
-                  >
-                    <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-
-                    <Marker
-                      position={[
-                        seller.address.latitude,
-                        seller.address.longitude,
-                      ]}
-                    >
-                      <Popup>{seller.name}</Popup>
-                    </Marker>
-                  </MapContainer>
-                ) : (
-                  <MapContainer
-                    center={[52.5200066, 13.404954]}
-                    zoom={15}
-                    scrollWheelZoom={false}
-                    style={{ height: "200px" }}
-                  >
-                    <TileLayer
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-
-                    <Marker position={[52.5200066, 13.404954]}>
-                      <Popup>
-                        No location shared <br />
-                        by seller
-                      </Popup>
-                    </Marker>
-                  </MapContainer>
-                )}
+                <MapClient
+                  lat={seller.address?.latitude ?? 52.5200066}
+                  lng={seller.address?.longitude ?? 13.404954}
+                  label={
+                    seller.address
+                      ? seller.name
+                      : "No location shared by seller"
+                  }
+                />
               </Col>
             </Row>
             <hr />
