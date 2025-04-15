@@ -13,12 +13,24 @@ import {
 } from "react-bootstrap";
 import { SignOut } from "./sign-out";
 import { useSession } from "next-auth/react";
+import { auth } from "@/app/lib/auth";
+import { Session } from "next-auth";
+// export async function getServerSideProps(ctx) {
+//   const session = await auth(ctx);
+//   console.log("session :>> ", session);
+//   return {
+//     props: {
+//       session,
+//     },
+//   };
+// }
 
 // import { AuthContext } from "../context/AuthContext";
 // import { Link } from "react-router";
 // import useUserStatus from "../hooks/useUserStatus";
 
 function NavBar() {
+  // console.log("user Name in session :>> ", session.user?.name);
   // const { logout, user } = useContext(AuthContext);
   // const { loading } = useUserStatus();
   const { data: session } = useSession();
