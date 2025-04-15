@@ -1,25 +1,23 @@
-import mongoose, { mongo } from "mongoose";
-import { Message, Chat, UserFull } from "@/model/types/types";
+import mongoose from "mongoose";
+import { Message } from "@/model/types/types";
 
 const { Schema } = mongoose;
 
 const messageSchema = new Schema<Message>(
   {
-    chatroomId: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Chat",
-        required: false,
-      },
-    ],
-    senderId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+    chatroomId: {
+      type: Schema.Types.ObjectId,
+      ref: "Chatroom",
       required: false,
     },
-    text: {
+    messageText: {
       type: String,
-      trim: true,
+      // trim: true,
+      required: false,
+    },
+    authorId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: false,
     },
   },
