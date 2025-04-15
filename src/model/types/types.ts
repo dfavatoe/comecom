@@ -1,3 +1,5 @@
+import { ObjectId } from "mongoose";
+
 export type UserFull = {
   _id: string;
   name: string;
@@ -81,24 +83,19 @@ export type JWTToken = {
   image?: string;
 };
 
-export type Chat = {
-  chatroomId: string;
-  messageText: string;
-  messageId: string;
-  sender: string;
-  participants: [];
-  //   role: string;
-  createdAt: string;
-  updatedAt: string;
+export type Chatroom = {
+  _id: string;
+  messageId: ObjectId | null;
+  participants: [{}];
+  created_at: string;
+  updated_at: string;
 };
 
 export type Message = {
-  messageId: string;
+  _id: string;
+  chatroomId: ObjectId;
   messageText: string;
-  chatroomId: string;
-  senderId: string; // SENDER here oder im chat?
-  // participants:[] ;
-  //   role: string;
-  createdAt: string;
-  updatedAt: string;
+  authorId: ObjectId | null;
+  created_at: string;
+  updated_at: string;
 };
