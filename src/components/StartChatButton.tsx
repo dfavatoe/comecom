@@ -53,12 +53,21 @@ export default function StartChatButton({ sellerId }: Props) {
       }
 
       // 🆕 2. Sonst neuen Chatroom erstellen
+      // const createRes = await fetch(`/api/chatroom`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({
+      //     // otherUserId: sellerId,
+      //     participants: [session.user.id, sellerId],
+      //   }),
+      // });
+      const chatroomId = [session.user.id, sellerId].sort().join("_");
+
       const createRes = await fetch(`/api/chatroom`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          // otherUserId: sellerId,
-          participants: [session.user.id, sellerId],
+          chatroomId,
         }),
       });
 
@@ -85,8 +94,9 @@ export default function StartChatButton({ sellerId }: Props) {
       <div
         style={{ position: "fixed", bottom: "90px", right: "5%", zIndex: 1002 }}
       >
+        {/*  INSERT FOR TESTING AGAIN, if you need it
         <p>showChat: {String(showChat)}</p>
-        <p>chatroomId: {chatroomId}</p>
+        <p>chatroomId: {chatroomId}</p> */}
       </div>
       <Button
         variant="contained"

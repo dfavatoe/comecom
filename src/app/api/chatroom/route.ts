@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server"; // Hier verwenden wir N
 import ChatroomModel from "@/model/chatroomModel";
 import UserModel from "@/model/usersModel";
 import { getSession } from "next-auth/react";
+import { createChatroom } from "@/app/lib/chatroom";
 
 // GET api/chatroom - Gibt alle Chatrooms zurück
 export async function GET(req: NextRequest) {
@@ -33,46 +34,35 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   const session = await auth();
 
-  // if (!session) {
-  //   return new Response(JSON.stringify({ message: "User not authenticated" }), {
-  //     status: 401,
-  //   });
-  // }
-
-  // const { userId, chatroomName } = await req.json();
-
-  // if (!userId || !chatroomName) {
-  //   return new Response(
-  //     JSON.stringify({ message: "Missing required fields" }),
-  //     { status: 400 }
-  //   );
-  // }
-  if (!session || !session.user) {
-    // Falls keine Session oder Benutzer vorhanden sind, Fehler zurückgeben
+  if (!session || !session.user || !session.user.id) {
     return new NextResponse(
-      JSON.stringify({ message: "User not authenticated" }),
+      JSON.stringify({ message: "User not authenticated or missing ID" }),
       { status: 401 }
     );
   }
-  // Hole den Benutzer aus der Session
+
   const userId = session.user.id;
 
-  // Hole die Chatroom-Daten aus dem Request-Body
-  // const { chatroomName } = await req.json();
+  const body = await req.json();
+  const { chatroomId } = body;
 
-  // if (!chatroomName) {
-  //   return new NextResponse(
-  //     JSON.stringify({ message: "Chatroom name is required" }),
-  //     { status: 400 }
-  //   );
-  // }
+  if (!chatroomId) {
+    return new NextResponse(
+      JSON.stringify({ message: "Chatroom ID is required" }),
+      { status: 400 }
+    );
+  }
 
   try {
-    const newChatroom = await createChatroom(userId, chatroomName);
+    const newChatroom = await createChatroom(userId, chatroomId);
     return new Response(JSON.stringify(newChatroom), { status: 200 });
   } catch (error) {
+    console.error("❌ API Error:", error); // raus nehmen wenn nicht mehr gebraucht TODO
     return new Response(
-      JSON.stringify({ message: "Error creating chatroom", error }),
+      JSON.stringify({
+        message: "Error creating chatroom",
+        error: error instanceof Error ? error.message : error,
+      }),
       { status: 500 }
     );
   }
