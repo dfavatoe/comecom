@@ -1,0 +1,76 @@
+import { Button, Card, Stack } from "react-bootstrap";
+
+import style from "./productcard.module.css";
+
+import { MouseEvent, useState } from "react";
+
+import ModalAlert from "./ModalAlert";
+import { ProductT } from "@/model/types/types";
+import Link from "next/link";
+
+type ProductCardProps = {
+  product: ProductT;
+};
+
+function ProductCard({ product }: ProductCardProps) {
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
+  const handleAddProductToList = async (e: MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    // await addProductToList({
+    //   productId: product._id,
+    //   token,
+    //   baseUrl,
+    //   setUser,
+    //   setShowAlert,
+    //   setAlertText,
+    // });
+  };
+
+  return (
+    <>
+      <Card
+        className={style.card}
+        style={{
+          width: "18rem",
+          boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
+          textAlign: "center",
+        }}
+      >
+        <Card.Img
+          className={style.image}
+          variant="top"
+          src={product.images[0]}
+        />
+        <Card.Body className="d-flex flex-column">
+          <Card.Title>{product.title}</Card.Title>
+          <Card.Subtitle className="mb-2 text-muted">
+            {product.price} €
+          </Card.Subtitle>
+          <Stack gap={3}>
+            <Link className="mb-2" href={`/products/${product._id}`}>
+              Learn more
+            </Link>
+          </Stack>
+          <Button
+            className="mt-auto mx-auto"
+            style={{ maxWidth: "130px" }}
+            variant="warning"
+            onClick={handleAddProductToList}
+          >
+            Add to list
+          </Button>
+        </Card.Body>
+      </Card>
+      <ModalAlert
+        showAlert={showAlert}
+        alertText={alertText}
+        setShowAlert={setShowAlert}
+      />
+    </>
+  );
+}
+
+export default ProductCard;
