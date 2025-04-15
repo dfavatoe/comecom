@@ -1,8 +1,5 @@
 import { Dispatch } from "react";
-<<<<<<< HEAD
-=======
 import { Role } from "../../../nextauth";
->>>>>>> 22ff5e7a94cb3ca39dc3ed65e67b25125d191c44
 
 export type UserFull = {
   _id: string;
@@ -115,8 +112,6 @@ export type ModalAlertProps = {
   alertText: string;
 };
 
-<<<<<<< HEAD
-=======
 export interface UpdateAddressOkResponse {
   message: string;
   user: UserFull;
@@ -131,4 +126,3 @@ export interface GetShopInfo {
   error: string;
 }
 
->>>>>>> 22ff5e7a94cb3ca39dc3ed65e67b25125d191c44
