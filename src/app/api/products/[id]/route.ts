@@ -7,6 +7,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+
   const { id } = await params; // Access the id directly
 
   try {

@@ -20,7 +20,6 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from "@mui/icons-material/Send";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
@@ -31,7 +30,7 @@ interface Comment {
   user: {
     _id: string;
     name: string;
-  };
+  } | null;
   text: string;
 }
 
@@ -57,7 +56,9 @@ export default function PostPage() {
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [commentMap, setCommentMap] = useState<Record<string, string>>({});
-  const [menuAnchorMap, setMenuAnchorMap] = useState<Record<string, HTMLElement | null>>({});
+  const [menuAnchorMap, setMenuAnchorMap] = useState<
+    Record<string, HTMLElement | null>
+  >({});
   const [showForm, setShowForm] = useState(false);
 
   const fetchPosts = async () => {
@@ -101,7 +102,9 @@ export default function PostPage() {
   };
 
   const handleLike = async (postId: string) => {
-    await fetch(`/api/posts/${postId}/like`, { method: "POST" });
+    await fetch(`/api/posts/${postId}/like`, {
+      method: "POST",
+    });
     fetchPosts();
   };
 
@@ -123,8 +126,17 @@ export default function PostPage() {
   };
 
   const handleCommentDelete = async (postId: string, commentId: string) => {
-    await fetch(`/api/posts/${postId}/comment/${commentId}`, { method: "DELETE" });
-    fetchPosts();
+    const res = await fetch(`/api/posts/${postId}/comment/${commentId}`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      fetchPosts();
+    } else {
+      alert("Failed to delete comment: " + data.error);
+    }
   };
 
   return (
@@ -188,7 +200,10 @@ export default function PostPage() {
               <>
                 <IconButton
                   onClick={(e) =>
-                    setMenuAnchorMap((prev) => ({ ...prev, [post._id]: e.currentTarget }))
+                    setMenuAnchorMap((prev) => ({
+                      ...prev,
+                      [post._id]: e.currentTarget,
+                    }))
                   }
                   sx={{ marginLeft: "auto" }}
                 >
@@ -204,7 +219,10 @@ export default function PostPage() {
                   <MenuItem
                     onClick={() => {
                       handleDelete(post._id);
-                      setMenuAnchorMap((prev) => ({ ...prev, [post._id]: null }));
+                      setMenuAnchorMap((prev) => ({
+                        ...prev,
+                        [post._id]: null,
+                      }));
                     }}
                   >
                     Delete Post
@@ -226,30 +244,50 @@ export default function PostPage() {
               {post.caption}
             </Typography>
 
-            <Box sx={{ display: "flex", gap: 2, marginBottom: 1 }}>
-              <IconButton
-                color={post.likes.includes(session?.user?.id || "") ? "error" : "default"}
-                onClick={() => handleLike(post._id)}
-              >
-                <FavoriteIcon />
-              </IconButton>
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                marginBottom: 1,
+                alignItems: "center",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                <IconButton
+                  color={
+                    post.likes.includes(session?.user?.id || "")
+                      ? "error"
+                      : "default"
+                  }
+                  onClick={() => handleLike(post._id)}
+                >
+                  <FavoriteIcon />
+                </IconButton>
+                <Typography variant="body2">{post.likes.length}</Typography>
+              </Box>
+
               <IconButton>
                 <ChatBubbleOutlineIcon sx={{ color: "gray" }} />
               </IconButton>
-              <Typography variant="body2">{post.likes.length}</Typography>
             </Box>
 
             <Box sx={{ display: "flex", gap: 1, marginTop: 2 }}>
               <TextField
                 value={commentMap[post._id] || ""}
                 onChange={(e) =>
-                  setCommentMap((prev) => ({ ...prev, [post._id]: e.target.value }))
+                  setCommentMap((prev) => ({
+                    ...prev,
+                    [post._id]: e.target.value,
+                  }))
                 }
                 label="Add a comment"
                 fullWidth
                 size="small"
               />
-              <Button variant="contained" onClick={() => handleComment(post._id)}>
+              <Button
+                variant="contained"
+                onClick={() => handleComment(post._id)}
+              >
                 Comment
               </Button>
             </Box>
@@ -267,10 +305,14 @@ export default function PostPage() {
                   }}
                 >
                   <Typography variant="body2">
-                    <b>{comment.user.name || "Deleted User"}:</b> {comment.text}
+                    <b>{comment.user?.name || "Deleted User"}:</b>{" "}
+                    {comment.text}
                   </Typography>
-                  {comment.user._id === session?.user?.id && (
-                    <IconButton onClick={() => handleCommentDelete(post._id, comment._id)}>
+
+                  {String(comment.user?._id) === session?.user?.id && (
+                    <IconButton
+                      onClick={() => handleCommentDelete(post._id, comment._id)}
+                    >
                       <DeleteIcon />
                     </IconButton>
                   )}

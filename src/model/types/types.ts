@@ -125,3 +125,4 @@ export interface GetShopInfo {
   productsBySeller: ProductT[];
   error: string;
 }
+
