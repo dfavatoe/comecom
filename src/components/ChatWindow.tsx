@@ -15,15 +15,10 @@ export default function Chat({ chatroomId }: ChatProps) {
   const [messageText, setMessageText] = useState<string>("");
   const { data: session } = useSession();
 
-  // useEffect(() => {
-  //   if (chatroomId) {
-  //     fetchChat();
-  //   }
-  // }, [chatroomId]);
   useEffect(() => {
     // Safety Check für gültige MongoDB-ID
     if (!chatroomId || chatroomId.length !== 24) {
-      console.error("❌ Ungültige Chatroom-ID:", chatroomId);
+      console.error("❌ Invalid chatroom ID:", chatroomId);
       return;
     }
 
@@ -81,7 +76,7 @@ export default function Chat({ chatroomId }: ChatProps) {
     return <div>Not authenticated</div>;
   }
 
-  // Dynamisch den Chatpartner-Namen (oder Chatraumnamen) holen
+  // Get dynamically the Chatpartner-Name
   const chatPartnerName =
     messages.length > 0 ? session.user.name : "Unknown User";
 
@@ -94,7 +89,7 @@ export default function Chat({ chatroomId }: ChatProps) {
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         }}
       >
-        <Typography variant="h8" sx={{ fontWeight: "bold" }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           Chat with {chatPartnerName}
         </Typography>
       </Box>
@@ -175,13 +170,18 @@ export default function Chat({ chatroomId }: ChatProps) {
       <Box
         component="form"
         onSubmit={handleMessageSubmit}
-        sx={{ display: "flex", p: 1, borderTop: "1px solid #eee" }}
+        sx={{
+          display: "flex",
+          p: 1,
+          borderTop: "1px solid #eee",
+        }}
       >
         <TextField
           fullWidth
           placeholder="Type a message"
           onChange={handleMessageTextChange}
           value={messageText}
+          //sx={{ height: "1em" }}
         />
         <Button type="submit">
           <SendIcon />

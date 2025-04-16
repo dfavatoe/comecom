@@ -1,7 +1,7 @@
 "use client"; // Diese Direktive stellt sicher, dass die Datei als Client-Komponente behandelt wird.
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState } from "react";
 import StartChatButton from "@/components/StartChatButton";
 
 export default function Chat() {
@@ -12,17 +12,9 @@ export default function Chat() {
   const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
 
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const toggleChat = () => {
-    setIsChatOpen((prev) => !prev);
-  };
-
-  // Stelle sicher, dass die chatroomId aus der URL extrahiert wird, wenn die Komponente gemountet wird
-  // useEffect(() => {
-  //   const path = window.location.pathname; // Hole den vollständigen URL-Pfad
-  //   const parts = path.split("/"); // Teile den Pfad auf
-  //   const chatroomIdFromUrl = parts[parts.length - 1]; // Die chatroomId sollte der letzte Teil des Pfads sein
-  //   setChatroomId(chatroomIdFromUrl); // Setze die chatroomId im Zustand
-  // }, []);
+  // const toggleChat = () => {
+  //   setIsChatOpen((prev) => !prev);
+  // };
 
   // Lade die Nachrichten, wenn die chatroomId vorhanden ist
   useEffect(() => {
@@ -39,55 +31,53 @@ export default function Chat() {
     }
   };
 
-  // Nachrichtenschreibfunktion
-  const handleMessageTextChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setMessageText(e.target.value);
-  };
+  // const handleMessageTextChange = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setMessageText(e.target.value);
+  // };
 
-  // Nachricht Absenden
-  const handleMessageSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  // const handleMessageSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
 
-    // Sicherheits-Check für gültige chatroomId
-    if (!chatroomId || chatroomId.length !== 24) {
-      console.error("❌ Ungültige Chatroom-ID:", chatroomId);
-      return;
-    }
+  //   // Sicherheits-Check für gültige chatroomId
+  //   if (!chatroomId || chatroomId.length !== 24) {
+  //     console.error("❌ Ungültige Chatroom-ID:", chatroomId);
+  //     return;
+  //   }
 
-    if (!session?.user) {
-      alert("You need to login first.");
-      return;
-    }
+  //   if (!session?.user) {
+  //     alert("You need to login first.");
+  //     return;
+  //   }
 
-    const newMessage = {
-      messageText: messageText, // Nachrichtentext
-      authorId: session.user.id, // Authentifizierter Benutzer
-      chatroomId: chatroomId, // Chatroom ID aus der URL
-      date: new Date(),
-    };
+  //   const newMessage = {
+  //     messageText: messageText,
+  //     authorId: session.user.id,
+  //     chatroomId: chatroomId,
+  //     date: new Date(),
+  //   };
 
-    const res = await fetch(`/api/chatroom/${chatroomId}/message`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newMessage),
-    });
+  //   const res = await fetch(`/api/chatroom/${chatroomId}/message`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(newMessage),
+  //   });
 
-    // if (res.ok) {
-    //   const updatedMessages = await res.json();
-    //   setMessages(updatedMessages); // Nachrichten aktualisieren
-    //   setMessageText(""); // Textfeld leeren
-    // } else {
-    //   alert("Failed to send message");
-    // }
-    if (res.ok) {
-      await fetchChat(); // Lade alle Nachrichten neu
-      setMessageText(""); // Leere das Textfeld
-    } else {
-      alert("Failed to send message");
-    }
-  };
+  //   // if (res.ok) {
+  //   //   const updatedMessages = await res.json();
+  //   //   setMessages(updatedMessages); // Nachrichten aktualisieren
+  //   //   setMessageText(""); // Textfeld leeren
+  //   // } else {
+  //   //   alert("Failed to send message");
+  //   // }
+  //   if (res.ok) {
+  //     await fetchChat(); // Lade alle Nachrichten neu
+  //     setMessageText(""); // Leere das Textfeld
+  //   } else {
+  //     alert("Failed to send message");
+  //   }
+  // };
 
   if (!session?.user) {
     return <div>Not authenticated</div>;

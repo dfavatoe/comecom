@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import ChatModal from "./ChatModal";
 import Button from "@mui/material/Button";
 import ChatWindow from "@/components/ChatWindow";
 
@@ -28,14 +27,14 @@ export default function StartChatButton({ sellerId }: Props) {
       alert("Seller ID is missing");
       return;
     }
-    // Falls Chat offen ist → einfach schließen
+
     if (showChat) {
       setShowChat(false);
       return;
     }
 
     try {
-      // 🔍 1. Prüfe, ob Chatroom schon existiert
+      // 1. Check if the chatroom already exist
       const res = await fetch(`/api/chatroom`);
       const allChatrooms = await res.json();
 
@@ -52,15 +51,7 @@ export default function StartChatButton({ sellerId }: Props) {
         return;
       }
 
-      // 🆕 2. Sonst neuen Chatroom erstellen
-      // const createRes = await fetch(`/api/chatroom`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({
-      //     // otherUserId: sellerId,
-      //     participants: [session.user.id, sellerId],
-      //   }),
-      // });
+      // 2. If not, create a new chatroom
       const chatroomId = [session.user.id, sellerId].sort().join("_");
 
       const createRes = await fetch(`/api/chatroom`, {
@@ -71,20 +62,20 @@ export default function StartChatButton({ sellerId }: Props) {
         }),
       });
 
-      // prüfen, ob nach dem fetchen, die antwort korrekt ist
+      // check, if answer is correct, after fetching
       if (!createRes.ok) {
         const text = await createRes.text();
-        console.error("❌ Fehler beim Erstellen des Chatrooms:", text);
+        console.error("❌ Error creating the chatroom:", text);
         return;
       }
 
       const newChatroom = await createRes.json();
-      console.log("💬 Neuer Chatroom erstellt / gefunden:", newChatroom);
+      console.log("💬 New chatroom created/ found:", newChatroom);
       console.log(newChatroom);
       setChatroomId(newChatroom._id);
       setShowChat(true);
     } catch (err) {
-      console.error("Chat konnte nicht gestartet werden", err);
+      console.error("Chat could not be started", err);
     }
   };
 
@@ -113,15 +104,12 @@ export default function StartChatButton({ sellerId }: Props) {
         {showChat ? "Close Chat" : "Contact Seller"}
       </Button>
 
-      {/* {showChat && chatroomId && (
-        <ChatModal chatroomId={chatroomId} onClose={() => setShowChat(false)} />
-      )} */}
       {showChat && chatroomId && (
         <>
-          {console.log(
+          {/* {console.log(
             "📦 ChatWindow wird gerendert mit chatroomId:",
             chatroomId
-          )}
+          )} */}
 
           <div
             style={{
