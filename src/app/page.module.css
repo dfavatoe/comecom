@@ -1,0 +1,94 @@
+/* global styles für html und body */
+/* :global(html, body) {
+  height: 100%; /* Setzt die Höhe von html und body auf 100% */
+/* margin: 0; /* Entfernt die Standardmargen von html und body */
+/*} */
+
+/* .body {
+  overflow: auto;
+} */
+
+.container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: rgb(251, 251, 251);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  position: relative; /* Position für den Grid */
+  z-index: 1; /* Grid unterhalb des Textes */
+  opacity: 0.4;
+}
+
+.gridItem {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%; /* Square */
+  overflow: hidden;
+}
+
+.gridItem img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  top: 0;
+  left: 0;
+}
+
+.overlay {
+  /* position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 10; */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: rgba(0, 0, 0, 0.5); Halbdurchsichtiger Hintergrund */
+  z-index: 10; /* Oberhalb des Grids */
+}
+
+.brand {
+  font-size: 10vw;
+  color: #ed6c02;
+  /* opacity: 0.8; */
+  /* background-color: #ed6c02; */
+  border-radius: 20px;
+  font-weight: bold;
+  z-index: 11;
+  text-align: center;
+  pointer-events: none;
+  /* text-transform: uppercase; */
+  /* text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6); */
+  padding: 1rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: 6px;
+    padding: 1rem;
+  }
+
+  .brand {
+    font-size: 15vw; /* Etwas größer auf Mobile */
+  }
+}
