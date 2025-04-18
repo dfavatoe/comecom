@@ -1,9 +1,12 @@
 "use client";
-import SellerAddProduct from "@/components/SellerAddProduct";
+import SellerProductsList from "@/components/SellerProductsList";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import BuyerShoppingList from "@/components/BuyerShoppingList";
+import { Button, Container } from "react-bootstrap";
+import Link from "next/link";
 
-function AddProduct() {
+function ProductsList() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
 
@@ -15,18 +18,30 @@ function AddProduct() {
 
   if (loading) return <p>Loading...</p>;
   if (status === "unauthenticated")
-    return <h4>You must be signed in to view your account.</h4>;
+    return (
+      <Container className="d-block">
+        <h4>You must be signed in to view your shopping list.</h4>
+        <div className="d-block mb-4">
+          <Link className="d-inline" href={"/signup"}>
+            Sign up{" "}
+          </Link>
+          <span>or </span>
+          <Link className="d-inline" href={"/login"}>
+            Log in{" "}
+          </Link>
+        </div>
+      </Container>
+    );
 
   if (session?.user!.role === "seller") {
     return (
       <>
-        <SellerAddProduct />
-        setLoading(false)
+        <SellerProductsList />
       </>
     );
   }
 
-  return <p>Shopping List Under Construction!</p>;
+  return <BuyerShoppingList />;
 }
 
-export default AddProduct;
+export default ProductsList;
