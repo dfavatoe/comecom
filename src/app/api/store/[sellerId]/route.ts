@@ -34,6 +34,7 @@ export async function GET(
         name: sellerInfo.name,
         email: sellerInfo.email,
         image: sellerInfo.image,
+        storeCoverImage: sellerInfo.storeCoverImage,
         address: sellerInfo.address,
         created_at: sellerInfo.created_at,
       },

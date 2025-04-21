@@ -49,7 +49,7 @@ const usersSchema = new Schema<UserFull>(
       default:
         "https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg",
     },
-
+    storeCoverImage: String, // Cloudinary URL
     role: {
       type: String,
       enum: ["buyer", "seller"], //a set of related values with descriptive names, often used to represent fixed options

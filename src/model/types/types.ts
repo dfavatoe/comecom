@@ -7,6 +7,7 @@ export type UserFull = {
   email: string;
   password: string;
   image: string;
+  storeCoverImage: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -150,3 +151,32 @@ export interface GETSellersProdutsResponse {
   amount: number;
   products: ProductT[];
 }
+
+//Cloudinary Types
+export type CloudinaryUploadError = Error & {
+  http_code?: number;
+  name?: string;
+  message: string;
+};
+
+export type CloudinaryUploadResult = {
+  asset_id: string;
+  public_id: string;
+  version: number;
+  version_id: string;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  tags: string[];
+  bytes: number;
+  type: string;
+  etag: string;
+  placeholder: boolean;
+  url: string;
+  secure_url: string;
+  original_filename: string;
+  folder?: string;
+};

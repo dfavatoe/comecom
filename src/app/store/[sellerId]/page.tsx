@@ -57,11 +57,20 @@ export default function Store() {
               className="align-content-center mb-4"
               style={{ height: "auto" }}
             >
-              <Image
-                className="mb-4"
-                src={seller.image}
-                style={{ height: "300px", objectFit: "cover" }}
-              />
+              {seller.storeCoverImage ? (
+                <Image
+                  className="mb-4"
+                  src={seller.storeCoverImage}
+                  style={{ height: "300px", objectFit: "cover" }}
+                />
+              ) : (
+                <Image
+                  className="mb-4"
+                  src={seller.image}
+                  style={{ height: "300px", objectFit: "cover" }}
+                />
+              )}
+
               <div className="second-header" style={{ textAlign: "center" }}>
                 {seller.name}
               </div>
