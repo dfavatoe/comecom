@@ -3,6 +3,7 @@ import { roboto } from "@/app/ui/fonts";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import NavBar from "@/components/NavBar";
+import { ClientProviders } from "@/components/ClientProviders";
 
 export const metadata: Metadata = {
   title: "Com&Com",
@@ -17,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
-        <SessionProvider>
+        <ClientProviders>
           <NavBar />
           {children}
-        </SessionProvider>
+        </ClientProviders>
       </body>
     </html>
   );
