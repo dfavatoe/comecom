@@ -1,0 +1,132 @@
+.scrollmenu {
+  position: relative; /* Ensures child absolute elements (buttons) position correctly */
+  /* display: flex;
+  align-items: center; */
+  overflow: hidden; /* Prevents unwanted scrolling outside bounds */
+  width: 100%;
+}
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px; /* Etwas größerer Abstand zwischen den Karten */
+  padding: 10px 40px;
+  scroll-snap-type: x mandatory; /* Helps with smooth scrolling */
+  /* text-wrap: wrap; */
+  background-color: lightgray;
+}
+
+.productCard {
+  flex: 0 0 auto;
+  width: 25vw;
+  max-width: 350px;
+  min-width: 200px;
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+
+  /* width: 350px; /* Größere Breite der Cards 
+  height: 425px; /* Größere Höhe der Cards 
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Verhindert, dass Inhalte aus der Card herausragen 
+  text-align: center;
+  background-color: white; */
+  /* OPTIONAL für automatisches anpasssen an bildschirmgröße
+  width: 80vw;
+  max-width: 350px;
+  min-width: 180px; */
+}
+
+.productCard img {
+  width: 100%; /* Das Bild nimmt die gesamte Breite des Containers ein */
+  height: auto;
+  /* Höhe passt sich an die Breite an, ohne das Seitenverhältnis zu verzerren */
+  object-fit: contain; /* Stellt sicher, dass das Bild den Container füllt, ohne das Verhältnis zu verändern */
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 20px;
+}
+
+.productCard product-price {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+/* Ensure smooth scrolling */
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Arrow buttons */
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
+}
+
+.carousel-button:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.carousel-button.left {
+  left: 10px;
+}
+
+.carousel-button.right {
+  right: 10px;
+}
+
+/* @media (max-width: 1024px) {
+  .productCard {
+    width: 35vw; /* Weniger Cards nebeneinander 
+  }
+} */
+
+@media (max-width: 768px) {
+  .scroll-container {
+    padding: 10px 20px;
+    gap: 8px;
+  }
+
+  .productCard {
+    /* width: 250px; */
+    height: 360px;
+    width: 60vw;
+  }
+
+  .carousel-button {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productCard {
+    /* width: 200px; */
+    height: 300px;
+    width: 70vw;
+  }
+
+  .productCard img {
+    height: 50%;
+  }
+
+  .carousel-button {
+    padding: 3px;
+  }
+}
