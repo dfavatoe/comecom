@@ -127,6 +127,31 @@ export interface GetShopInfo {
   error: string;
 }
 
+//For getShoppingList
+
+export interface GetProductsListResponse {
+  message: string;
+  amount: number;
+  records: ProductsList[];
+}
+
+export interface ProductsList {
+  _id: string;
+  title: string;
+  price: number;
+  rating?: number;
+  seller: User;
+  images: string[];
+  reservation: boolean;
+  reservationTime: number;
+}
+
+export interface GETSellersProdutsResponse {
+  message: string;
+  amount: number;
+  products: ProductT[];
+}
+
 export type Chatroom = {
   _id: string;
   messageId: ObjectId | null;
