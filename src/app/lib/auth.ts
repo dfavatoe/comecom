@@ -5,8 +5,7 @@ import UserModel from "@/model/usersModel";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "./dbConnect";
-import { JWTToken } from "@/model/types/types";
-import { Role } from "../../../nextauth";
+import { JWTToken, UserFull } from "@/model/types/types";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -57,7 +56,19 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // User is available during sign-in
         token.id = user.id;
         token.role = user.role;
+        token.avatar = user.avatar;
       }
+
+      // If avatar is not set from `user` (like after image gen), fetch it manually
+      if (!token.avatar && token.email) {
+        const dbUser = (await UserModel.findOne({
+          email: token.email,
+        }).lean()) as { avatar?: string };
+        if (dbUser?.avatar) {
+          token.avatar = dbUser.avatar;
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
@@ -65,6 +76,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (typedToken?.id && typedToken?.role) {
         session.user.id = typedToken.id;
         session.user.role = typedToken.role;
+        session.user.avatar = typedToken.avatar;
       }
       return session;
     },

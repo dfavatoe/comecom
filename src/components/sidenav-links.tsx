@@ -12,8 +12,8 @@ const links = [
     icon: ProductionQuantityLimitsIcon,
   },
   {
-    name: "Create Ad",
-    href: "/account/create-ad",
+    name: "Generate Image",
+    href: "/account/generate-image",
     icon: LightbulbIcon,
   },
 ];
