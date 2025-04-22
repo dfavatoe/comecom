@@ -9,10 +9,7 @@ export default async function UserAvatar() {
   return (
     <div>
       <img
-        src={
-          session.user.image ??
-          "https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg"
-        }
+        src={session!.user!.avatar! || session?.user?.image!}
         alt="User Avatar"
         width="250px"
       />

@@ -5,7 +5,7 @@ import dbConnect from "@/app/lib/dbConnect";
 import UserModel from "@/model/usersModel";
 import { bufferFromURL } from "@/app/lib/bufferFromURL";
 import { uploadToCloudinary } from "@/app/lib/cloudinaryHelpers";
-import { improvePrompt } from "@/app/lib/openaiHelpers";
+import { improvePromptAvatar } from "@/app/lib/openaiHelpers";
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_SECRET });
 
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Improve prompt
-    const improvedPrompt = await improvePrompt(prompt); //! make a improve promp just for avatars
+    const improvedPrompt = await improvePromptAvatar(prompt);
     console.log("Improved Prompt (Avatar): ", improvedPrompt);
 
     // Generate image with OpenAI
@@ -44,14 +44,14 @@ export async function POST(req: NextRequest) {
     const uploadResult = await uploadToCloudinary(imageBuffer);
     const cloudinaryUrl = uploadResult.secure_url;
 
-    // console.log("User from session:", session.user);
-
     // Save to MongoDB in avatar field
     const updatedUser = await UserModel.findByIdAndUpdate(session.user.id, {
       avatar: cloudinaryUrl,
     });
 
     console.log("✅ Avatar updated:", updatedUser?.avatar);
+
+    console.log("User from session:", session.user);
 
     return NextResponse.json({ avatarUrl: cloudinaryUrl });
   } catch (err) {

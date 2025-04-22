@@ -45,7 +45,7 @@ function AvatarGenerator() {
         <p>
           It is very simple, just write below a short description of your avatar
           and press the "Generate Avatar" button. You will have a preview of the
-          result and after that it will automatically be added to your profile's
+          result and after that it will automatically substitute your profile's
           picture.
         </p>
       </div>
