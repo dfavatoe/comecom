@@ -1,13 +1,3 @@
-/* global styles für html und body */
-/* :global(html, body) {
-  height: 100%; /* Setzt die Höhe von html und body auf 100% */
-/* margin: 0; /* Entfernt die Standardmargen von html und body */
-/*} */
-
-/* .body {
-  overflow: auto;
-} */
-
 .container {
   position: relative;
   width: 100vw;
@@ -16,34 +6,104 @@
   background: rgb(251, 251, 251);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 10px;
+.beigeOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  padding: 1.5rem;
+  background-color: rgba(253, 251, 248, 255);
+  z-index: 1;
+  pointer-events: none;
+}
+.grid {
+  display: grid;
+  /* grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); */
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  /* gap: 15px; */
+  width: 100%;
+  height: auto;
+  /* height: 100%; */
+  /* overflow: hidden; */
+  padding: 20px;
+  align-content: start;
+  /* padding: 1.5rem; */
   box-sizing: border-box;
   position: relative; /* Position für den Grid */
-  z-index: 1; /* Grid unterhalb des Textes */
+  z-index: 2; /* Grid unterhalb des Textes */
   opacity: 0.4;
+  grid-auto-rows: 1fr; /* Gleichmäßige Verteilung der Reihen */
 }
+
+/* Dynamische Höhe des Containers (um sicherzustellen, dass keine Zeile abgeschnitten wird) */
+#mosaic-container {
+  height: auto;
+  min-height: calc(
+    100vh - 80px
+  ); /* Beispiel: Höhe des Containers, angepasst an die Bildschirmgröße */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+}
+/* .transitionSpacer {
+  height: 100px;
+  background: linear-gradient(
+    to bottom,
+    #f5f5f5,
+    white
+  ); /* oder beige zu weiß 
+  margin-top: -20px; /* optionaler overlap für smoothen Übergang 
+} */
 
 .gridItem {
   position: relative;
   width: 100%;
-  padding-bottom: 100%; /* Square */
+  padding-bottom: 100%; /* macht das GridItem quadratisch */
   overflow: hidden;
 }
 
-.gridItem img {
+.imageWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.image {
+  filter: grayscale(100%);
+  opacity: 0.5;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.image :global(img) {
+  object-fit: cover;
+}
+
+/* Dynamische Höhe des Containers */
+/* #mosaic-container {
+  height: auto;
+  min-height: calc(
+    100vh - 80px
+  ); 
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px;
+} */
+
+/* .gridItem img {
   position: absolute;
   width: 100%;
   height: 100%;
   object-fit: cover;
   top: 0;
   left: 0;
-}
+} */
 
 .overlay {
   /* position: absolute;
@@ -64,10 +124,13 @@
   justify-content: center;
   /* background-color: rgba(0, 0, 0, 0.5); Halbdurchsichtiger Hintergrund */
   z-index: 10; /* Oberhalb des Grids */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* optional, zentriert die Elemente horizontal */
 }
 
 .brand {
-  font-size: 10vw;
+  font-size: 12vw;
   color: #ed6c02;
   /* opacity: 0.8; */
   /* background-color: #ed6c02; */
@@ -81,6 +144,10 @@
   padding: 1rem;
 }
 
+.subtitel {
+  font-size: 2vw;
+}
+
 @media (max-width: 600px) {
   .grid {
     grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -89,6 +156,51 @@
   }
 
   .brand {
-    font-size: 15vw; /* Etwas größer auf Mobile */
+    font-size: 18vw; /* Etwas größer auf Mobile */
+  }
+
+  .subtitel {
+    font-size: 4vw;
+  }
+}
+
+/* STYLES FOR TEXT IN BETWEEN */
+.text-block {
+  text-align: center !important;
+}
+
+/* STYLES FOR PRODUCTS */
+div.scrollmenu {
+  background-color: #d3d3d3;
+  overflow: auto;
+  white-space: nowrap;
+  width: 100vw;
+  -ms-overflow-style: none; /* IE and Edge */
+  /* scrollbar-width: none; Firefox */
+}
+
+div.scrollmenu::-webkit-scrollbar {
+  display: none;
+}
+
+/* Inner flex container */
+div.scroll-container {
+  display: flex;
+  gap: 16px; /* Adds spacing between items */
+}
+
+/* Ensure product cards don't shrink */
+div.scroll-container > * {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(90px, 1fr)
+    ); /* Kleinere Produkte für mobile Geräte */
+    gap: 6px;
+    padding: 1rem;
   }
 }
