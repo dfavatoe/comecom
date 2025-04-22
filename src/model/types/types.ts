@@ -8,6 +8,7 @@ export type UserFull = {
   password: string;
   image: string;
   storeCoverImage: string;
+  avatar: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -20,6 +21,8 @@ interface User {
   name: string;
   email: string;
   image: string;
+  storeCoverImage: string;
+  avatar: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -105,6 +108,7 @@ export type JWTToken = {
   email?: string;
   image?: string;
   role?: Role;
+  avatar?: string;
 };
 
 export type ModalAlertProps = {

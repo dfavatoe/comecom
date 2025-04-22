@@ -49,6 +49,10 @@ const usersSchema = new Schema<UserFull>(
       default:
         "https://img.freepik.com/vecteurs-libre/homme-affaires-caractere-avatar-isole_24877-60111.jpg",
     },
+    avatar: {
+      type: String,
+      required: false,
+    },
     storeCoverImage: String, // Cloudinary URL
     role: {
       type: String,

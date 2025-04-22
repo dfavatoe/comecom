@@ -10,7 +10,7 @@ export function uploadToCloudinary(
 ): Promise<CloudinaryUploadResult> {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
-      { folder: "store-covers" },
+      { folder: "ai-generated" },
       (error: CloudinaryUploadError, result: CloudinaryUploadResult) => {
         if (error || !result) {
           return reject(error || new Error("Unknown Cloudinary error"));

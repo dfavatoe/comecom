@@ -156,7 +156,7 @@ const AccountPage = () => {
               <Image
                 className="mb-4"
                 style={{ width: "200px" }}
-                src={user.image}
+                src={user.avatar || user.image}
                 alt="user profile pic"
                 rounded
               />

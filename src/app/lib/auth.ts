@@ -6,7 +6,6 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "./dbConnect";
 import { JWTToken } from "@/model/types/types";
-import { Role } from "../../../nextauth";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -57,6 +56,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         // User is available during sign-in
         token.id = user.id;
         token.role = user.role;
+        token.avatar = user.avatar;
       }
       return token;
     },
@@ -65,6 +65,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (typedToken?.id && typedToken?.role) {
         session.user.id = typedToken.id;
         session.user.role = typedToken.role;
+        session.user.avatar = typedToken.avatar;
       }
       return session;
     },

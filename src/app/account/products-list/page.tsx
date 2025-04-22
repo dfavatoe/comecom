@@ -20,7 +20,7 @@ function ProductsList() {
   if (status === "unauthenticated")
     return (
       <Container className="d-block">
-        <h4>You must be signed in to view your shopping list.</h4>
+        <h4>You must be signed in to view your account.</h4>
         <div className="d-block mb-4">
           <Link className="d-inline" href={"/signup"}>
             Sign up{" "}
