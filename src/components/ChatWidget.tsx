@@ -37,7 +37,7 @@ export default function ChatWidget() {
       setMessages([
         {
           sender: "ai",
-          text: "Hello! 🤖 I'm your assistant. Ask me anything about our products.",
+          text: "👋 Welcome to our shop! I'm your assistant. Ask me anything about our products.",
         },
       ]);
     }
@@ -115,22 +115,31 @@ export default function ChatWidget() {
         <Box
           sx={{
             position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
+            bottom: 100,
+            right: 24,
+            width: 380,
             height: 500,
-            bgcolor: "#fff",
+            bgcolor: "white",
+            backgroundImage: "linear-gradient(135deg, #f5f7fa, #c3cfe2)",
             borderRadius: 4,
             boxShadow: 6,
             p: 2,
             display: "flex",
             flexDirection: "column",
             zIndex: 1200,
+            backdropFilter: "blur(4px)",
           }}
         >
-          <Typography variant="h6" sx={{ mb: 1 }}>
-            🤖 AI Assistant
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 1,
+              fontWeight: "bold",
+              color: "#1976d2",
+              textAlign: "center",
+            }}
+          >
+            🛍️ Com&Com AI Assistant
           </Typography>
 
           <Box
@@ -170,11 +179,10 @@ export default function ChatWidget() {
                       {session.user.name}
                     </Typography>
                   )}
-
                   <Paper
                     sx={{
                       p: 1,
-                      bgcolor: msg.sender === "user" ? "#1976d2" : "#f0f0f0",
+                      bgcolor: msg.sender === "user" ? "#1976d2" : "#ffffffcc",
                       color: msg.sender === "user" ? "white" : "black",
                       borderRadius: 2,
                       maxWidth: "80%",
@@ -194,7 +202,7 @@ export default function ChatWidget() {
             <TextField
               fullWidth
               value={input}
-              placeholder="Ask something..."
+              placeholder="Type your question..."
               size="small"
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}

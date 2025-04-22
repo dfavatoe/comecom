@@ -266,7 +266,14 @@ export default function PostPage() {
                 <Typography variant="body2">{post.likes.length}</Typography>
               </Box>
 
-              <IconButton>
+              <IconButton
+                disableRipple
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
                 <ChatBubbleOutlineIcon sx={{ color: "gray" }} />
               </IconButton>
             </Box>
