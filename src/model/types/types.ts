@@ -74,7 +74,7 @@ export type ReviewT = {
   rating: number | null;
   comment: string;
   date: Date;
-  id: string;
+  _id: string;
 };
 
 export type addProductT = Pick<
@@ -184,3 +184,16 @@ export type CloudinaryUploadResult = {
   original_filename: string;
   folder?: string;
 };
+
+// Reviews Responses
+export interface PostNewReviewResponse {
+  message: string;
+  product: ProductT;
+  error: string;
+}
+
+export interface GetReviewsResponse {
+  message: string;
+  reviews: ReviewT[];
+  error: string;
+}
