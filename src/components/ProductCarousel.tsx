@@ -2,6 +2,9 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./productcarousel.module.css";
 import { ProductT } from "@/model/types/types";
+import { Stack } from "react-bootstrap";
+import Link from "next/link";
+import AddToShoppingListButton from "./addToShoppingListButton";
 
 interface ProductCarouselProps {
   productsRecords: ProductT[];
@@ -11,7 +14,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
   productsRecords,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const productCardRef = useRef<HTMLDivElement>(null); //Card reference
+  const productCardRef = useRef<HTMLDivElement>(null);
 
   // Dynamic scrolling, based on card size
   const scroll = (direction: "left" | "right") => {
@@ -20,7 +23,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
     if (!container || !card) return;
 
-    const cardWidth = card.offsetWidth + 10; // + gap zwischen Cards (z. B. 10px)
+    const cardWidth = card.offsetWidth + 10;
     const maxScroll = container.scrollWidth - container.clientWidth;
 
     if (direction === "left") {
@@ -36,16 +39,9 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
         container.scrollBy({ left: cardWidth, behavior: "smooth" });
       }
     }
-    // if (scrollContainerRef.current) {
-    //   const scrollAmount = 300; // Adjust scroll amount as needed
-    //   scrollContainerRef.current.scrollBy({
-    //     left: direction === "left" ? -scrollAmount : scrollAmount,
-    //     behavior: "smooth",
-    //   });
-    // }
   };
 
-  // SIngle product card
+  // Single product card
   const ProductCard = ({
     product,
     index,
@@ -53,43 +49,36 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
     product: ProductT;
     index: number;
   }) => (
-    // <div className={styles.productCard}>
-    //   <img src={product.images[0]} alt={product.title} />
-    //   <h4>{product.title}</h4>
-    //   <span className="product-price">{product.price} € </span>
-    // </div>
-
     <div
-      ref={index === 0 ? productCardRef : null} // 🟡 Referenz nur auf die erste Card
+      ref={index === 0 ? productCardRef : null}
       className={styles.productCard}
     >
       <img src={product.images[0]} alt={product.title} />
       <h4>{product.title}</h4>
       <span className="product-price">{product.price} €</span>
+      <Stack gap={3}>
+        <Link className="mb-2" href={`/products/${product._id}`}>
+          Learn more
+        </Link>
+      </Stack>
+
+      <AddToShoppingListButton productId={product._id} />
     </div>
   );
 
   return (
-    <div
-      className={styles.scrollmenu}
-      // className="scrollmenu relative mb-4"
-    >
+    <div className={styles.scrollmenu}>
       {/* Left Button */}
       <button
         onClick={() => scroll("left")}
         className={`${styles["carousel-button"]} ${styles.left}`}
-        // className="carousel-button left"
         aria-label="Scroll left"
       >
         <ChevronLeft size={24} />
       </button>
 
       {/* Scrollable Container */}
-      <div
-        ref={scrollContainerRef}
-        className={styles["scroll-container"]}
-        //   className="scroll-container"
-      >
+      <div ref={scrollContainerRef} className={styles["scroll-container"]}>
         {productsRecords.map((product, index) => (
           <ProductCard key={product._id} product={product} index={index} />
         ))}
@@ -99,7 +88,6 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
       <button
         onClick={() => scroll("right")}
         className={`${styles["carousel-button"]} ${styles.right}`}
-        // className="carousel-button right"
         aria-label="Scroll right"
       >
         <ChevronRight size={24} />
