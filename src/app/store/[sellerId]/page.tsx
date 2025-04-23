@@ -22,31 +22,8 @@ export default function Store() {
   const { data: session } = useSession(); // Authentifizierte Session holen
   const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
 
-  // Lade die Nachrichten, wenn die chatroomId vorhanden ist
-  useEffect(() => {
-    if (chatroomId) {
-      fetchChat();
-    }
-  }, [chatroomId]);
-
-  const fetchChat = async () => {
-    if (chatroomId) {
-      const res = await fetch(`/api/chatroom/${chatroomId}/message`);
-      const data = await res.json();
-      setMessages(data); // Nachrichten setzen
-    }
-  };
-
-  if (!session?.user) {
-    return <div>Not authenticated</div>;
-  }
-
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
-
-  const sellerAddress = seller?.address
-    ? `${seller.address.streetName} ${seller.address.streetNumber}, ${seller.address.postalcode} ${seller.address.city}`
-    : "";
 
   const handleGetSellerShopInfo = async () => {
     if (sellerId) {
@@ -68,9 +45,46 @@ export default function Store() {
     }
   };
 
+  const fetchChat = async () => {
+    if (chatroomId) {
+      const res = await fetch(`/api/chatroom/${chatroomId}/message`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data); // Nachrichten setzen
+      } else {
+        console.error("Fehler beim Abrufen der Nachrichten");
+      }
+    }
+  };
+
+  // Lade die Nachrichten, wenn die chatroomId vorhanden ist
+  // useEffect(() => {
+  //   if (chatroomId) {
+  //     fetchChat();
+  //   }
+  // }, [chatroomId]);
+
+  // Polling für das Abrufen der Nachrichten alle 3 Sekunden
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchChat(); // Ruft alle 3 Sekunden die Nachrichten ab
+    }, 1000);
+
+    // Cleanup: Wenn der Component unmounted wird, das Intervall aufräumen
+    return () => clearInterval(interval);
+  }, [chatroomId]); // Polling läuft nur, wenn sich die chatroomId ändert
+
   useEffect(() => {
     handleGetSellerShopInfo();
   }, []);
+
+  if (!session?.user) {
+    return <div>Not authenticated</div>;
+  }
+
+  const sellerAddress = seller?.address
+    ? `${seller.address.streetName} ${seller.address.streetNumber}, ${seller.address.postalcode} ${seller.address.city}`
+    : "";
 
   return (
     <>
@@ -145,8 +159,6 @@ export default function Store() {
             )}
           </Container>
           <div style={{ padding: "2rem" }}>
-            {/* <StartChatButton onClick={toggleChat} sellerId={dummySellerId} /> 
-          {/* TODO - Dummy ID hast to be changed to real seller id  */}
             {sellerId && <StartChatButton sellerId={sellerId} />}
           </div>
         </>

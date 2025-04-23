@@ -1,7 +1,7 @@
 import ChatroomModel from "@/model/chatroomModel";
 import dbConnect from "./dbConnect";
 
-export async function createChatroom(userId: string, chatroomId: string) {
+export async function createChatroom(chatroomId: string, participants: string) {
   try {
     await dbConnect();
 
@@ -16,8 +16,9 @@ export async function createChatroom(userId: string, chatroomId: string) {
     // Create a new chatroom
     const newChatroom = new ChatroomModel({
       // creatorId: userId, // Die ID des Benutzers, der den Chatroom erstellt
-      chatroomId, // passt das hier?
-      participants: [userId], // Den Ersteller als ersten Teilnehmer hinzufügen
+      //chatroomId,  passt das hier?
+      chatroomId,
+      participants, //[userId],  Den Ersteller als ersten Teilnehmer hinzufügen
       createdAt: new Date(),
     });
 
@@ -27,10 +28,15 @@ export async function createChatroom(userId: string, chatroomId: string) {
     return newChatroom;
   } catch (error) {
     console.error("Fehler beim Erstellen des Chatrooms:", error);
-    if (error instanceof Error) {
-      throw new Error(`Error creating chatroom: ${error.message}`);
-    } else {
-      throw new Error("Unknown error occurred while creating chatroom.");
-    }
+    // if (error instanceof Error) {
+    //   throw new Error(`Error creating chatroom: ${error.message}`);
+    // } else {
+    //   throw new Error("Unknown error occurred while creating chatroom.");
+    // }
+    throw new Error(
+      error instanceof Error
+        ? `Error creating chatroom: ${error.message}`
+        : "Unknown error occurred while creating chatroom."
+    );
   }
 }

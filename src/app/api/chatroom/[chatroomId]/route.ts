@@ -12,9 +12,9 @@ import MessageModel from "@/model/chatMessageModel";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { chatroomId: string; messageId: string } }
+  { params }: { params: { chatroomId: string } }
 ) {
-  const { chatroomId, messageId } = params;
+  const { chatroomId } = params;
 
   await dbConnect();
 
@@ -29,19 +29,18 @@ export async function GET(
       return new NextResponse("Chatroom nicht gefunden", { status: 404 });
     }
     // Die eine Nachricht holen
-    const message = await MessageModel.findOne({
-      _id: messageId,
+    const messages = await MessageModel.find({
       chatroomId: chatroomId,
-    });
+    }).sort({ createdAt: 1 }); // Aufsteigend sortieren nach Zeit;
 
-    if (!message) {
-      return new NextResponse("Nachricht nicht gefunden", { status: 404 });
-    }
+    // if (!message) {
+    //   return new NextResponse("Nachricht nicht gefunden", { status: 404 });
+    // }
 
-    return NextResponse.json(message);
+    return NextResponse.json(messages);
   } catch (error) {
-    console.log(error);
-    return new NextResponse("Fehler beim Abrufen des Chatrooms", {
+    console.error("Fehler beim Abrufen der Nachrichten:", error);
+    return new NextResponse("Fehler beim Abrufen der Nachrichten", {
       status: 500,
     });
   }

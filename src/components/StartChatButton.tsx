@@ -23,6 +23,8 @@ export default function StartChatButton({ sellerId }: Props) {
     console.log("Session User ID: ", session.user.id);
     console.log("Seller ID: ", sellerId);
 
+    const buyerId = session.user.id;
+
     if (!sellerId) {
       alert("Seller ID is missing");
       return;
@@ -40,7 +42,8 @@ export default function StartChatButton({ sellerId }: Props) {
 
       const existingChat = allChatrooms.find(
         (room: any) =>
-          room.participants.includes(session.user.id) &&
+          // room.participants.includes(session.user.id) &&
+          room.participants.includes(buyerId) &&
           room.participants.includes(sellerId)
       );
 
@@ -52,13 +55,16 @@ export default function StartChatButton({ sellerId }: Props) {
       }
 
       // 2. If not, create a new chatroom
-      const chatroomId = [session.user.id, sellerId].sort().join("_");
+      // const chatroomId = [session.user.id, sellerId].sort().join("_");
+      const newChatroomId = [buyerId, sellerId].sort().join("_"); // Creating unique chatroom ID
 
       const createRes = await fetch(`/api/chatroom`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          chatroomId,
+          chatroomId: newChatroomId,
+          participants: [buyerId, sellerId],
+          // participants: [session.user.id, sellerId],
         }),
       });
 

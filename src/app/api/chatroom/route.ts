@@ -44,17 +44,19 @@ export async function POST(req: NextRequest) {
   const userId = session.user.id;
 
   const body = await req.json();
-  const { chatroomId } = body;
+  const { chatroomId, participants } = body;
 
-  if (!chatroomId) {
+  if (!chatroomId || !participants || participants.length < 2) {
     return new NextResponse(
-      JSON.stringify({ message: "Chatroom ID is required" }),
+      JSON.stringify({
+        message: "Chatroom ID and 2 participents are required",
+      }),
       { status: 400 }
     );
   }
 
   try {
-    const newChatroom = await createChatroom(userId, chatroomId);
+    const newChatroom = await createChatroom(chatroomId, participants);
     return new Response(JSON.stringify(newChatroom), { status: 200 });
   } catch (error) {
     console.error("❌ API Error:", error); // raus nehmen wenn nicht mehr gebraucht TODO
