@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import StartChatButton from "@/components/StartChatButton";
+import Link from "next/link";
 
 export default function Chat() {
   // const [messageText, setMessageText] = useState<string>("");
@@ -41,6 +42,9 @@ export default function Chat() {
     <div>
       <h2>Welcome to the Page of the Seller</h2>
 
+      <Link className="mb-2" href={`/dashboard/chats`}>
+        Your Chats
+      </Link>
       <div style={{ padding: "2rem" }}>
         {/* <StartChatButton onClick={toggleChat} sellerId={dummySellerId} /> */}
         {/* TODO - Dummy ID hast to be changed to real seller id  */}
