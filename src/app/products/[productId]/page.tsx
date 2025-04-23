@@ -8,6 +8,7 @@ import ModalAlert from "@/components/ModalAlert";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
+import Reviews from "@/components/Reviews";
 
 export default function SingleProductPage() {
   const { productId } = useParams<{ productId: string }>();
@@ -169,7 +170,7 @@ export default function SingleProductPage() {
         </Row>
         <h4 ref={topReviewsRef}>Top Reviews:</h4>
 
-        {/* <Reviews productId={productId!} /> */}
+        <Reviews productId={productId!} />
         <ModalAlert
           showAlert={showAlert}
           alertText={alertText}
