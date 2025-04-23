@@ -1,17 +1,18 @@
 import Link from "next/link";
 import NavLinks from "@/components/sidenav-links";
 import { Col, Row } from "react-bootstrap";
+import "@/app/globals.css";
 
 export default function SideNav() {
   return (
     <div className="d-flex flex-column h-100 px-3 py-4 px-md-2">
       <div
         className="mb-2 flex h-20 items-center justify-center rounded-md p-4 md:h-40"
-        style={{ backgroundColor: "#ffd43b" }}
+        style={{ backgroundColor: "var(--secondary)", boxShadow: "5px" }}
       >
         <div className="text-black" style={{ width: "8rem" }}>
           <Row className="d-inline text-center">
-            <h1>Account</h1>
+            <h1 style={{ color: "var(--primary)" }}>Account</h1>
           </Row>
         </div>
       </div>
