@@ -369,7 +369,7 @@ export default function Home() {
             <div key={product.id || index} className={styles.gridItem}>
               <div className={styles.imageWrapper}>
                 <Image
-                  src={product.images[0] || "/fallback.jpg"}
+                  src={product.thumbnail || "/fallback.jpg"}
                   alt={product.title}
                   fill
                   sizes="(max-width: 600px) 100vw, 25vw"
