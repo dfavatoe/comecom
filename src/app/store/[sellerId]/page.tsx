@@ -7,6 +7,8 @@ import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useSession } from "next-auth/react";
+import StartChatButton from "@/components/StartChatButton";
 
 const MapClient = dynamic(() => import("@/components/MapClient"), {
   ssr: false,
@@ -15,6 +17,29 @@ const MapClient = dynamic(() => import("@/components/MapClient"), {
 export default function Store() {
   const { sellerId } = useParams<{ sellerId: string }>();
   console.log("sellerId :>> ", sellerId);
+
+  const [messages, setMessages] = useState<any[]>([]); // Zustand für Nachrichten
+  const { data: session } = useSession(); // Authentifizierte Session holen
+  const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
+
+  // Lade die Nachrichten, wenn die chatroomId vorhanden ist
+  useEffect(() => {
+    if (chatroomId) {
+      fetchChat();
+    }
+  }, [chatroomId]);
+
+  const fetchChat = async () => {
+    if (chatroomId) {
+      const res = await fetch(`/api/chatroom/${chatroomId}/message`);
+      const data = await res.json();
+      setMessages(data); // Nachrichten setzen
+    }
+  };
+
+  if (!session?.user) {
+    return <div>Not authenticated</div>;
+  }
 
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
@@ -119,6 +144,11 @@ export default function Store() {
               <h2>Seller still didn't share the products</h2>
             )}
           </Container>
+          <div style={{ padding: "2rem" }}>
+            {/* <StartChatButton onClick={toggleChat} sellerId={dummySellerId} /> 
+          {/* TODO - Dummy ID hast to be changed to real seller id  */}
+            {sellerId && <StartChatButton sellerId={sellerId} />}
+          </div>
         </>
       )}
     </>
