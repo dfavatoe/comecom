@@ -7,16 +7,18 @@ import { ReviewT } from "@/model/types/types";
 //GET reviews
 export async function GET(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: { productId: string } }
 ) {
+  // context plus await avoids an error when trying to directly access params without awaiting
+  const { productId } = await context.params;
   await dbConnect();
 
   try {
-    const product = await ProductModel.findById(params.productId);
+    const product = await ProductModel.findById(productId);
 
     if (!product) {
       return NextResponse.json(
-        { message: `Product ${params.productId} not found.` },
+        { message: `Product ${productId} not found.` },
         { status: 404 }
       );
     }
@@ -28,7 +30,7 @@ export async function GET(
 
     if (sortedReviews.length === 0) {
       return NextResponse.json(
-        { message: `No Reviews yet for ptoduct ${params.productId}.` },
+        { message: `No Reviews yet for ptoduct ${productId}.` },
         { status: 200 }
       );
     }
@@ -49,8 +51,10 @@ export async function GET(
 // Post a review
 export async function POST(
   req: NextRequest,
-  { params }: { params: { productId: string } }
+  context: { params: { productId: string } }
 ) {
+  // context plus await avoids an error when trying to directly access params without awaiting
+  const { productId } = await context.params;
   await dbConnect();
 
   const session = await auth();
@@ -78,7 +82,7 @@ export async function POST(
     };
 
     const product = await ProductModel.findByIdAndUpdate(
-      params.productId,
+      productId,
       { $push: { reviews: newReview } },
       { new: true }
     );
