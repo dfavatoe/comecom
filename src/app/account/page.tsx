@@ -8,7 +8,7 @@ import {
   UserFull,
 } from "@/model/types/types";
 import { baseUrl } from "../lib/urls";
-import { Button, Col, Form, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import Link from "next/link";
 import "@/app/globals.css";
 
@@ -144,7 +144,21 @@ const AccountPage = () => {
 
   if (loading) return <p>Loading...</p>;
 
-  if (!session) return <p>You must be signed in to view your account.</p>;
+  if (status === "unauthenticated")
+    return (
+      <Container className="d-block">
+        <h4>You must be signed in to view your account.</h4>
+        <div className="d-block mb-4">
+          <Link className="d-inline" href={"/signup"}>
+            Sign up{" "}
+          </Link>
+          <span>or </span>
+          <Link className="d-inline" href={"/login"}>
+            Log in{" "}
+          </Link>
+        </div>
+      </Container>
+    );
 
   return (
     <>

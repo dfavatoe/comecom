@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
 import Reviews from "@/components/Reviews";
+import "@/app/globals.css";
 
 export default function SingleProductPage() {
   const { productId } = useParams<{ productId: string }>();

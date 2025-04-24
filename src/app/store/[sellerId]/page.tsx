@@ -7,6 +7,7 @@ import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
+import "@/app/globals.css";
 
 const MapClient = dynamic(() => import("@/components/MapClient"), {
   ssr: false,
@@ -71,12 +72,12 @@ export default function Store() {
                 />
               )}
 
-              <div className="second-header" style={{ textAlign: "center" }}>
+              <h1 className="second-header" style={{ textAlign: "center" }}>
                 {seller.name}
-              </div>
-              <div className="third-header" style={{ textAlign: "center" }}>
+              </h1>
+              <h2 className="third-header" style={{ textAlign: "center" }}>
                 Store
-              </div>
+              </h2>
             </Row>
             <hr />
             <Row>
@@ -110,9 +111,9 @@ export default function Store() {
               </Col>
             </Row>
             <hr />
-            <div className="second-header mb-4" style={{ textAlign: "center" }}>
+            <h2 className="second-header mb-4" style={{ textAlign: "center" }}>
               Products
-            </div>
+            </h2>
             {products ? (
               products.map((product) => {
                 return (

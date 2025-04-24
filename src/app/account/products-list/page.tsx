@@ -3,8 +3,9 @@ import SellerProductsList from "@/components/SellerProductsList";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import BuyerShoppingList from "@/components/BuyerShoppingList";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Link from "next/link";
+import "@/app/globals.css";
 
 function ProductsList() {
   const { data: session, status } = useSession();

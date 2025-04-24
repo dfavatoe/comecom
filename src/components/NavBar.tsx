@@ -45,10 +45,10 @@ function NavBar() {
             </NavDropdown>
           </Nav>
 
-          <div className="d-flex align-items-center gap-2">
+          <div className="d-lg-flex justify-content-end align-items-center">
             {session?.user ? (
               <>
-                <span className="mb-0">Hello {session.user.name}!</span>
+                <span className="mb-0">Hello {session.user.name}!</span>{" "}
                 <SignOut />
               </>
             ) : (

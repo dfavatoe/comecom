@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Container } from "react-bootstrap";
 import Link from "next/link";
 import AvatarGenerator from "@/components/AvatarGenerator";
+import "@/app/globals.css";
 
 function generateImage() {
   const { data: session, status } = useSession();
