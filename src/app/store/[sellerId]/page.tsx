@@ -19,6 +19,8 @@ export default function Store() {
   console.log("sellerId :>> ", sellerId);
 
   const [messages, setMessages] = useState<any[]>([]); // Zustand für Nachrichten
+  const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
+
   const { data: session } = useSession(); // Authentifizierte Session holen
   const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
 
@@ -46,14 +48,26 @@ export default function Store() {
   };
 
   const fetchChat = async () => {
-    if (chatroomId) {
-      const res = await fetch(`/api/chatroom/${chatroomId}/message`);
-      if (res.ok) {
-        const data = await res.json();
-        setMessages(data); // Nachrichten setzen
-      } else {
+    if (!chatroomId) return;
+
+    try {
+      const query = lastTimestamp ? `?after=${lastTimestamp}` : "";
+      const res = await fetch(`/api/chatroom/${chatroomId}/message${query}`);
+      if (!res.ok) {
         console.error("Fehler beim Abrufen der Nachrichten");
+        return;
       }
+
+      const newMessages = await res.json();
+
+      if (newMessages.length > 0) {
+        setMessages((prev) => [...prev, ...newMessages]);
+
+        const latest = newMessages[newMessages.length - 1];
+        setLastTimestamp(new Date(latest.createdAt).getTime());
+      }
+    } catch (err) {
+      console.error("fetchChat error:", err);
     }
   };
 
@@ -65,14 +79,14 @@ export default function Store() {
   // }, [chatroomId]);
 
   // Polling für das Abrufen der Nachrichten alle 3 Sekunden
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetchChat(); // Ruft alle 3 Sekunden die Nachrichten ab
-    }, 1000);
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     fetchChat(); // Ruft alle 3 Sekunden die Nachrichten ab
+  //   }, 1000);
 
-    // Cleanup: Wenn der Component unmounted wird, das Intervall aufräumen
-    return () => clearInterval(interval);
-  }, [chatroomId]); // Polling läuft nur, wenn sich die chatroomId ändert
+  //   // Cleanup: Wenn der Component unmounted wird, das Intervall aufräumen
+  //   return () => clearInterval(interval);
+  // }, [chatroomId]); // Polling läuft nur, wenn sich die chatroomId ändert
 
   useEffect(() => {
     handleGetSellerShopInfo();

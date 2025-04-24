@@ -1,4 +1,4 @@
-"use client"; // Diese Direktive stellt sicher, dass die Datei als Client-Komponente behandelt wird.
+"use client";
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -6,20 +6,12 @@ import StartChatButton from "@/components/StartChatButton";
 import Link from "next/link";
 
 export default function Chat() {
-  // const [messageText, setMessageText] = useState<string>("");
-  const dummySellerId = "6616aa551b0bca7f42123456"; // Später dynamisch holen TODO
+  const dummySellerId = "6616aa551b0bca7f42123456";
 
-  const [messages, setMessages] = useState<any[]>([]); // Zustand für Nachrichten
-  const { data: session } = useSession(); // Authentifizierte Session holen
-  const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
+  const [messages, setMessages] = useState<any[]>([]);
+  const { data: session } = useSession();
+  const [chatroomId, setChatroomId] = useState<string | null>(null);
 
-  // const [isChatOpen, setIsChatOpen] = useState(false);
-
-  // const toggleChat = () => {
-  //   setIsChatOpen((prev) => !prev);
-  // };
-
-  // Lade die Nachrichten, wenn die chatroomId vorhanden ist
   useEffect(() => {
     if (chatroomId) {
       fetchChat();
@@ -30,7 +22,7 @@ export default function Chat() {
     if (chatroomId) {
       const res = await fetch(`/api/chatroom/${chatroomId}/message`);
       const data = await res.json();
-      setMessages(data); // Nachrichten setzen
+      setMessages(data);
     }
   };
 
@@ -46,8 +38,6 @@ export default function Chat() {
         Your Chats
       </Link>
       <div style={{ padding: "2rem" }}>
-        {/* <StartChatButton onClick={toggleChat} sellerId={dummySellerId} /> */}
-        {/* TODO - Dummy ID hast to be changed to real seller id  */}
         <StartChatButton sellerId={dummySellerId} />
       </div>
     </div>

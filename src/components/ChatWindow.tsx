@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useEffect, useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent, useRef } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Message } from "@/model/types/types";
@@ -14,22 +14,75 @@ export default function Chat({ chatroomId }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
   const { data: session } = useSession();
+  const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
+
+  // useEffect(() => {
+  //   // Safety Check für gültige MongoDB-ID
+  //   if (!chatroomId || chatroomId.length !== 24) {
+  //     console.error("❌ Invalid chatroom ID:", chatroomId);
+  //     return;
+  //   }
+
+  //   fetchChat();
+  // }, [chatroomId]);
+
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    // Safety Check für gültige MongoDB-ID
-    if (!chatroomId || chatroomId.length !== 24) {
-      console.error("❌ Invalid chatroom ID:", chatroomId);
-      return;
-    }
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
+  useEffect(() => {
+    if (!chatroomId || chatroomId.length !== 24) return;
+
+    // Initial laden
     fetchChat();
+
+    // Polling starten
+    const interval = setInterval(() => {
+      fetchChat();
+    }, 5000); // oder z. B. 3000ms für weniger Netzwerktraffic
+
+    return () => clearInterval(interval);
   }, [chatroomId]);
 
   const fetchChat = async () => {
-    const res = await fetch(`/api/chatroom/${chatroomId}/message`);
-    const data = await res.json();
-    setMessages(data.reverse());
+    const query = lastTimestamp ? `?after=${lastTimestamp}` : "";
+    const res = await fetch(`/api/chatroom/${chatroomId}/message${query}`);
+    const newMessages: Message[] = await res.json();
+
+    if (newMessages.length > 0) {
+      setMessages((prev) => {
+        const existingIds = new Set(prev.map((msg) => msg._id));
+        const allMessages = [...prev];
+
+        newMessages.forEach((msg) => {
+          if (!existingIds.has(msg._id)) {
+            allMessages.push(msg);
+          }
+        });
+
+        return allMessages.sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
+      });
+
+      // Robusteste Variante: neuesten Timestamp extrahieren
+      const latest = newMessages.reduce((latest, msg) => {
+        const time = new Date(msg.created_at).getTime();
+        return time > latest ? time : latest;
+      }, lastTimestamp ?? 0);
+
+      setLastTimestamp(latest);
+    }
   };
+
+  // const fetchChat = async () => {
+  //   const res = await fetch(`/api/chatroom/${chatroomId}/message`);
+  //   const data = await res.json();
+  //   setMessages(data.reverse());
+  // };
 
   const handleMessageTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessageText(e.target.value);
@@ -106,7 +159,7 @@ export default function Chat({ chatroomId }: ChatProps) {
           overflowY: "auto",
           padding: "1rem",
           display: "flex",
-          flexDirection: "column-reverse",
+          flexDirection: "column",
         }}
       >
         {messages.map((message) => {
@@ -186,6 +239,7 @@ export default function Chat({ chatroomId }: ChatProps) {
         <Button type="submit">
           <SendIcon />
         </Button>
+        <div ref={bottomRef} />
       </Box>
     </div>
   );

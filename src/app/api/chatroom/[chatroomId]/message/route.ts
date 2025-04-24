@@ -56,29 +56,62 @@ export async function POST(
 }
 
 // GET api/chatroom/[chatroomId]/message - Gibt alle Nachrichten eines Chatrooms zurück
+// export async function GET(
+//   req: NextRequest,
+//   { params }: { params: { chatroomId: string } }
+// ) {
+//   //const { chatroomId } = req.params; // Hole die chatroomId aus der URL
+//   // const url = new URL(req.url);
+//   // const chatroomId = url.pathname.split("/")[3]; // Der chatroomId befindet sich an Position 3 in der URL (z.B. /api/chatroom/:chatroomId)
+//   const { chatroomId } = params;
+//   await dbConnect();
+
+//   //   const session = await auth(); // auth() gibt die Session zurück
+//   //   if (!session?.user) {
+//   //     return new NextResponse("Unauthorized", { status: 401 });
+//   //   }
+
+//   try {
+//     const messages = await MessageModel.find({ chatroomId }); // Alle Nachrichten des Chatrooms abrufen
+//     return new NextResponse(JSON.stringify(messages), { status: 200 });
+//   } catch (error) {
+//     console.error("Fehler beim Abrufen der Nachrichten:", error);
+//     // return new NextResponse("Fehler beim Abrufen der Nachrichten", {
+//     //   status: 500,
+//     // });
+//     return new NextResponse(
+//       JSON.stringify({ error: "Fehler beim Abrufen der Nachrichten" }),
+//       {
+//         status: 500,
+//         headers: { "Content-Type": "application/json" },
+//       }
+//     );
+//   }
+// }
+
 export async function GET(
   req: NextRequest,
   { params }: { params: { chatroomId: string } }
 ) {
-  //const { chatroomId } = req.params; // Hole die chatroomId aus der URL
-  // const url = new URL(req.url);
-  // const chatroomId = url.pathname.split("/")[3]; // Der chatroomId befindet sich an Position 3 in der URL (z.B. /api/chatroom/:chatroomId)
   const { chatroomId } = params;
   await dbConnect();
 
-  //   const session = await auth(); // auth() gibt die Session zurück
-  //   if (!session?.user) {
-  //     return new NextResponse("Unauthorized", { status: 401 });
-  //   }
+  const url = new URL(req.url);
+  const after = url.searchParams.get("after");
 
   try {
-    const messages = await MessageModel.find({ chatroomId }); // Alle Nachrichten des Chatrooms abrufen
+    let query: any = { chatroomId };
+
+    if (after) {
+      const afterDate = new Date(Number(after)); // "after" als Zahl (Zeitstempel)
+      query.createdAt = { $gt: afterDate };
+    }
+
+    const messages = await MessageModel.find(query).sort({ createdAt: 1 });
+
     return new NextResponse(JSON.stringify(messages), { status: 200 });
   } catch (error) {
     console.error("Fehler beim Abrufen der Nachrichten:", error);
-    // return new NextResponse("Fehler beim Abrufen der Nachrichten", {
-    //   status: 500,
-    // });
     return new NextResponse(
       JSON.stringify({ error: "Fehler beim Abrufen der Nachrichten" }),
       {
