@@ -28,8 +28,13 @@ export default function Chat({ chatroomId }: ChatProps) {
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
+  // useEffect(() => {
+  //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages]);
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -219,6 +224,7 @@ export default function Chat({ chatroomId }: ChatProps) {
             </Box>
           );
         })}
+        <div ref={bottomRef} />
       </div>
       <Box
         component="form"
@@ -239,7 +245,6 @@ export default function Chat({ chatroomId }: ChatProps) {
         <Button type="submit">
           <SendIcon />
         </Button>
-        <div ref={bottomRef} />
       </Box>
     </div>
   );
