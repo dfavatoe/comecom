@@ -1,25 +1,22 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Container, Form, Button, Alert } from "react-bootstrap";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
 
 function Login() {
   const { data: session } = useSession();
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const { showToast } = useToast();
   const ref = useRef<HTMLFormElement>(null);
   const router = useRouter();
 
   const handleLogin = async (formData: FormData) => {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-
-    setError(null);
-    setSuccess(null);
 
     const result = await signIn("credentials", {
       redirect: false, //If set to `false`, the `signIn` method will return the URL to redirectTo instead of redirecting automatically to the same page.
@@ -28,28 +25,20 @@ function Login() {
     });
 
     if (result?.error) {
-      setError("Invalid credentials. Please try again.");
+      showToast("Invalid credentials. Please try again.", "danger");
     } else if (result?.ok) {
-      setSuccess("Successfully logged in!");
+      showToast("Successfully logged in!", "success");
 
       //Reset form
       if (ref.current) {
         ref.current.reset();
       }
-
-      // Redirect after login
-      setTimeout(() => {
-        router.push("/products");
-      }, 5000);
     }
   };
 
   return (
     <Container style={{ maxWidth: "600px" }}>
       <h1 className="m-4 text-center">Login</h1>
-
-      {success && <Alert variant="success">{success}</Alert>}
-      {error && <Alert variant="danger">{error}</Alert>}
 
       {session?.user ? (
         <div>
@@ -119,11 +108,6 @@ function Login() {
           </>
         )}
       </Form>
-      {/* <ModalAlert
-          showAlert={showAlert}
-          alertText={alertText}
-          setShowAlert={setShowAlert}
-        /> */}
     </Container>
   );
 }
