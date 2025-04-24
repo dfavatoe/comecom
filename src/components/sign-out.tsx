@@ -16,7 +16,7 @@ export function SignOut() {
         }}
         style={{
           textDecoration: "none",
-          color: "orange",
+          color: "var(--primary)",
           padding: 0,
         }}
       >
