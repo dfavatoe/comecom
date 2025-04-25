@@ -137,6 +137,7 @@ export default function Home() {
   return (
     <>
       <h1 style={{ color: "var(--primary)" }}>Welcome</h1>
+
       <div
         className={styles.container}
         style={{
@@ -192,6 +193,7 @@ export default function Home() {
       </div>
 
       <ProductCarousel productsRecords={products} />
+
     </>
   );
 }
