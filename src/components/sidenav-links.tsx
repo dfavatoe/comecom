@@ -1,6 +1,7 @@
 import Person2Icon from "@mui/icons-material/Person2";
 import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import { Nav } from "react-bootstrap";
 
 // Navigation link data
@@ -15,6 +16,11 @@ const links = [
     name: "Generate Image",
     href: "/account/generate-image",
     icon: LightbulbIcon,
+  },
+  {
+    name: "Chats",
+    href: "/dashboard/chats",
+    icon: ChatBubbleIcon,
   },
 ];
 
