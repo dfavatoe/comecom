@@ -8,6 +8,8 @@ import { ProductT } from "@/model/types/types";
 import { baseUrl } from "./lib/urls";
 import { useSession } from "next-auth/react";
 import styles from "./page.module.css";
+import UserAvatar from "@/components/UserAvatar";
+import "@/app/globals.css";
 
 export interface ProductsRoot {
   message: string;
@@ -134,6 +136,7 @@ export default function Home() {
 
   return (
     <>
+      <h1 style={{ color: "var(--primary)" }}>Welcome</h1>
       <div
         className={styles.container}
         style={{

@@ -1,12 +1,13 @@
 "use client";
-import SellerProductsList from "@/components/SellerProductsList";
+
+import StoreCoverGenerator from "@/components/StoreCoverGenerator";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import BuyerShoppingList from "@/components/BuyerShoppingList";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import Link from "next/link";
+import AvatarGenerator from "@/components/AvatarGenerator";
 
-function ProductsList() {
+function generateImage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
 
@@ -34,14 +35,10 @@ function ProductsList() {
     );
 
   if (session?.user!.role === "seller") {
-    return (
-      <>
-        <SellerProductsList />
-      </>
-    );
+    return <StoreCoverGenerator />;
   }
 
-  return <BuyerShoppingList />;
+  return <AvatarGenerator />;
 }
 
-export default ProductsList;
+export default generateImage;
