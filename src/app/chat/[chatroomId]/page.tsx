@@ -2,6 +2,7 @@
 
 import ChatWindow from "@/components/ChatWindow";
 import { useParams } from "next/navigation";
+import "@/app/globals.css";
 
 export default function ChatRoomPage() {
   const params = useParams();
@@ -13,7 +14,7 @@ export default function ChatRoomPage() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h2>💬 Chatroom</h2>
+      <h2>Chatroom </h2>
       <div
         style={{
           width: "100%",

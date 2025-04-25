@@ -5,6 +5,7 @@ import { useEffect, useState, ChangeEvent, FormEvent, useRef } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Message } from "@/model/types/types";
+import "@/app/globals.css";
 
 interface ChatProps {
   chatroomId: string;
@@ -16,21 +17,8 @@ export default function Chat({ chatroomId }: ChatProps) {
   const { data: session } = useSession();
   const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
 
-  // useEffect(() => {
-  //   // Safety Check für gültige MongoDB-ID
-  //   if (!chatroomId || chatroomId.length !== 24) {
-  //     console.error("❌ Invalid chatroom ID:", chatroomId);
-  //     return;
-  //   }
-
-  //   fetchChat();
-  // }, [chatroomId]);
-
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // useEffect(() => {
-  //   bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
   useEffect(() => {
     if (bottomRef.current) {
       bottomRef.current.scrollIntoView({ behavior: "smooth" });
@@ -73,7 +61,6 @@ export default function Chat({ chatroomId }: ChatProps) {
         );
       });
 
-      // Robusteste Variante: neuesten Timestamp extrahieren
       const latest = newMessages.reduce((latest, msg) => {
         const time = new Date(msg.created_at).getTime();
         return time > latest ? time : latest;
@@ -82,12 +69,6 @@ export default function Chat({ chatroomId }: ChatProps) {
       setLastTimestamp(latest);
     }
   };
-
-  // const fetchChat = async () => {
-  //   const res = await fetch(`/api/chatroom/${chatroomId}/message`);
-  //   const data = await res.json();
-  //   setMessages(data.reverse());
-  // };
 
   const handleMessageTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMessageText(e.target.value);
@@ -120,14 +101,6 @@ export default function Chat({ chatroomId }: ChatProps) {
     } else {
       alert("Failed to send message");
     }
-
-    // if (res.ok) {
-    //   const updatedMessages = await res.json();
-    //   setMessages(updatedMessages);
-    //   setMessageText("");
-    // } else {
-    //   alert("Failed to send message");
-    // }
   };
 
   if (!session?.user) {
@@ -172,7 +145,7 @@ export default function Chat({ chatroomId }: ChatProps) {
       <Box
         sx={{
           padding: "0.5rem",
-          backgroundColor: "#f1f0f0",
+          backgroundColor: "var(--grey-bg)",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
         }}
       >
@@ -199,12 +172,6 @@ export default function Chat({ chatroomId }: ChatProps) {
         {messages.map((message) => {
           const isOwnMessage = String(message.authorId) === session?.user?.id;
 
-          // ONLY TIME
-          //   const time = new Date(message.created_at).toLocaleTimeString([], {
-          //     hour: "2-digit",
-          //     minute: "2-digit",
-          //   });
-          // DATE AND TIME ARE SHOWN
           const time = new Date(message.created_at).toLocaleString([], {
             day: "2-digit",
             month: "2-digit",
@@ -224,7 +191,9 @@ export default function Chat({ chatroomId }: ChatProps) {
             >
               <Box
                 sx={{
-                  backgroundColor: isOwnMessage ? "#ffefe2" : "#f1f0f0",
+                  backgroundColor: isOwnMessage
+                    ? "var(--secondary)"
+                    : "var(--grey-bg)",
                   color: "black",
                   borderRadius: "12px",
                   padding: "8px 12px",
@@ -273,7 +242,7 @@ export default function Chat({ chatroomId }: ChatProps) {
           //sx={{ height: "1em" }}
         />
         <Button type="submit">
-          <SendIcon />
+          <SendIcon style={{ color: "var(--btn-blue)" }} />
         </Button>
       </Box>
     </div>

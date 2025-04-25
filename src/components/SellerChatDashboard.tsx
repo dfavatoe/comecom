@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import "@/app/globals.css";
 import { Box, Typography, Paper, Stack, Button, Divider } from "@mui/material";
+import "@/app/globals.css";
 
 export default function SellerChatDashboard() {
   const { data: session } = useSession();
@@ -35,30 +36,6 @@ export default function SellerChatDashboard() {
   }, [session]);
 
   return (
-    // <div style={{ padding: "2rem" }}>
-    //   <h2>Your Chatrooms</h2>
-    //   {chatrooms.length === 0 && <p>No chats found.</p>}
-
-    //   {chatrooms.map((room) => (
-    //     <div
-    //       key={room._id}
-    //       style={{
-    //         marginBottom: "1rem",
-    //         borderBottom: "1px solid #ddd",
-    //         paddingBottom: "1rem",
-    //       }}
-    //     >
-    //       <p>
-    //         <strong>Chat with:</strong> {session?.user?.name} <br />
-    //         {/* <strong>Mit:</strong>{" "} */}
-    //         {room.participants
-    //           .filter((id: string) => id !== session?.user?.id)
-    //           .join(", ")}
-    //       </p>
-    //       <Link href={`/chat/${room._id}`}>Open Chat</Link>
-    //     </div>
-    //   ))}
-    // </div>
     <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
       <Typography variant="h4" gutterBottom>
         Your Chatrooms
@@ -122,7 +99,11 @@ export default function SellerChatDashboard() {
                   // passHref
                   // legacyBehavior
                 >
-                  <Button variant="outlined" size="small">
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    style={{ color: "var(--btn-blue)" }}
+                  >
                     Open Chat
                   </Button>
                 </Link>
