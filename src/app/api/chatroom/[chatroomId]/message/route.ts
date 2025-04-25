@@ -41,6 +41,7 @@ export async function POST(
       chatroomId,
       messageText,
       authorId: user._id, // Setze den Author der Nachricht aus der Datenbank
+      authorName: user.name,
     });
 
     // Speichere die Nachricht
@@ -52,6 +53,40 @@ export async function POST(
     return new NextResponse("Fehler beim Erstellen der Nachricht", {
       status: 500,
     });
+  }
+}
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { chatroomId: string } }
+) {
+  const { chatroomId } = params;
+  await dbConnect();
+
+  const url = new URL(req.url);
+  const after = url.searchParams.get("after");
+
+  try {
+    let query: any = { chatroomId };
+
+    if (after) {
+      const afterDate = new Date(Number(after)); // "after" als Zahl (Zeitstempel)
+      query.createdAt = { $gt: afterDate };
+    }
+
+    const messages = await MessageModel.find(query).sort({ createdAt: 1 });
+    console.log(messages);
+
+    return new NextResponse(JSON.stringify(messages), { status: 200 });
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Nachrichten:", error);
+    return new NextResponse(
+      JSON.stringify({ error: "Fehler beim Abrufen der Nachrichten" }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 }
 
@@ -88,36 +123,3 @@ export async function POST(
 //     );
 //   }
 // }
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { chatroomId: string } }
-) {
-  const { chatroomId } = params;
-  await dbConnect();
-
-  const url = new URL(req.url);
-  const after = url.searchParams.get("after");
-
-  try {
-    let query: any = { chatroomId };
-
-    if (after) {
-      const afterDate = new Date(Number(after)); // "after" als Zahl (Zeitstempel)
-      query.createdAt = { $gt: afterDate };
-    }
-
-    const messages = await MessageModel.find(query).sort({ createdAt: 1 });
-
-    return new NextResponse(JSON.stringify(messages), { status: 200 });
-  } catch (error) {
-    console.error("Fehler beim Abrufen der Nachrichten:", error);
-    return new NextResponse(
-      JSON.stringify({ error: "Fehler beim Abrufen der Nachrichten" }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-  }
-}

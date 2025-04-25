@@ -135,8 +135,37 @@ export default function Chat({ chatroomId }: ChatProps) {
   }
 
   // Get dynamically the Chatpartner-Name
+  function getChatPartnerName(
+    messages: Message[],
+    currentUserId: string
+  ): string {
+    console.log("Messages:", messages);
+    console.log("Current User ID:", currentUserId);
+
+    if (messages.length === 0) {
+      console.log("No messages found, returning Unknown User");
+      return "Unknown User";
+    }
+
+    const partnerMsg = messages.find(
+      (msg) => String(msg.authorId) !== String(currentUserId)
+    );
+
+    if (partnerMsg) {
+      console.log("Partner found:", partnerMsg);
+      return partnerMsg.authorName || "Unknown User";
+    }
+
+    console.log("No partner found, returning Unknown User");
+    return "Unknown User";
+  }
+
+  // const chatPartnerName =
+  //   messages.length > 0 ? session.user.name : "Unknown User";
   const chatPartnerName =
-    messages.length > 0 ? session.user.name : "Unknown User";
+    messages.length > 0 && session?.user?.id
+      ? getChatPartnerName(messages, session.user.id)
+      : "Unknown User";
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -168,7 +197,8 @@ export default function Chat({ chatroomId }: ChatProps) {
         }}
       >
         {messages.map((message) => {
-          const isOwnMessage = message.authorId === session?.user?.id;
+          const isOwnMessage = String(message.authorId) === session?.user?.id;
+
           // ONLY TIME
           //   const time = new Date(message.created_at).toLocaleTimeString([], {
           //     hour: "2-digit",

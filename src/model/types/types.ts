@@ -165,6 +165,7 @@ export type Message = {
   chatroomId: ObjectId;
   messageText: string;
   authorId: ObjectId | null;
+  authorName?: string;
   created_at: string;
   updated_at: string;
 };
