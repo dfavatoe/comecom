@@ -80,7 +80,7 @@ export async function addProductToList(productId: string): Promise<void> {
 
   try {
     const response = await fetch(
-      `${baseUrl}/api/shopping-list/add-product-to-list`,
+      `${baseUrl}/api/products-list/add-product-to-list`,
       requestOptions
     );
 

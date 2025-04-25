@@ -12,6 +12,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { useSession } from "next-auth/react";
+import "@/app/globals.css"; 
 
 type Message = {
   sender: "user" | "ai";
@@ -32,7 +33,9 @@ export default function ChatWidget() {
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
 
+  useEffect(() => {
     if (open && messages.length === 0) {
       setMessages([
         {
@@ -73,7 +76,7 @@ export default function ChatWidget() {
     } catch {
       setMessages([
         ...newMessages,
-        { sender: "ai", text: " Something went wrong." },
+        { sender: "ai", text: "Something went wrong." },
       ]);
     } finally {
       setLoading(false);
@@ -82,28 +85,20 @@ export default function ChatWidget() {
 
   return (
     <>
-      <Box
-        sx={{
-          position: "fixed",
-          bottom: 24,
-          right: 24,
-          zIndex: 1000,
-        }}
-      >
+      <Box sx={{ position: "fixed", bottom: 24, right: 24, zIndex: 1000 }}>
         <IconButton
           onClick={() => setOpen(!open)}
           sx={{
-            width: 64,
-            height: 64,
+            width: 60,
+            height: 60,
             borderRadius: "50%",
-            backgroundColor: "#ffffff",
-            color: "#1976d2",
+            backgroundColor: "var(--btn-yellow)",
+            color: "#000",
+            fontSize: 28,
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
-            fontSize: 30,
-            transition: "all 0.3s ease",
             "&:hover": {
-              transform: "scale(1.08)",
-              backgroundColor: "#f0f0f0",
+              transform: "scale(1.1)",
+              backgroundColor: "#e6b800",
             },
           }}
         >
@@ -119,15 +114,14 @@ export default function ChatWidget() {
             right: 24,
             width: 380,
             height: 500,
-            bgcolor: "white",
-            backgroundImage: "linear-gradient(135deg, #f5f7fa, #c3cfe2)",
+            bgcolor: "var(--secondary)",
             borderRadius: 4,
             boxShadow: 6,
             p: 2,
             display: "flex",
             flexDirection: "column",
             zIndex: 1200,
-            backdropFilter: "blur(4px)",
+            border: "1px solid #e0e0e0",
           }}
         >
           <Typography
@@ -135,11 +129,11 @@ export default function ChatWidget() {
             sx={{
               mb: 1,
               fontWeight: "bold",
-              color: "#1976d2",
+              color: "var(--primary)",
               textAlign: "center",
             }}
           >
-            🛍️ Com&Com AI Assistant
+            🛍️ Com&Com Assistant
           </Typography>
 
           <Box
@@ -163,7 +157,13 @@ export default function ChatWidget() {
                 }}
               >
                 <Avatar
-                  sx={{ width: 28, height: 28, bgcolor: "#1976d2" }}
+                  sx={{
+                    width: 28,
+                    height: 28,
+                    bgcolor: "var(--btn-yellow)",
+                    color: "#000",
+                    fontWeight: "bold",
+                  }}
                   src={
                     msg.sender === "user"
                       ? session?.user?.image ?? "/images/defaultProfile.jpg"
@@ -182,9 +182,10 @@ export default function ChatWidget() {
                   <Paper
                     sx={{
                       p: 1,
-                      bgcolor: msg.sender === "user" ? "#1976d2" : "#ffffffcc",
-                      color: msg.sender === "user" ? "white" : "black",
+                      bgcolor: "var(--grey-bg)",
+                      color: "#000",
                       borderRadius: 2,
+                      border: "1px solid #ddd",
                       maxWidth: "80%",
                     }}
                   >
@@ -206,8 +207,25 @@ export default function ChatWidget() {
               size="small"
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSend()}
+              InputProps={{
+                sx: {
+                  backgroundColor: "#fff",
+                  borderRadius: "8px",
+                },
+              }}
             />
-            <Button variant="contained" onClick={handleSend} disabled={loading}>
+            <Button
+              variant="contained"
+              onClick={handleSend}
+              disabled={loading}
+              sx={{
+                bgcolor: "var(--btn-yellow)",
+                color: "#000",
+                "&:hover": {
+                  bgcolor: "#e6b800",
+                },
+              }}
+            >
               {loading ? (
                 <CircularProgress size={20} color="inherit" />
               ) : (
