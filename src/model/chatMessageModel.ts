@@ -20,6 +20,10 @@ const messageSchema = new Schema<Message>(
       ref: "User",
       required: false,
     },
+    authorName: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: { createdAt: "created_at", updatedAt: "updated_at" } }
 );
