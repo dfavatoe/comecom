@@ -3,6 +3,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import "@/app/globals.css";
 
 export default function SellerChatDashboard() {
   const { data: session } = useSession();
@@ -31,7 +32,7 @@ export default function SellerChatDashboard() {
 
   return (
     <div style={{ padding: "2rem" }}>
-      <h2>📬 Your Chatrooms</h2>
+      <h2>Your Chatrooms</h2>
       {chatrooms.length === 0 && <p>No chats found.</p>}
 
       {chatrooms.map((room) => (
