@@ -25,6 +25,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/useToast";
+import "@/app/globals.css";
 
 interface Comment {
   _id: string;
@@ -180,7 +181,7 @@ export default function PostPage() {
             onClick={handleUpload}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Post"}
+            {loading ? <CircularProgress size={24} color="warning" /> : "Post"}
           </Button>
           {message && (
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
