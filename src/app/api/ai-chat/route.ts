@@ -5,7 +5,7 @@ import Product from "@/model/productsModel";
 import UserModel from "@/model/usersModel";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
+  apiKey: process.env.OPENAI_SECRET!,
 });
 
 function normalize(str: string) {
@@ -42,10 +42,12 @@ export async function POST(req: NextRequest) {
 
     const q = normalize(question);
 
-    const matchedProduct = productData.find((product) =>
-      normalize(product.title).includes(q) ||
-      normalize(product.description || "").includes(q) ||
-      (Array.isArray(product.tags) && product.tags.some((tag) => normalize(tag).includes(q)))
+    const matchedProduct = productData.find(
+      (product) =>
+        normalize(product.title).includes(q) ||
+        normalize(product.description || "").includes(q) ||
+        (Array.isArray(product.tags) &&
+          product.tags.some((tag) => normalize(tag).includes(q)))
     );
 
     if (matchedProduct) {
@@ -79,7 +81,9 @@ If the user asks for products (including phrases like "products", "other product
 Do not return JSON. Do not add extra details unless explicitly requested.
 
 Store Owner: ${currentUser.name}
-Address: ${address.streetName} ${address.streetNumber}, ${address.city}, ${address.country} (${address.postalcode})
+Address: ${address.streetName} ${address.streetNumber}, ${address.city}, ${
+      address.country
+    } (${address.postalcode})
 
 Products:
 ${JSON.stringify(productData, null, 2)}
@@ -99,6 +103,9 @@ Your answer:
     return NextResponse.json({ answer });
   } catch (error) {
     console.error("AI Chat Error:", error);
-    return NextResponse.json({ error: "Something went wrong." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Something went wrong." },
+      { status: 500 }
+    );
   }
 }
