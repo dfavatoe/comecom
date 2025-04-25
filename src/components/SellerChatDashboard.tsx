@@ -18,8 +18,11 @@ export default function SellerChatDashboard() {
         const res = await fetch("/api/chatroom");
         const allRooms = await res.json();
 
+        // const myRooms = allRooms.filter((room: any) =>
+        //   room.participants.includes(session.user.id)
+        // );
         const myRooms = allRooms.filter((room: any) =>
-          room.participants.includes(session.user.id)
+          room.participants.some((user: any) => user._id === session.user.id)
         );
 
         setChatrooms(myRooms);
@@ -68,8 +71,12 @@ export default function SellerChatDashboard() {
           {chatrooms.map((room) => {
             console.log("room :>> ", room);
             const otherParticipants = room.participants.filter(
-              (id: string) => id !== session?.user?.id
+              (user: any) => user._id !== session?.user?.id
             );
+
+            const participantNames = otherParticipants
+              .map((user: any) => user.name)
+              .join(", ");
 
             const createdAt = room.created_at
               ? new Date(room.created_at).toLocaleDateString()
@@ -97,7 +104,7 @@ export default function SellerChatDashboard() {
                 }}
               >
                 <Typography variant="subtitle1" fontWeight="bold">
-                  Chat with: {otherParticipants.join(", ") || "Only you"}
+                  Chat with {participantNames || "Unknown"}
                 </Typography>
 
                 <Typography

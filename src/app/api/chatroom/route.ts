@@ -15,7 +15,13 @@ export async function GET(req: NextRequest) {
 
   try {
     await dbConnect();
-    const chatrooms = await ChatroomModel.find();
+
+    // const chatrooms = await ChatroomModel.find();
+
+    const chatrooms = await ChatroomModel.find()
+      .populate("participants", "name email _id") // <- Nur die Felder, die du brauchst
+      .lean();
+
     return new NextResponse(JSON.stringify(chatrooms), { status: 200 });
   } catch (error) {
     // return new NextResponse("Fehler beim Abrufen der Chatrooms", {
