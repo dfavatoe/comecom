@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
+import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
@@ -82,6 +82,14 @@ export default function SingleProductPage() {
       fetchProduct();
     }
   }, [productId]);
+
+  if (!product)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
 
   return (
     <div>

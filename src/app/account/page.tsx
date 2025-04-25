@@ -8,7 +8,15 @@ import {
   UserFull,
 } from "@/model/types/types";
 import { baseUrl } from "../lib/urls";
-import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
 import "@/app/globals.css";
@@ -139,7 +147,13 @@ const AccountPage = () => {
     }
   }, [status]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
 
   if (status === "unauthenticated")
     return (

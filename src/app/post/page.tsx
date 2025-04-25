@@ -25,7 +25,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useToast } from "@/hooks/useToast";
-import "@/app/globals.css";
 
 interface Comment {
   _id: string;
@@ -44,7 +43,6 @@ interface Post {
     _id: string;
     name: string;
     image?: string;
-    avatar?: string;
   };
   likes: string[];
   comments: Comment[];
@@ -181,7 +179,7 @@ export default function PostPage() {
             onClick={handleUpload}
             disabled={loading}
           >
-            {loading ? <CircularProgress size={24} color="warning" /> : "Post"}
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Post"}
           </Button>
           {message && (
             <Typography variant="body2" align="center" sx={{ mt: 2 }}>
@@ -196,13 +194,7 @@ export default function PostPage() {
       {posts.map((post) => (
         <Card key={post._id} sx={{ mb: 4 }}>
           <Box sx={{ display: "flex", alignItems: "center", padding: 2 }}>
-            <Avatar
-              src={
-                post.user?.avatar ||
-                post.user?.image ||
-                "/images/defaultProfile.jpg"
-              }
-            />
+            <Avatar src={post.user?.image || "/images/defaultProfile.jpg"} />
             <Typography variant="h6" sx={{ marginLeft: 2 }}>
               {post.user?.name || "Unknown"}
             </Typography>
@@ -246,7 +238,7 @@ export default function PostPage() {
             component="img"
             height="350"
             image={post.imageUrl}
-            sx={{ borderRadius: 2, objectFit: "contain" }}
+            sx={{ borderRadius: 2 }}
           />
 
           <CardContent>
@@ -276,7 +268,14 @@ export default function PostPage() {
                 <Typography variant="body2">{post.likes.length}</Typography>
               </Box>
 
-              <IconButton>
+              <IconButton
+                disableRipple
+                sx={{
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
                 <ChatBubbleOutlineIcon sx={{ color: "gray" }} />
               </IconButton>
             </Box>

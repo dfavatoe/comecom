@@ -3,7 +3,7 @@
 import StoreCoverGenerator from "@/components/StoreCoverGenerator";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import Link from "next/link";
 import AvatarGenerator from "@/components/AvatarGenerator";
 import "@/app/globals.css";
@@ -18,7 +18,14 @@ function generateImage() {
     }
   }, [status]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
+
   if (status === "unauthenticated")
     return (
       <Container className="d-block">

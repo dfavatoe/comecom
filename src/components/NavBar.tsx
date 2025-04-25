@@ -14,7 +14,7 @@ function NavBar() {
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand style={{ color: "var(--primary)" }} href="/">
-          com&com
+          <b>com&com</b>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse className="text-center" id="navbarScroll">

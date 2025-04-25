@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { GetShopInfo, ProductT, UserFull } from "@/model/types/types";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import ProductCardStore from "@/components/ProductCardStore";
 import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
@@ -47,6 +47,14 @@ export default function Store() {
   useEffect(() => {
     handleGetSellerShopInfo();
   }, []);
+
+  if (!products)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
 
   return (
     <>

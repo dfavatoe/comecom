@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { baseUrl } from "../lib/urls";
 import { ProductT } from "@/model/types/types";
-import { Alert, Container } from "react-bootstrap";
+import { Alert, Container, Spinner } from "react-bootstrap";
 import Grid from "@/components/Grid";
 import Link from "next/link";
 
@@ -19,7 +19,13 @@ export default function Products() {
     fetchProducts();
   }, []);
 
-  if (!products) return <div>Loading...</div>;
+  if (!products)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
 
   return (
     <>
