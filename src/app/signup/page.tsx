@@ -2,14 +2,16 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { register } from "@/app/lib/actions";
 import { baseUrl } from "../lib/urls";
+import { useToast } from "@/hooks/useToast";
+import { useSession } from "next-auth/react";
 
 export default function Register() {
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  const { data: session } = useSession();
+  const { showToast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const router = useRouter();
   const ref = useRef<HTMLFormElement>(null);
@@ -57,6 +59,7 @@ export default function Register() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       let uploadedImageUrl = "";
@@ -75,17 +78,19 @@ export default function Register() {
       if (result.error) {
         throw new Error(result.error);
       }
-
-      setSuccess("Registration successful!");
-      setError(null);
+      showToast("Registration successful!", "success");
       ref.current?.reset();
       setImagePreview(null);
       setTimeout(() => {
         router.push("/login");
       }, 3000);
     } catch (err: any) {
-      setError(err.message || "An error occurred during registration.");
-      setSuccess(null);
+      showToast(
+        err.message || "An error occurred during registration.",
+        "danger"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -100,7 +105,7 @@ export default function Register() {
         </h1>
         <br />
 
-        {success === null ? (
+        {!session?.user ? (
           <p>
             Join us today for exclusive deals, fast checkout, and a seamless
             shopping experience!
@@ -195,17 +200,26 @@ export default function Register() {
             store and list products on our online platform.
           </Form.Text>
 
-          <Button type="submit" className="mb-4" variant="warning">
-            Register
+          <Button
+            type="submit"
+            className="mb-4"
+            variant="warning"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <span
+                  className="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Registering...
+              </>
+            ) : (
+              "Register"
+            )}
           </Button>
         </Form>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        {success && <p style={{ color: "green" }}>{success}</p>}
-        {/* <ModalAlert
-        showAlert={showAlert}
-        alertText={alertText}
-        setShowAlert={setShowAlert}
-      /> */}
       </Container>
     </>
   );

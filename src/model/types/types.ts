@@ -8,6 +8,8 @@ export type UserFull = {
   email: string;
   password: string;
   image: string;
+  storeCoverImage: string;
+  avatar: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -20,6 +22,8 @@ interface User {
   name: string;
   email: string;
   image: string;
+  storeCoverImage: string;
+  avatar: string;
   role: string;
   createdAt: string;
   updatedAt: string;
@@ -71,7 +75,7 @@ export type ReviewT = {
   rating: number | null;
   comment: string;
   date: Date;
-  id: string;
+  _id: string;
 };
 
 export type addProductT = Pick<
@@ -105,6 +109,7 @@ export type JWTToken = {
   email?: string;
   image?: string;
   role?: Role;
+  avatar?: string;
 };
 
 export type ModalAlertProps = {
@@ -150,6 +155,48 @@ export interface GETSellersProdutsResponse {
   message: string;
   amount: number;
   products: ProductT[];
+}
+
+//Cloudinary Types
+export type CloudinaryUploadError = Error & {
+  http_code?: number;
+  name?: string;
+  message: string;
+};
+
+export type CloudinaryUploadResult = {
+  asset_id: string;
+  public_id: string;
+  version: number;
+  version_id: string;
+  signature: string;
+  width: number;
+  height: number;
+  format: string;
+  resource_type: string;
+  created_at: string;
+  tags: string[];
+  bytes: number;
+  type: string;
+  etag: string;
+  placeholder: boolean;
+  url: string;
+  secure_url: string;
+  original_filename: string;
+  folder?: string;
+};
+
+// Reviews Responses
+export interface PostNewReviewResponse {
+  message: string;
+  product: ProductT;
+  error: string;
+}
+
+export interface GetReviewsResponse {
+  message: string;
+  reviews: ReviewT[];
+  error: string;
 }
 
 export type Chatroom = {

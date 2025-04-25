@@ -10,7 +10,7 @@ import {
 import { baseUrl } from "../lib/urls";
 import { Button, Col, Form, Image, Row } from "react-bootstrap";
 import Link from "next/link";
-import Router from "next/router";
+import "@/app/globals.css";
 
 const AccountPage = () => {
   const { data: session, status } = useSession();
@@ -156,7 +156,7 @@ const AccountPage = () => {
               <Image
                 className="mb-4"
                 style={{ width: "200px" }}
-                src={user.image}
+                src={user.avatar || user.image}
                 alt="user profile pic"
                 rounded
               />
