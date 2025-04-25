@@ -2,23 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { baseUrl } from "@/app/lib/urls";
 import { GetProductsListResponse, ProductsList } from "@/model/types/types";
-import { Button, Container, Row } from "react-bootstrap";
+import { Button, Container, Row, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import ProductCardList from "@/components/ProductCardList";
 
 export default function BuyerShoppingList() {
   const { data: session, status } = useSession();
   const [productsList, setProductsList] = useState<ProductsList[] | null>(null);
-
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const handleGetShoppingList = async () => {
     try {
+      setLoading(true);
       const response = await fetch(`${baseUrl}/api/products-list`, {
         method: "GET",
       });
       if (!response.ok) {
         console.log("Something went wrong while fetching the list");
+        setLoading(false);
         return;
       }
 
@@ -30,6 +32,8 @@ export default function BuyerShoppingList() {
       setProductsList(result.records);
     } catch (error) {
       console.error("Error fetching the list:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,14 +49,17 @@ export default function BuyerShoppingList() {
         <h2 className="mb-4" style={{ textAlign: "center" }}>
           Shopping List
         </h2>
-        {productsList ? (
-          productsList.map((item) => {
-            return (
-              <Row className="d-flex justify-content-center m-4" key={item._id}>
-                <ProductCardList key={item._id} product={item} />
-              </Row>
-            );
-          })
+        {loading ? (
+          <div className="d-flex flex-column align-items-center justify-content-center">
+            <Spinner animation="border" variant="warning" />
+            <p className="mt-2">Loading...</p>
+          </div>
+        ) : productsList && productsList.length > 0 ? (
+          productsList.map((item) => (
+            <Row className="d-flex justify-content-center m-4" key={item._id}>
+              <ProductCardList key={item._id} product={item} />
+            </Row>
+          ))
         ) : (
           <>
             <Container className="d-block text-center">
