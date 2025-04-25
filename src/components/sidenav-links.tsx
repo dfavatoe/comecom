@@ -19,7 +19,7 @@ const links = [
   },
   {
     name: "Chats",
-    href: "/dashboard/chats",
+    href: "/account/dashboard/chats",
     icon: ChatBubbleIcon,
   },
 ];
