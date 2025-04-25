@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import ModalAlert from "@/components/ModalAlert";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
@@ -17,8 +16,6 @@ export default function SingleProductPage() {
 
   //State Hooks
   const [product, setProduct] = useState<ProductT | null>(null);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertText, setAlertText] = useState("");
 
   // UseRef Hook used to scroll the Page to the Reviews
   const topReviewsRef = useRef<HTMLHeadingElement | null>(null);
@@ -172,11 +169,6 @@ export default function SingleProductPage() {
         <h4 ref={topReviewsRef}>Top Reviews:</h4>
 
         <Reviews productId={productId!} />
-        <ModalAlert
-          showAlert={showAlert}
-          alertText={alertText}
-          setShowAlert={setShowAlert}
-        />
       </Container>
     </div>
   );

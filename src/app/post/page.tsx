@@ -43,6 +43,7 @@ interface Post {
     _id: string;
     name: string;
     image?: string;
+    avatar?: string;
   };
   likes: string[];
   comments: Comment[];
@@ -194,7 +195,13 @@ export default function PostPage() {
       {posts.map((post) => (
         <Card key={post._id} sx={{ mb: 4 }}>
           <Box sx={{ display: "flex", alignItems: "center", padding: 2 }}>
-            <Avatar src={post.user?.image || "/images/defaultProfile.jpg"} />
+            <Avatar
+              src={
+                post.user?.avatar ||
+                post.user?.image ||
+                "/images/defaultProfile.jpg"
+              }
+            />
             <Typography variant="h6" sx={{ marginLeft: 2 }}>
               {post.user?.name || "Unknown"}
             </Typography>
@@ -238,7 +245,7 @@ export default function PostPage() {
             component="img"
             height="350"
             image={post.imageUrl}
-            sx={{ borderRadius: 2 }}
+            sx={{ borderRadius: 2, objectFit: "contain" }}
           />
 
           <CardContent>

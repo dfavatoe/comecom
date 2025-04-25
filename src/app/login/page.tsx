@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRef } from "react";
 import { redirect, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Container, Form, Button, Alert } from "react-bootstrap";
+import { Container, Form, Button } from "react-bootstrap";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
 

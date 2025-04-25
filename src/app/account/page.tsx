@@ -10,6 +10,7 @@ import {
 import { baseUrl } from "../lib/urls";
 import { Button, Col, Container, Form, Image, Row } from "react-bootstrap";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
 import "@/app/globals.css";
 
 const AccountPage = () => {
@@ -18,8 +19,8 @@ const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [newUserName, setNewUserName] = useState("");
   const [newAddress, setNewAddress] = useState<Address | null>(null);
-  const [messageName, setMessageName] = useState("");
-  const [messageAddress, setMessageAddress] = useState("");
+
+  const { showToast } = useToast();
 
   //======================================================================
 
@@ -35,9 +36,8 @@ const AccountPage = () => {
     e.preventDefault();
     if (!session!.user) {
       console.log("user has to log in first");
-      alert("You have to log in first.");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first.", "warning");
+
       return;
     }
 
@@ -56,10 +56,10 @@ const AccountPage = () => {
     const result = await response.json();
     if (response.ok) {
       setUser(result.user);
-      setMessageName("Name updated successfully!");
+      showToast("Name updated successfully!", "success");
       setNewUserName("");
     } else {
-      setMessageName(result.error || "Failed to update name.");
+      showToast(result.error || "Failed to update name.", "danger");
     }
   };
 
@@ -79,16 +79,13 @@ const AccountPage = () => {
   const submitAddress = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!session!.user) {
-      alert("You have to log in first.");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first.", "warning");
       return;
     }
 
     if (!newAddress) {
-      alert("Complete all fields");
-      // setAlertText("Complete all fields");
-      // setShowAlert(true);
+      showToast("Complete all fields", "warning");
+
       return;
     }
 
@@ -108,14 +105,14 @@ const AccountPage = () => {
 
       if (response.ok) {
         setUser(result.user);
-        setMessageAddress("Address updated successfully!");
+        showToast("Address updated successfully!", "success");
         setNewAddress(null);
       } else {
-        setMessageAddress(result.error || "Failed to update address.");
+        showToast(result.error || "Failed to update address.", "danger");
       }
     } catch (error) {
       console.error("Error updating address:", error);
-      setMessageAddress("Something went wrong.");
+      showToast("Something went wrong.", "danger");
     }
     // Router.reload();
   };
@@ -190,7 +187,6 @@ const AccountPage = () => {
                   onChange={handleUserNameChange}
                   required
                 />
-                {messageName && <p>{messageName}</p>}
                 <Button type="submit" className="d-block ml-2 mb-3">
                   Update
                 </Button>
@@ -291,7 +287,6 @@ const AccountPage = () => {
                     onChange={handleAddress}
                     required
                   />{" "}
-                  {messageAddress && <p>{messageAddress}</p>}
                 </div>
                 <Button type="submit" className="d-inline mb-3">
                   Update
