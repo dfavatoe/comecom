@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import "@/app/globals.css";
+import { Box, Typography, Paper, Stack, Button, Divider } from "@mui/material";
 
 export default function SellerChatDashboard() {
   const { data: session } = useSession();
@@ -31,29 +32,98 @@ export default function SellerChatDashboard() {
   }, [session]);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <h2>Your Chatrooms</h2>
-      {chatrooms.length === 0 && <p>No chats found.</p>}
+    // <div style={{ padding: "2rem" }}>
+    //   <h2>Your Chatrooms</h2>
+    //   {chatrooms.length === 0 && <p>No chats found.</p>}
 
-      {chatrooms.map((room) => (
-        <div
-          key={room._id}
-          style={{
-            marginBottom: "1rem",
-            borderBottom: "1px solid #ddd",
-            paddingBottom: "1rem",
-          }}
-        >
-          <p>
-            <strong>Chat with:</strong> {session?.user?.name} <br />
-            {/* <strong>Mit:</strong>{" "} */}
-            {room.participants
-              .filter((id: string) => id !== session?.user?.id)
-              .join(", ")}
-          </p>
-          <Link href={`/chat/${room._id}`}>Open Chat</Link>
-        </div>
-      ))}
-    </div>
+    //   {chatrooms.map((room) => (
+    //     <div
+    //       key={room._id}
+    //       style={{
+    //         marginBottom: "1rem",
+    //         borderBottom: "1px solid #ddd",
+    //         paddingBottom: "1rem",
+    //       }}
+    //     >
+    //       <p>
+    //         <strong>Chat with:</strong> {session?.user?.name} <br />
+    //         {/* <strong>Mit:</strong>{" "} */}
+    //         {room.participants
+    //           .filter((id: string) => id !== session?.user?.id)
+    //           .join(", ")}
+    //       </p>
+    //       <Link href={`/chat/${room._id}`}>Open Chat</Link>
+    //     </div>
+    //   ))}
+    // </div>
+    <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
+      <Typography variant="h4" gutterBottom>
+        Your Chatrooms
+      </Typography>
+
+      {chatrooms.length === 0 ? (
+        <Typography color="text.secondary">No chats found.</Typography>
+      ) : (
+        <Stack spacing={2}>
+          {chatrooms.map((room) => {
+            console.log("room :>> ", room);
+            const otherParticipants = room.participants.filter(
+              (id: string) => id !== session?.user?.id
+            );
+
+            const createdAt = room.created_at
+              ? new Date(room.created_at).toLocaleDateString()
+              : "Unknown";
+
+            const time = new Date(room.created_at).toLocaleString([], {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            return (
+              <Paper
+                key={room._id}
+                elevation={2}
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  transition: "all 0.2s",
+                  "&:hover": {
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Chat with: {otherParticipants.join(", ") || "Only you"}
+                </Typography>
+
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  Created: {createdAt}
+                </Typography>
+
+                <Divider sx={{ my: 1 }} />
+
+                <Link
+                  href={`/chat/${room._id}`}
+                  // passHref
+                  // legacyBehavior
+                >
+                  <Button variant="outlined" size="small">
+                    Open Chat
+                  </Button>
+                </Link>
+              </Paper>
+            );
+          })}
+        </Stack>
+      )}
+    </Box>
   );
 }
