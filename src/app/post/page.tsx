@@ -24,6 +24,7 @@ import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/useToast";
 
 interface Comment {
   _id: string;
@@ -60,6 +61,7 @@ export default function PostPage() {
     Record<string, HTMLElement | null>
   >({});
   const [showForm, setShowForm] = useState(false);
+  const { showToast } = useToast();
 
   const fetchPosts = async () => {
     const res = await fetch("/api/posts");
@@ -90,12 +92,12 @@ export default function PostPage() {
         body: formData,
       });
       const data = await res.json();
-      setMessage(data.message || "Uploaded!");
+      showToast(data.message || "Upload success!", "success");
       setCaption("");
       setFile(null);
       fetchPosts();
     } catch {
-      setMessage("Upload failed");
+      showToast("Upload failed!", "danger");
     } finally {
       setLoading(false);
     }
