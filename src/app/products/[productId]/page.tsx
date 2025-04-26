@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
-import { Button, Col, Container, Image, Row } from "react-bootstrap";
-import ModalAlert from "@/components/ModalAlert";
+import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
 import Reviews from "@/components/Reviews";
+import "@/app/globals.css";
 
 export default function SingleProductPage() {
   const { productId } = useParams<{ productId: string }>();
@@ -16,8 +16,6 @@ export default function SingleProductPage() {
 
   //State Hooks
   const [product, setProduct] = useState<ProductT | null>(null);
-  const [showAlert, setShowAlert] = useState(false);
-  const [alertText, setAlertText] = useState("");
 
   // UseRef Hook used to scroll the Page to the Reviews
   const topReviewsRef = useRef<HTMLHeadingElement | null>(null);
@@ -85,13 +83,28 @@ export default function SingleProductPage() {
     }
   }, [productId]);
 
+  if (!product)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
+
   return (
     <div>
       <h1 className="m-4" style={{ textAlign: "center" }}>
         com&com Products
       </h1>
 
-      <Container style={{ width: "auto", height: "auto", textAlign: "left" }}>
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          textAlign: "left",
+          paddingInline: "30px",
+        }}
+      >
         <Row>
           {product && (
             <>
@@ -107,7 +120,7 @@ export default function SingleProductPage() {
                   </Button>
                 </p>
 
-                <h4>{product.price} €</h4>
+                <h4 style={{ color: "rgba(0, 0, 0)" }}>{product.price} €</h4>
                 <h6>{discount(product)} </h6>
                 <Image src={product.images[0]} rounded fluid />
               </Col>
@@ -168,15 +181,17 @@ export default function SingleProductPage() {
           )}
           <hr />
         </Row>
-        <h4 ref={topReviewsRef}>Top Reviews:</h4>
+        <div
+          style={{
+            background: "var(--secondary)",
+            padding: "2rem",
+          }}
+        >
+          <h4 ref={topReviewsRef}>Top Reviews:</h4>
 
-        <Reviews productId={productId!} />
-        <ModalAlert
-          showAlert={showAlert}
-          alertText={alertText}
-          setShowAlert={setShowAlert}
-        />
-      </Container>
+          <Reviews productId={productId!} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -16,7 +16,6 @@ import {
   Col,
   Container,
   Form,
-  Image,
   InputGroup,
   Modal,
   Row,
@@ -120,9 +119,7 @@ export default function SellerProductsList() {
 
     if (!session?.user) {
       console.log("user has to log in first");
-      alert("user has to log in first");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first!", "warning");
       return;
     }
 
@@ -144,13 +141,11 @@ export default function SellerProductsList() {
 
     if (response.ok) {
       console.log("Product added successfully!");
-      alert("Product added successfully!");
-      // setAlertText("Product successfully added!");
-      // setShowAlert(true);
+      showToast("Product successfully added!", "success");
       setNewProduct(null);
     } else {
       console.log(result.error || "Failed to add the product.");
-      alert("Error adding products!");
+      showToast("Error adding products!", "danger");
     }
   };
 
@@ -301,8 +296,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="description"
                   id="product-description"
-                  // value={email}
-                  // onChange={handleEmailChange}
                   placeholder="Describe the product"
                   onChange={handleNewProductInputChange}
                 />
@@ -314,8 +307,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="category"
                   id="product-category"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Set the product's category"
                   onChange={handleNewProductInputChange}
                 />
@@ -327,8 +318,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="price"
                   id="product-price"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Set a price"
                   onChange={handleNewProductInputChange}
                 />
@@ -340,8 +329,6 @@ export default function SellerProductsList() {
                   type="number"
                   name="stock"
                   id="product-stock"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Number of product's in stock"
                   onChange={handleNewProductInputChange}
                 />
