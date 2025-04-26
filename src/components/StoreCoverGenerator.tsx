@@ -3,14 +3,16 @@
 import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import { useSession } from "next-auth/react";
+import { useToast } from "@/hooks/useToast";
 
 export default function StoreCoverGenerator() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const { data: session } = useSession();
+  const { showToast } = useToast();
 
   const generateCoverImage = async () => {
     setLoading(true);
@@ -31,6 +33,7 @@ export default function StoreCoverGenerator() {
       setImageUrl(data.imageUrl);
     } catch (err) {
       console.error("Error generating image:", err);
+      showToast("Failed to generate image", "danger");
     } finally {
       setLoading(false);
     }
@@ -65,7 +68,13 @@ export default function StoreCoverGenerator() {
           disabled={loading}
           className="mx-auto d-block mb-3"
         >
-          {loading ? "Generating..." : "Generate Cover"}
+          {loading ? (
+            <>
+              <Spinner animation="border" size="sm" /> Generating...
+            </>
+          ) : (
+            "Generate Cover"
+          )}
         </Button>
 
         {imageUrl && (

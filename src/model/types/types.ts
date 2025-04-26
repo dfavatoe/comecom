@@ -111,12 +111,6 @@ export type JWTToken = {
   avatar?: string;
 };
 
-export type ModalAlertProps = {
-  showAlert: boolean;
-  setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  alertText: string;
-};
-
 export interface UpdateAddressOkResponse {
   message: string;
   user: UserFull;

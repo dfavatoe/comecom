@@ -4,16 +4,16 @@ import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
+import { useToast } from "@/hooks/useToast";
 
 function AvatarGenerator() {
   const [prompt, setPrompt] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const { showToast } = useToast();
 
   const generateAvatar = async () => {
     setLoading(true);
-    setErrorMsg("");
     try {
       const res = await fetch(`${baseUrl}/api/generate-avatar`, {
         method: "POST",
@@ -26,7 +26,7 @@ function AvatarGenerator() {
 
       setImageUrl(data.avatarUrl);
     } catch (error: any) {
-      setErrorMsg(error.message);
+      showToast(error.message || "Something went wrong!", "danger");
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,6 @@ function AvatarGenerator() {
             "Generate Avatar"
           )}
         </Button>
-        {errorMsg && <p className="text-danger mt-3">{errorMsg}</p>}{" "}
         {/* Toast */}
         {imageUrl && (
           <div className="mt-4">

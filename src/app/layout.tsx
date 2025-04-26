@@ -4,6 +4,7 @@ import "./globals.css";
 import NavBar from "@/components/NavBar";
 import ChatWidget from "@/components/ChatWidget";
 import { ClientProviders } from "@/components/ClientProviders";
+import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
   title: "Com&Com",
@@ -19,9 +20,14 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.className} antialiased`}>
         <ClientProviders>
-          <NavBar />
-          {children}
-          <ChatWidget />
+          <div className="layout-wrapper">
+            <NavBar />
+            <main className="main-content">
+              {children}
+              <ChatWidget />
+            </main>
+            <Footer />
+          </div>
         </ClientProviders>
       </body>
     </html>

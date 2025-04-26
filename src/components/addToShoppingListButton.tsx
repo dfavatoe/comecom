@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { addProductToList } from "@/app/lib/actions";
+import { useToast } from "@/hooks/useToast";
 
 type AddToShoppingListButtonProps = {
   productId: string;
@@ -12,23 +13,25 @@ export default function AddToShoppingListButton({
   productId,
 }: AddToShoppingListButtonProps) {
   const { data: session } = useSession();
+  const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const handleAddToList = async () => {
     if (!session) {
-      setError("Log in to add products to your shopping list");
+      showToast("Log in to add products to your shopping list", "warning");
       return;
     }
 
     setLoading(true);
-    setError(null);
 
     try {
       await addProductToList(productId);
-      alert("Product added to your shopping list!");
+      showToast("Product added to your shopping list!", "success");
     } catch (err: unknown | any | string) {
-      setError(err.message || "Failed to add product to the shopping list.");
+      showToast(
+        err.message || "Failed to add product to the shopping list.",
+        "danger"
+      );
     } finally {
       setLoading(false);
     }
@@ -43,7 +46,6 @@ export default function AddToShoppingListButton({
       >
         Add to List
       </button>
-      <div style={{ color: "red", marginTop: "10px" }}>{error} </div>
     </div>
   );
 }

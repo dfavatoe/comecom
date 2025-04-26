@@ -1,5 +1,5 @@
 import Person2Icon from "@mui/icons-material/Person2";
-import ProductionQuantityLimitsIcon from "@mui/icons-material/ProductionQuantityLimits";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import { Nav } from "react-bootstrap";
 
@@ -9,7 +9,7 @@ const links = [
   {
     name: "Products List",
     href: "/account/products-list",
-    icon: ProductionQuantityLimitsIcon,
+    icon: AddShoppingCartIcon,
   },
   {
     name: "Generate Image",
