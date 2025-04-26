@@ -1,0 +1,127 @@
+.scrollmenu {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 10px;
+  padding: 10px 40px;
+  scroll-snap-type: x mandatory;
+  background-color: #fffaed;
+}
+
+.productCard {
+  flex: 0 0 auto;
+  width: 25vw;
+  max-width: 350px;
+  min-width: 200px;
+
+  height: auto;
+  min-height: 280px;
+
+  margin: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.productCard h4 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.productCard img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px 8px 0 0;
+  margin-bottom: 20px;
+}
+
+.productCard product-price {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Arrow buttons */
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease;
+}
+
+.carousel-button:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.carousel-button.left {
+  left: 10px;
+}
+
+.carousel-button.right {
+  right: 10px;
+}
+
+/* @media (max-width: 1024px) {
+  .productCard {
+    width: 35vw; /* Weniger Cards nebeneinander 
+  }
+} */
+
+@media (max-width: 768px) {
+  .scroll-container {
+    padding: 10px 20px;
+    gap: 8px;
+  }
+
+  .productCard {
+    width: 60vw;
+    max-width: none;
+    height: auto;
+    min-height: 280px;
+  }
+
+  .carousel-button {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .productCard {
+    width: 75vw;
+    height: auto;
+    min-height: 280px;
+  }
+
+  .productCard img {
+    height: auto;
+    max-height: 160px;
+  }
+
+  .carousel-button {
+    padding: 3px;
+  }
+}
