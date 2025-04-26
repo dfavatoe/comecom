@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   Address,
@@ -19,14 +19,16 @@ import {
 } from "react-bootstrap";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 import "@/app/globals.css";
 
 const AccountPage = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [user, setUser] = useState<UserFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [newUserName, setNewUserName] = useState("");
   const [newAddress, setNewAddress] = useState<Address | null>(null);
+  const router = useRouter();
 
   const { showToast } = useToast();
 
@@ -115,6 +117,7 @@ const AccountPage = () => {
         setUser(result.user);
         showToast("Address updated successfully!", "success");
         setNewAddress(null);
+        await update();
       } else {
         showToast(result.error || "Failed to update address.", "danger");
       }
@@ -122,8 +125,34 @@ const AccountPage = () => {
       console.error("Error updating address:", error);
       showToast("Something went wrong.", "danger");
     }
-    // Router.reload();
   };
+
+  //============================================================
+
+  const deleteAddress = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (!session!.user) {
+      showToast("You have to log in first", "warning");
+      return;
+    }
+
+    const response = await fetch(
+      `${baseUrl}/api/users/profile/delete-address`,
+      { method: "DELETE" }
+    );
+
+    const result = (await response.json()) as UpdateAddressOkResponse;
+
+    if (response.ok) {
+      console.log("delete address result", result);
+      showToast("Address deleted successfully!", "success");
+      setNewAddress(null);
+      await update();
+    } else {
+      showToast(result.error || "Failed to delete address.", "danger");
+    }
+  };
+
+  //============================================================
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -305,10 +334,7 @@ const AccountPage = () => {
                 <Button type="submit" className="d-inline mb-3">
                   Update
                 </Button>
-                <Button
-                  //onClick={deleteUserAddress}
-                  className="d-inline mx-2 mb-3"
-                >
+                <Button onClick={deleteAddress} className="d-inline mx-2 mb-3">
                   Delete
                 </Button>
               </Form>
