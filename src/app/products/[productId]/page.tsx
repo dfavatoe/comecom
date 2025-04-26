@@ -97,7 +97,14 @@ export default function SingleProductPage() {
         com&com Products
       </h1>
 
-      <Container style={{ width: "auto", height: "auto", textAlign: "left" }}>
+      <div
+        style={{
+          width: "auto",
+          height: "auto",
+          textAlign: "left",
+          paddingInline: "30px",
+        }}
+      >
         <Row>
           {product && (
             <>
@@ -113,7 +120,7 @@ export default function SingleProductPage() {
                   </Button>
                 </p>
 
-                <h4>{product.price} €</h4>
+                <h4 style={{ color: "rgba(0, 0, 0)" }}>{product.price} €</h4>
                 <h6>{discount(product)} </h6>
                 <Image src={product.images[0]} rounded fluid />
               </Col>
@@ -174,10 +181,17 @@ export default function SingleProductPage() {
           )}
           <hr />
         </Row>
-        <h4 ref={topReviewsRef}>Top Reviews:</h4>
+        <div
+          style={{
+            background: "var(--secondary)",
+            padding: "2rem",
+          }}
+        >
+          <h4 ref={topReviewsRef}>Top Reviews:</h4>
 
-        <Reviews productId={productId!} />
-      </Container>
+          <Reviews productId={productId!} />
+        </div>
+      </div>
     </div>
   );
 }

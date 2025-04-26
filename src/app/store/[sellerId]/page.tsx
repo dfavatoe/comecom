@@ -61,7 +61,7 @@ export default function Store() {
       {console.log("seller>>>>>", seller)}
       {seller && (
         <>
-          <Container>
+          <div>
             <Row
               className="align-content-center mb-4"
               style={{ height: "auto" }}
@@ -70,7 +70,7 @@ export default function Store() {
                 <Image
                   className="mb-4"
                   src={seller.storeCoverImage}
-                  style={{ height: "300px", objectFit: "cover" }}
+                  style={{ height: "350px", objectFit: "cover" }}
                 />
               ) : (
                 <Image
@@ -88,55 +88,67 @@ export default function Store() {
               </h2>
             </Row>
             <hr />
-            <Row>
-              <Col
-                sm={6}
-                className="d-block mb-2"
-                style={{ textAlign: "left" }}
-              >
-                <h4>Contacts</h4>
-                <h5>{seller.email}</h5>
-                {sellerAddress && (
-                  <Link
-                    className="mb-2"
-                    href={`https://maps.google.com/?q=${sellerAddress}`}
-                    target="_blank"
-                  >
-                    {sellerAddress}
-                  </Link>
-                )}
-              </Col>
-              <Col>
-                <MapClient
-                  lat={seller.address?.latitude ?? 52.5200066}
-                  lng={seller.address?.longitude ?? 13.404954}
-                  label={
-                    seller.address
-                      ? seller.name
-                      : "No location shared by seller"
-                  }
-                />
-              </Col>
-            </Row>
+            <Container>
+              <Row>
+                <Col
+                  sm={6}
+                  className="d-block mb-2"
+                  style={{ textAlign: "left" }}
+                >
+                  <h4>Contacts</h4>
+                  <h5>{seller.email}</h5>
+                  {sellerAddress && (
+                    <Link
+                      className="mb-2"
+                      href={`https://maps.google.com/?q=${sellerAddress}`}
+                      target="_blank"
+                    >
+                      {sellerAddress}
+                    </Link>
+                  )}
+                </Col>
+                <Col>
+                  <MapClient
+                    lat={seller.address?.latitude ?? 52.5200066}
+                    lng={seller.address?.longitude ?? 13.404954}
+                    label={
+                      seller.address
+                        ? seller.name
+                        : "No location shared by seller"
+                    }
+                  />
+                </Col>
+              </Row>
+            </Container>
             <hr />
             <h2 className="second-header mb-4" style={{ textAlign: "center" }}>
               Products
             </h2>
-            {products ? (
-              products.map((product) => {
-                return (
-                  <Row
-                    className="d-flex justify-content-center"
-                    key={product._id}
-                  >
-                    <ProductCardStore key={product._id} product={product} />
-                  </Row>
-                );
-              })
-            ) : (
-              <h2>Seller still didn't share the products</h2>
-            )}
-          </Container>
+            <div
+              style={{
+                width: "auto",
+                height: "auto",
+                textAlign: "left",
+                paddingInline: "30px",
+                background: "var(--secondary)",
+              }}
+            >
+              {products ? (
+                products.map((product) => {
+                  return (
+                    <Row
+                      className="d-flex justify-content-center"
+                      key={product._id}
+                    >
+                      <ProductCardStore key={product._id} product={product} />
+                    </Row>
+                  );
+                })
+              ) : (
+                <h2>Seller still didn't share the products</h2>
+              )}
+            </div>
+          </div>
         </>
       )}
     </>

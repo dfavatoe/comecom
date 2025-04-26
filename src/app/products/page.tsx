@@ -6,6 +6,7 @@ import { ProductT } from "@/model/types/types";
 import { Alert, Container, Spinner } from "react-bootstrap";
 import Grid from "@/components/Grid";
 import Link from "next/link";
+import "@/app/globals.css";
 
 export default function Products() {
   const [products, setProducts] = useState<ProductT[] | null>(null);
@@ -29,29 +30,45 @@ export default function Products() {
 
   return (
     <>
-      <Container>
-        <h1 className="m-4" style={{ textAlign: "center" }}>
+      <div>
+        <h1 className="mt-4" style={{ textAlign: "center" }}>
           com&com Products
         </h1>
-        <Alert variant="warning">
-          {" "}
-          Welcome to Com&Com — your one-stop shop for everything you need! From
-          the latest tech gadgets and home essentials to fashion, beauty, and
-          more, we bring you a wide variety of sellers and products all in one
-          place. Fell free to contact our sellers and post your buying
+        <h4 className="mb-3" style={{ textAlign: "center" }}>
+          com&com is your one-stop shop for everything you need!
+        </h4>
+
+        <div
+          className="mb-4"
+          style={{
+            maxWidth: "70vw",
+            textAlign: "center",
+            margin: "0 auto",
+            fontWeight: "500",
+          }}
+        >
+          From the latest tech gadgets and home essentials to fashion, beauty,
+          and more, we bring you a wide variety of sellers and products all in
+          one place. Fell free to contact our sellers and post your buying
           experiences in our{" "}
           <span>
             <Link href={"/post"}>Social</Link>
           </span>{" "}
           page.
-        </Alert>
+        </div>
 
-        <Container className="justify-content-center">
+        <div
+          className="justify-content-center my-0"
+          style={{
+            background: "var(--secondary)",
+            padding: "2rem",
+          }}
+        >
           <>
             <Grid products={products}></Grid>
           </>
-        </Container>
-      </Container>
+        </div>
+      </div>
     </>
   );
 }
