@@ -218,6 +218,7 @@ export default function Chat({
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          disableScrollLock={true}
           className={styles.menu}
           anchorOrigin={{
             vertical: "bottom",
