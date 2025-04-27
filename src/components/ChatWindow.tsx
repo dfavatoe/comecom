@@ -27,9 +27,14 @@ import { relative } from "path";
 interface ChatProps {
   chatroomId: string;
   onClose?: () => void;
+  refreshChatrooms: (deletedRoomId: string) => void;
 }
 
-export default function Chat({ chatroomId, onClose }: ChatProps) {
+export default function Chat({
+  chatroomId,
+  onClose,
+  refreshChatrooms,
+}: ChatProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
@@ -180,6 +185,7 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
       if (res.ok) {
         setConfirmOpen(false);
         if (onClose) onClose();
+        refreshChatrooms(chatroomId);
       } else {
         alert("Error deleting chatroom");
       }
@@ -201,7 +207,7 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
           aria-haspopup="true"
           onClick={handleMenuOpen}
           sx={{
-            zIndex: 1, // Setzt sicher, dass der Button vor dem Menü bleibt
+            zIndex: 1,
           }}
         >
           <MoreVertIcon />
@@ -214,12 +220,12 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
           onClose={handleMenuClose}
           className={styles.menu}
           anchorOrigin={{
-            vertical: "bottom", // Menü öffnet sich nach unten
-            horizontal: "right", // Menü öffnet sich nach rechts
+            vertical: "bottom",
+            horizontal: "right",
           }}
           transformOrigin={{
-            vertical: "top", // Menü selbst wird an der Oberseite des Ankers ausgerichtet
-            horizontal: "right", // Menü selbst wird an der rechten Seite des Ankers ausgerichtet
+            vertical: "top",
+            horizontal: "right",
           }}
         >
           <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>

@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import {
   Box,
   Typography,
@@ -11,16 +10,11 @@ import {
   Button,
   Divider,
   Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import "@/app/globals.css";
+import Chat from "./ChatWindow";
 
 export default function SellerChatDashboard() {
   const { data: session } = useSession();
@@ -31,26 +25,21 @@ export default function SellerChatDashboard() {
 
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchChatrooms = async () => {
-      if (!session?.user?.id) return;
+  const [openChat, setOpenChat] = useState<string | null>(null);
+  const [chatroomId, setChatroomId] = useState<string | null>(null);
 
-      try {
-        const res = await fetch("/api/chatroom");
-        const allRooms = await res.json();
+  const handleOpenChat = (id: string) => {
+    setChatroomId(id);
+    setOpenChat(id);
+  };
 
-        const myRooms = allRooms.filter((room: any) =>
-          room.participants.some((user: any) => user._id === session.user.id)
-        );
+  const handleCloseChat = () => {
+    setOpenChat(null);
+  };
 
-        setChatrooms(myRooms);
-      } catch (err) {
-        console.error("Error loading chatrooms:", err);
-      }
-    };
-
-    fetchChatrooms();
-  }, [session]);
+  const refreshChatrooms = (deletedRoomId: string) => {
+    setChatrooms((prev) => prev.filter((room) => room._id !== deletedRoomId));
+  };
 
   const handleMenuOpen = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -91,7 +80,7 @@ export default function SellerChatDashboard() {
     });
 
     if (res.ok) {
-      setChatrooms((prev) => prev.filter((room) => room._id !== roomToDelete));
+      refreshChatrooms(roomToDelete);
       setConfirmOpen(false);
       setRoomToDelete(null);
     } else {
@@ -99,131 +88,103 @@ export default function SellerChatDashboard() {
     }
   };
 
+  useEffect(() => {
+    const fetchChatrooms = async () => {
+      if (!session?.user?.id) return;
+
+      try {
+        const res = await fetch("/api/chatroom");
+        const allRooms = await res.json();
+
+        const myRooms = allRooms.filter((room: any) =>
+          room.participants.some((user: any) => user._id === session.user.id)
+        );
+
+        setChatrooms(myRooms);
+      } catch (err) {
+        console.error("Error loading chatrooms:", err);
+      }
+    };
+
+    fetchChatrooms();
+  }, [session]);
+
   return (
     <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
       <h2>Your Chatrooms</h2>
 
-      {chatrooms.length === 0 ? (
-        <Typography color="text.secondary">No chats found.</Typography>
-      ) : (
-        <Stack spacing={2}>
-          {chatrooms.map((room) => {
-            console.log("room :>> ", room);
-            const otherParticipants = room.participants.filter(
-              (user: any) => user._id !== session?.user?.id
-            );
+      <Stack spacing={2}>
+        {chatrooms.map((room) => {
+          const otherParticipants = room.participants.filter(
+            (user) => user._id !== session?.user?.id
+          );
+          const participantNames = otherParticipants
+            .map((user) => user.name)
+            .join(", ");
+          const createdAt = room.created_at
+            ? new Date(room.created_at).toLocaleDateString()
+            : "Unknown";
 
-            const participantNames = otherParticipants
-              .map((user: any) => user.name)
-              .join(", ");
-
-            const createdAt = room.created_at
-              ? new Date(room.created_at).toLocaleDateString()
-              : "Unknown";
-
-            const time = new Date(room.created_at).toLocaleString([], {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-
-            return (
-              <Paper
-                key={room._id}
-                elevation={2}
+          return (
+            <Paper
+              key={room._id}
+              elevation={2}
+              sx={{
+                p: 2,
+                borderRadius: 2,
+                transition: "all 0.2s",
+                "&:hover": { boxShadow: 4 },
+              }}
+            >
+              <Box
                 sx={{
-                  p: 2,
-                  borderRadius: 2,
-                  transition: "all 0.2s",
-                  "&:hover": {
-                    boxShadow: 4,
-                  },
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    Chat with {participantNames || "Unknown"}
-                  </Typography>
-
-                  <IconButton
-                    aria-controls="chatroom-menu"
-                    aria-haspopup="true"
-                    onClick={(e) => handleMenuOpen(e, room._id)}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                </Box>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
-                  Created: {createdAt}
+                <Typography variant="subtitle1" fontWeight="bold">
+                  Chat with {participantNames || "Unknown"}
                 </Typography>
 
-                <Divider sx={{ my: 1 }} />
-
-                <Link
-                  href={`/chat/${room._id}`}
-                  // passHref
-                  // legacyBehavior
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => handleOpenChat(room._id)}
                 >
-                  <Button
-                    variant="outlined"
-                    size="small"
-                    style={{ color: "var(--btn-blue)" }}
-                  >
-                    Open Chat
-                  </Button>
-                </Link>
-              </Paper>
-            );
-          })}
-        </Stack>
-      )}
-      <Menu
-        id="chatroom-menu"
-        anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        sx={{ minWidth: "150px" }}
-      >
-        <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>
-      </Menu>
+                  Open Chat
+                </Button>
+              </Box>
 
-      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
-        <DialogTitle>Delete chat?</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this chat? This action cannot be
-            undone.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setConfirmOpen(false)} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={confirmDelete} color="error" variant="contained">
-            Delete
-          </Button>
-        </DialogActions>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                Created: {createdAt}
+              </Typography>
+
+              <Divider sx={{ my: 1 }} />
+            </Paper>
+          );
+        })}
+      </Stack>
+
+      <Dialog
+        open={!!openChat}
+        onClose={handleCloseChat}
+        fullWidth
+        maxWidth="md"
+      >
+        <Box sx={{ position: "absolute", top: 8, right: 8 }}>
+          <IconButton onClick={handleCloseChat}>
+            <CloseIcon />
+          </IconButton>
+        </Box>
+
+        {openChat && (
+          <Chat
+            chatroomId={openChat}
+            onClose={handleCloseChat}
+            refreshChatrooms={refreshChatrooms}
+          />
+        )}
       </Dialog>
     </Box>
   );
