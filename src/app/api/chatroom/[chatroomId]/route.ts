@@ -1,14 +1,8 @@
 import dbConnect from "@/app/lib/dbConnect";
 import { auth } from "@/app/lib/auth";
-import { NextRequest, NextResponse } from "next/server"; // Verwende NextRequest und NextResponse
-import ChatroomModel from "@/model/chatroomModel"; // Dein Chatroom Model
+import { NextRequest, NextResponse } from "next/server";
+import ChatroomModel from "@/model/chatroomModel";
 import MessageModel from "@/model/chatMessageModel";
-
-// GET api/chatroom/[chatroomId] - Gibt einen einzelnen Chatroom zurück
-//export async function GET(req: NextRequest) {
-//   const { chatroomId } = req.params; // Hole die chatroomId aus der URL
-// const url = new URL(req.url);
-// const chatroomId = url.pathname.split("/")[3]; // Der chatroomId befindet sich an Position 3 in der URL (z.B. /api/chatroom/:chatroomId)
 
 export async function GET(
   req: NextRequest,
@@ -18,24 +12,19 @@ export async function GET(
 
   await dbConnect();
 
-  const session = await auth(); // auth() gibt die Session zurück
+  const session = await auth();
   if (!session?.user) {
-    return new NextResponse("Unauthorized", { status: 401 }); // Falls keine Session oder User vorhanden ist
+    return new NextResponse("Unauthorized", { status: 401 });
   }
 
   try {
-    const chatroom = await ChatroomModel.findById(chatroomId); // Finde den Chatroom anhand der ID
+    const chatroom = await ChatroomModel.findById(chatroomId);
     if (!chatroom) {
       return new NextResponse("Chatroom nicht gefunden", { status: 404 });
     }
-    // Die eine Nachricht holen
     const messages = await MessageModel.find({
       chatroomId: chatroomId,
-    }).sort({ createdAt: 1 }); // Aufsteigend sortieren nach Zeit;
-
-    // if (!message) {
-    //   return new NextResponse("Nachricht nicht gefunden", { status: 404 });
-    // }
+    }).sort({ createdAt: 1 });
 
     return NextResponse.json(messages);
   } catch (error) {
@@ -46,11 +35,6 @@ export async function GET(
   }
 }
 
-// DELETE api/chatroom/[chatroomId] - Löscht einen Chatroom
-// export async function DELETE(req: NextRequest) {
-//   //const { chatroomId } = req.params; // Hole die chatroomId aus der URL
-//   const url = new URL(req.url);
-//   const chatroomId = url.pathname.split("/")[3]; // Der chatroomId befindet sich an Position 3 in der URL (z.B. /api/chatroom/:chatroomId)
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { chatroomId: string } }
@@ -58,13 +42,13 @@ export async function DELETE(
   const { chatroomId } = params;
   await dbConnect();
 
-  const session = await auth(); // auth() gibt die Session zurück
+  const session = await auth();
   if (!session?.user) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
   try {
-    const deletedChatroom = await ChatroomModel.findByIdAndDelete(chatroomId); // Lösche den Chatroom anhand der ID
+    const deletedChatroom = await ChatroomModel.findByIdAndDelete(chatroomId);
     if (!deletedChatroom) {
       return new NextResponse("Chatroom nicht gefunden", { status: 404 });
     }
