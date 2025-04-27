@@ -3,6 +3,7 @@ import {
   addProductT,
   GETSellersProdutsResponse,
   ProductT,
+  Reservation,
 } from "@/model/types/types";
 import React, {
   ChangeEvent,
@@ -33,6 +34,9 @@ export default function SellerProductsList() {
   const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const [sellerProducts, setSellerProducts] = useState<ProductT[]>([]);
+  const [sellerReservations, setSellerReservations] = useState<Reservation[]>(
+    []
+  );
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -40,6 +44,28 @@ export default function SellerProductsList() {
     Record<string, Partial<ProductT>>
   >({});
   const { showToast } = useToast();
+
+  //?======================================================================
+
+  //Fetch seller's reservations
+  const getSellerReservations = async () => {
+    if (!session?.user?.id) return;
+
+    const response = await fetch(
+      `${baseUrl}/api/reservations/seller?sellerId=${session.user.id}`
+    );
+    const result = await response.json();
+
+    if (response.ok) {
+      setSellerReservations(result.reservations as Reservation[]);
+    } else {
+      showToast(result.error || "Error fetching reservations", "danger");
+    }
+  };
+
+  useEffect(() => {
+    getSellerReservations();
+  }, [session]);
 
   //?======================================================================
 
@@ -247,6 +273,27 @@ export default function SellerProductsList() {
     } else {
       console.log("Failed to update product");
       showToast("Failed to update product.", "danger");
+    }
+  };
+
+  //* ====================================================================
+
+  const handleCancelReservation = async (reservationId: string) => {
+    const response = await fetch(`${baseUrl}/api/reservations/cancel`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      showToast("Reservation cancelled!", "success");
+      setSellerReservations((prev) =>
+        prev.filter((r) => r._id !== reservationId)
+      );
+    } else {
+      showToast(result.error || "Failed to cancel reservation", "danger");
     }
   };
 
@@ -673,6 +720,43 @@ export default function SellerProductsList() {
             </Button>
           </Modal.Footer>
         </Modal>
+      </Container>
+      <hr />
+      {/* Reservation List */}
+      <Container>
+        <h2 className="ml-0 mb-4">Reservations</h2>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product Name</th>
+              <th>Buyer ID</th> {/* Substitute for email */}
+              <th>Status</th>
+              <th>Expiration Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sellerReservations.map((reservation, index) => (
+              <tr key={reservation._id}>
+                <td>{index + 1}</td>
+                <td>{reservation.productId.title}</td>
+                <td>{reservation.buyerId}</td> {/* Substitute for email */}
+                <td>{reservation.status}</td>
+                <td>{new Date(reservation.expiresAt).toLocaleString()}</td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      handleCancelReservation(reservation._id);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Container>
     </>
   );
