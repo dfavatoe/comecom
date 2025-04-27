@@ -3,6 +3,9 @@ import { ProductsList } from "@/model/types/types";
 import style from "./productcard.module.css";
 import Link from "next/link";
 import { useCountdown } from "@/hooks/useCountdown";
+import { useSession } from "next-auth/react";
+import { baseUrl } from "@/app/lib/urls";
+import { useToast } from "@/hooks/useToast";
 
 type ProductCardProps = {
   product: ProductsList;
@@ -13,10 +16,62 @@ function ProductCardList({ product }: ProductCardProps) {
     product.reservationTime,
     `countdown_${product._id}` // Unique storage key for each product
   );
+  const { showToast } = useToast();
+  const { data: session, status } = useSession();
 
   const sellerAddress = product.seller?.address
     ? `${product.seller.address.streetName} ${product.seller.address.streetNumber}, ${product.seller.address.postalcode} ${product.seller.address.city}`
     : "";
+
+  const handleReserve = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/api/reservations`, {
+        method: "POST",
+        body: JSON.stringify({
+          productId: product._id,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        showToast(error || "Failed to reserve product", "danger");
+        return;
+      }
+      //if reservation was successfull, start countdown
+      start();
+    } catch (error) {
+      console.error("Error reserving product:", error);
+      showToast("Something went wrong while reserving", "danger");
+    }
+  };
+
+  const handleCancelReservation = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/api/reservations`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          productId: product._id,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        showToast(error || "Failed to cancel reservation", "danger");
+        return;
+      }
+
+      //If successfully canceld on the backend, reset frontend countdown
+      reset();
+      // Clear countdown from sessionStorage manually
+      sessionStorage.removeItem(`countdown_${product._id}`);
+      showToast("Reservation cancelled successfully", "success");
+    } catch (error) {
+      console.error("Error canceling reservation:", error);
+      showToast("Something went wrong while canceling", "danger");
+    }
+  };
 
   return (
     <Container className="mt-0">
@@ -59,7 +114,7 @@ function ProductCardList({ product }: ProductCardProps) {
                     className="mt-auto mx-auto"
                     style={{ maxWidth: "130px" }}
                     variant="warning"
-                    onClick={start}
+                    onClick={handleReserve}
                     disabled={isActive}
                   >
                     Reserve
@@ -97,7 +152,7 @@ function ProductCardList({ product }: ProductCardProps) {
                       style={{ maxWidth: "130px" }}
                       variant="primary"
                       // onClick={handle}
-                      onClick={reset}
+                      onClick={handleCancelReservation}
                     >
                       Cancel
                     </Button>

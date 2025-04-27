@@ -33,6 +33,7 @@ export default function SellerProductsList() {
   const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const [sellerProducts, setSellerProducts] = useState<ProductT[]>([]);
+  const [sellerReservations, setSellerReservations] = useState([]);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
