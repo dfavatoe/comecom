@@ -1,15 +1,13 @@
 import dbConnect from "@/app/lib/dbConnect";
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/app/lib/auth";
 import { ReservationModel } from "@/model/reservationModel";
 
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
 
-    const session = await auth();
-
-    const sellerId = session?.user!.id;
+    const url = new URL(req.url);
+    const sellerId = url.searchParams.get("sellerId");
 
     if (!sellerId) {
       return NextResponse.json(

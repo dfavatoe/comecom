@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { baseUrl } from "@/app/lib/urls";
-import { GetProductsListResponse, ProductsList } from "@/model/types/types";
+import {
+  GetProductsListResponse,
+  ProductsList,
+  Reservation,
+} from "@/model/types/types";
 import { Button, Container, Row, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import ProductCardList from "@/components/ProductCardList";
@@ -11,6 +15,10 @@ export default function BuyerShoppingList() {
   const [productsList, setProductsList] = useState<ProductsList[] | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const [reservations, setReservations] = useState<Reservation[] | null>(null);
+  const [reservationStatuses, setReservationStatuses] = useState<
+    Record<string, string>
+  >({});
 
   const handleGetShoppingList = async () => {
     try {
@@ -37,11 +45,64 @@ export default function BuyerShoppingList() {
     }
   };
 
+  const handleGetBuyerReservations = async () => {
+    try {
+      if (!session?.user!.id) return;
+      const response = await fetch(
+        `${baseUrl}/api/reservations?buyerId=${session?.user!.id}`,
+        { method: "GET" }
+      );
+      if (!response.ok) {
+        console.error("Error fetching reservations");
+        return;
+      }
+      const data = await response.json();
+      console.log("Fetched buyer reservations", data);
+      setReservations(data.reservations);
+    } catch (error) {
+      console.error("Error fetching buyer reservations", error);
+    }
+  };
+
   useEffect(() => {
     if (status === "authenticated") {
       handleGetShoppingList();
+      handleGetBuyerReservations();
     }
-  }, []);
+  }, [status, session?.user!.id]);
+
+  //polling: check every 10 seconds the reservation status
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const response = await fetch(
+          `${baseUrl}/api/reservations?buyerId=${session?.user!.id}`
+        );
+        const data = await response.json();
+
+        if (response.ok) {
+          const updatedStatuses: Record<string, string> = {};
+
+          for (const reservation of data.reservations) {
+            if (reservation.status === "cancelled") {
+              updatedStatuses[reservation.productId] = "cancelled";
+
+              // Clear countdown from sessionStorage
+              sessionStorage.removeItem(`countdown_${reservation.productId}`);
+            }
+          }
+
+          setReservationStatuses(updatedStatuses);
+        } else {
+          console.error("Failed to fetch reservations");
+        }
+      } catch (error) {
+        console.error("Error checking reservation status", error);
+      }
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [session?.user!.id]);
 
   return (
     <>
@@ -57,7 +118,11 @@ export default function BuyerShoppingList() {
         ) : productsList && productsList.length > 0 ? (
           productsList.map((item) => (
             <Row className="d-flex justify-content-center m-4" key={item._id}>
-              <ProductCardList key={item._id} product={item} />
+              <ProductCardList
+                key={item._id}
+                product={item}
+                reservationStatus={reservationStatuses[item._id]}
+              />
             </Row>
           ))
         ) : (
