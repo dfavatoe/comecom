@@ -21,6 +21,8 @@ import { Message } from "@/model/types/types";
 import { useRouter } from "next/navigation";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "@/app/globals.css";
+import styles from "./ChatWindow.module.css";
+import { relative } from "path";
 
 interface ChatProps {
   chatroomId: string;
@@ -188,17 +190,8 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
   };
 
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <Box
-        sx={{
-          padding: "0.5rem",
-          backgroundColor: "var(--grey-bg)",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
+    <div className={styles.chatContainer}>
+      <Box className={styles.chatHeader}>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           Chat with {chatPartnerName}
         </Typography>
@@ -207,6 +200,9 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
           aria-controls="chat-menu"
           aria-haspopup="true"
           onClick={handleMenuOpen}
+          sx={{
+            zIndex: 1, // Setzt sicher, dass der Button vor dem Menü bleibt
+          }}
         >
           <MoreVertIcon />
         </IconButton>
@@ -216,20 +212,21 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleMenuClose}
+          className={styles.menu}
+          anchorOrigin={{
+            vertical: "bottom", // Menü öffnet sich nach unten
+            horizontal: "right", // Menü öffnet sich nach rechts
+          }}
+          transformOrigin={{
+            vertical: "top", // Menü selbst wird an der Oberseite des Ankers ausgerichtet
+            horizontal: "right", // Menü selbst wird an der rechten Seite des Ankers ausgerichtet
+          }}
         >
           <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>
         </Menu>
       </Box>
 
-      <div
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "1rem",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className={styles.chatMessages}>
         {messages.map((message) => {
           const isOwnMessage = String(message.authorId) === session?.user?.id;
 
@@ -251,15 +248,11 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
               }}
             >
               <Box
+                className={styles.messageBox}
                 sx={{
                   backgroundColor: isOwnMessage
                     ? "var(--secondary)"
                     : "var(--grey-bg)",
-                  color: "black",
-                  borderRadius: "12px",
-                  padding: "8px 12px",
-                  maxWidth: "70%",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
                 }}
               >
                 <Typography
@@ -269,15 +262,7 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
                   {isOwnMessage ? "You" : message.authorName || "User"}
                 </Typography>
                 <Typography variant="body2">{message.messageText}</Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    fontSize: "0.7rem",
-                    float: "right",
-                    marginTop: "4px",
-                    color: "gray",
-                  }}
-                >
+                <Typography variant="caption" className={styles.messageTime}>
                   {time}
                 </Typography>
               </Box>
@@ -289,11 +274,7 @@ export default function Chat({ chatroomId, onClose }: ChatProps) {
       <Box
         component="form"
         onSubmit={handleMessageSubmit}
-        sx={{
-          display: "flex",
-          p: 1,
-          borderTop: "1px solid #eee",
-        }}
+        className={styles.chatFooter}
       >
         <TextField
           fullWidth

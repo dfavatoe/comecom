@@ -195,6 +195,15 @@ export default function SellerChatDashboard() {
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        sx={{ minWidth: "150px" }}
       >
         <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>
       </Menu>
