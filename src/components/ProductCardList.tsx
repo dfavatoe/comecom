@@ -1,22 +1,94 @@
+"use client";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import { ProductsList } from "@/model/types/types";
 import style from "./productcard.module.css";
 import Link from "next/link";
 import { useCountdown } from "@/hooks/useCountdown";
+import { useSession } from "next-auth/react";
+import { baseUrl } from "@/app/lib/urls";
+import { useToast } from "@/hooks/useToast";
+import { useEffect } from "react";
 
 type ProductCardProps = {
   product: ProductsList;
+  reservationStatus: string;
 };
 
-function ProductCardList({ product }: ProductCardProps) {
+function ProductCardList({ product, reservationStatus }: ProductCardProps) {
+  const { showToast } = useToast();
+  const { data: session, status } = useSession();
+
+  const shouldRunCountdown =
+    product.reservation && reservationStatus !== "cancelled";
+
   const { formattedTime, start, reset, isActive } = useCountdown(
-    product.reservationTime,
+    shouldRunCountdown ? product.reservationTime : 0,
     `countdown_${product._id}` // Unique storage key for each product
   );
 
   const sellerAddress = product.seller?.address
     ? `${product.seller.address.streetName} ${product.seller.address.streetNumber}, ${product.seller.address.postalcode} ${product.seller.address.city}`
     : "";
+
+  const handleReserve = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/api/reservations`, {
+        method: "POST",
+        body: JSON.stringify({
+          productId: product._id,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        showToast(error || "Failed to reserve product", "danger");
+        return;
+      }
+      //if reservation was successfull, start countdown
+      start();
+    } catch (error) {
+      console.error("Error reserving product:", error);
+      showToast("Something went wrong while reserving", "danger");
+    }
+  };
+
+  const handleCancelReservation = async () => {
+    try {
+      const response = await fetch(`${baseUrl}/api/reservations`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          productId: product._id,
+        }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        const { error } = await response.json();
+        showToast(error || "Failed to cancel reservation", "danger");
+        return;
+      }
+
+      //If successfully canceld on the backend, reset frontend countdown
+      reset();
+      // Clear countdown from sessionStorage manually
+      sessionStorage.removeItem(`countdown_${product._id}`);
+      showToast("Reservation cancelled successfully", "success");
+    } catch (error) {
+      console.error("Error canceling reservation:", error);
+      showToast("Something went wrong while canceling", "danger");
+    }
+  };
+
+  useEffect(() => {
+    if (reservationStatus === "cancelled") {
+      // Clear countdown from sessionStorage
+      sessionStorage.removeItem(`countdown_${product._id}`);
+
+      // Also reset the countdown manually
+      reset();
+    }
+  }, [reservationStatus, product._id]);
 
   return (
     <Container className="mt-0">
@@ -59,7 +131,7 @@ function ProductCardList({ product }: ProductCardProps) {
                     className="mt-auto mx-auto"
                     style={{ maxWidth: "130px" }}
                     variant="warning"
-                    onClick={start}
+                    onClick={handleReserve}
                     disabled={isActive}
                   >
                     Reserve
@@ -82,7 +154,7 @@ function ProductCardList({ product }: ProductCardProps) {
                 </Link>
               )}
 
-              {product.reservation && (
+              {shouldRunCountdown && (
                 <Container className="d-inline-flex justify-content-center">
                   <Card.Subtitle
                     className="text-xl mt-4 mx-2"
@@ -97,12 +169,20 @@ function ProductCardList({ product }: ProductCardProps) {
                       style={{ maxWidth: "130px" }}
                       variant="primary"
                       // onClick={handle}
-                      onClick={reset}
+                      onClick={handleCancelReservation}
                     >
                       Cancel
                     </Button>
                   </div>
                 </Container>
+              )}
+              {reservationStatus === "cancelled" && (
+                <div
+                  className="mt-2"
+                  style={{ color: "red", textAlign: "center" }}
+                >
+                  Reservation Cancelled
+                </div>
               )}
             </Col>
           </Row>
