@@ -39,9 +39,6 @@ export default function SellerChatDashboard() {
         const res = await fetch("/api/chatroom");
         const allRooms = await res.json();
 
-        // const myRooms = allRooms.filter((room: any) =>
-        //   room.participants.includes(session.user.id)
-        // );
         const myRooms = allRooms.filter((room: any) =>
           room.participants.some((user: any) => user._id === session.user.id)
         );
@@ -60,7 +57,7 @@ export default function SellerChatDashboard() {
     roomId: string
   ) => {
     setAnchorEl(event.currentTarget);
-    setRoomToDelete(roomId); // direkt setzen
+    setRoomToDelete(roomId);
     console.log("roomToDelete set:", roomId);
   };
 

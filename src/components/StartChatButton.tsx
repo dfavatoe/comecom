@@ -132,7 +132,10 @@ export default function StartChatButton({ sellerId }: Props) {
               overflow: "hidden",
             }}
           >
-            <ChatWindow chatroomId={chatroomId} />
+            <ChatWindow
+              chatroomId={chatroomId}
+              onClose={() => setShowChat(false)}
+            />
           </div>
         </>
       )}

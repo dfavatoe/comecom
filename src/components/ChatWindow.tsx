@@ -2,20 +2,40 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState, ChangeEvent, FormEvent, useRef } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Menu,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { Message } from "@/model/types/types";
+import { useRouter } from "next/navigation";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "@/app/globals.css";
 
 interface ChatProps {
   chatroomId: string;
+  onClose?: () => void;
 }
 
-export default function Chat({ chatroomId }: ChatProps) {
+export default function Chat({ chatroomId, onClose }: ChatProps) {
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
   const { data: session } = useSession();
   const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
@@ -28,10 +48,8 @@ export default function Chat({ chatroomId }: ChatProps) {
   useEffect(() => {
     if (!chatroomId || chatroomId.length !== 24) return;
 
-    // Initial laden
     fetchChat();
 
-    // Polling starten
     const interval = setInterval(() => {
       fetchChat();
     }, 5000); // oder z. B. 3000ms für weniger Netzwerktraffic
@@ -95,7 +113,6 @@ export default function Chat({ chatroomId }: ChatProps) {
     });
 
     if (res.ok) {
-      // Statt direkte Antwort → gesamte Chatliste neu laden
       await fetchChat();
       setMessageText("");
     } else {
@@ -133,12 +150,42 @@ export default function Chat({ chatroomId }: ChatProps) {
     return "Unknown User";
   }
 
-  // const chatPartnerName =
-  //   messages.length > 0 ? session.user.name : "Unknown User";
   const chatPartnerName =
     messages.length > 0 && session?.user?.id
       ? getChatPartnerName(messages, session.user.id)
       : "Unknown User";
+
+  // Delete Chatroom
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDeleteClick = () => {
+    setConfirmOpen(true);
+    handleMenuClose();
+  };
+
+  const confirmDelete = async () => {
+    try {
+      const res = await fetch(`/api/chatroom/${chatroomId}`, {
+        method: "DELETE",
+      });
+
+      if (res.ok) {
+        setConfirmOpen(false);
+        if (onClose) onClose();
+      } else {
+        alert("Error deleting chatroom");
+      }
+    } catch (error) {
+      // console.error("Error deleting:", error);
+      alert("Something went wrong.");
+    }
+  };
 
   return (
     <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -147,19 +194,33 @@ export default function Chat({ chatroomId }: ChatProps) {
           padding: "0.5rem",
           backgroundColor: "var(--grey-bg)",
           boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
         }}
       >
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           Chat with {chatPartnerName}
         </Typography>
+
+        <IconButton
+          aria-controls="chat-menu"
+          aria-haspopup="true"
+          onClick={handleMenuOpen}
+        >
+          <MoreVertIcon />
+        </IconButton>
+
+        <Menu
+          id="chat-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>
+        </Menu>
       </Box>
-      {/* <div style={{ flex: 1, overflowY: "auto", padding: "1rem" }}>
-        {messages.map((message) => (
-          <Typography key={message._id} variant="body2" sx={{ mb: 1 }}>
-            {message.messageText}
-          </Typography>
-        ))}
-      </div> */}
+
       <div
         style={{
           flex: 1,
@@ -244,6 +305,24 @@ export default function Chat({ chatroomId }: ChatProps) {
         <Button type="submit">
           <SendIcon style={{ color: "var(--btn-blue)" }} />
         </Button>
+
+        <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+          <DialogTitle>Delete chat?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete this chat? This action cannot be
+              undone.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setConfirmOpen(false)} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={confirmDelete} color="error" variant="contained">
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Box>
     </div>
   );
