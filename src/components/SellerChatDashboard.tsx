@@ -3,7 +3,6 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import "@/app/globals.css";
 import { Box, Typography, Paper, Stack, Button, Divider } from "@mui/material";
 import "@/app/globals.css";
 
@@ -37,9 +36,7 @@ export default function SellerChatDashboard() {
 
   return (
     <Box sx={{ p: 4, maxWidth: 800, mx: "auto" }}>
-      <Typography variant="h4" gutterBottom>
-        Your Chatrooms
-      </Typography>
+      <h2>Your Chatrooms</h2>
 
       {chatrooms.length === 0 ? (
         <Typography color="text.secondary">No chats found.</Typography>
