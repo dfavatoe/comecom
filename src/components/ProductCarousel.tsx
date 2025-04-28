@@ -79,9 +79,10 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
       {/* Scrollable Container */}
       <div ref={scrollContainerRef} className={styles["scroll-container"]}>
-        {productsRecords.map((product, index) => (
-          <ProductCard key={product._id} product={product} index={index} />
-        ))}
+       {Array.isArray(productsRecords) && productsRecords.map((product, index) => (
+  <ProductCard key={product._id} product={product} index={index} />
+))}
+
       </div>
 
       {/* Right Button */}

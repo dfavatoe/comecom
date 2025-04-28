@@ -12,7 +12,7 @@ import {
   Avatar,
 } from "@mui/material";
 import { useSession } from "next-auth/react";
-import "@/app/globals.css"; 
+import "@/app/globals.css";
 
 type Message = {
   sender: "user" | "ai";
@@ -68,6 +68,10 @@ export default function ChatWidget() {
             name: session?.user?.name,
             email: session?.user?.email,
           },
+          history: newMessages.map((msg) => ({
+            role: msg.sender === "user" ? "user" : "assistant",
+            content: msg.text,
+          })),
         }),
       });
 
@@ -89,15 +93,15 @@ export default function ChatWidget() {
         <IconButton
           onClick={() => setOpen(!open)}
           sx={{
-            width: 60,
-            height: 60,
+            width: 64,
+            height: 64,
             borderRadius: "50%",
             backgroundColor: "var(--btn-yellow)",
             color: "#000",
-            fontSize: 28,
+            fontSize: 30,
             boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
             "&:hover": {
-              transform: "scale(1.1)",
+              transform: "scale(1.08)",
               backgroundColor: "#e6b800",
             },
           }}
@@ -182,8 +186,9 @@ export default function ChatWidget() {
                   <Paper
                     sx={{
                       p: 1,
-                      bgcolor: "var(--grey-bg)",
-                      color: "#000",
+                      bgcolor:
+                        msg.sender === "user" ? "#1976d2" : "var(--grey-bg)",
+                      color: msg.sender === "user" ? "white" : "black",
                       borderRadius: 2,
                       border: "1px solid #ddd",
                       maxWidth: "80%",
