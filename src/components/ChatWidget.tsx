@@ -137,7 +137,7 @@ export default function ChatWidget() {
               textAlign: "center",
             }}
           >
-            🛍️ Com&Com Assistant
+            🛍️ com&com Assistant
           </Typography>
 
           <Box
