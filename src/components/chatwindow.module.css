@@ -18,7 +18,8 @@
 .storeChatWindow {
   position: fixed;
   bottom: 100px;
-  right: 5%;
+  /* right: 5%; */
+  right: calc(100% - 850px - 20px);
   width: 360px;
   height: 400px;
   background-color: white;
@@ -103,5 +104,12 @@
     right: 5%;
     width: auto;
     max-width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .storeChatWindow {
+    right: calc(100% - 275px - 20px); /* Dynamisch für kleinere Bildschirme */
+    max-width: 90%; /* Damit das Chatfenster auch auf kleineren Bildschirmen passt */
   }
 }

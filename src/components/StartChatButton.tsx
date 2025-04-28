@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import ChatWindow from "@/components/ChatWindow";
+import { Box, IconButton } from "@mui/material";
+import ChatIcon from "@mui/icons-material/Chat";
 
 interface Props {
   sellerId: string;
@@ -13,6 +15,8 @@ export default function StartChatButton({ sellerId }: Props) {
   const { data: session } = useSession();
   const [chatroomId, setChatroomId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   const startChat = async () => {
     if (!session?.user?.id) {
@@ -80,7 +84,7 @@ export default function StartChatButton({ sellerId }: Props) {
 
   return (
     <>
-      <div
+      {/* <div
         style={{ position: "fixed", bottom: "90px", right: "5%", zIndex: 1002 }}
       ></div>
       <Button
@@ -96,7 +100,43 @@ export default function StartChatButton({ sellerId }: Props) {
         }}
       >
         {showChat ? "Close Chat" : "Contact Seller"}
-      </Button>
+      </Button> */}
+      <Box
+        sx={{
+          position: "fixed",
+          bottom: 24,
+          right: "calc(100% - 850px - 20px)",
+          zIndex: 1000,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          alignItems: "center",
+          "@media (max-width: 768px)": {
+            right: "calc(100% - 275px - 20px)",
+            gap: 2,
+          },
+        }}
+      >
+        <IconButton
+          // onClick={() => setOpen(!open)}
+          onClick={startChat}
+          sx={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            backgroundColor: "var(--btn-yellow)",
+            color: "#000",
+            fontSize: 30,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            "&:hover": {
+              transform: "scale(1.08)",
+              backgroundColor: "#e6b800",
+            },
+          }}
+        >
+          <ChatIcon />
+        </IconButton>
+      </Box>
 
       {showChat && chatroomId && (
         <>
