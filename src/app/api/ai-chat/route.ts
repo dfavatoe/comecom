@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     const currentUser = await UserModel.findById(user?.id).populate("productsList");
     if (!currentUser) {
-      return NextResponse.json({ answer: "User not found." });
+      return NextResponse.json({ answer: "You have to log in first." });
     }
 
     const allProducts = await Product.find().populate("seller");
