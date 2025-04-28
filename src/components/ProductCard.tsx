@@ -26,7 +26,9 @@ function ProductCard({ product }: ProductCardProps) {
           src={product.images[0]}
         />
         <Card.Body className="d-flex flex-column">
-          <Card.Title>{product.title}</Card.Title>
+          <Card.Title style={{ color: "var(--primary)" }}>
+            {product.title}
+          </Card.Title>
           <Card.Subtitle className="mb-2 text-muted">
             {product.price} €
           </Card.Subtitle>

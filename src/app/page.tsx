@@ -33,9 +33,9 @@ export default function Home() {
 
   if (!products || products.length === 0) {
     return (
-      <div>
+      <div className="d-flex flex-column align-items-center justify-content-center">
         <Spinner animation="border" variant="warning" />
-        <p>Loading...</p>
+        <p className="mt-2">Loading...</p>
       </div>
     );
   }
@@ -55,8 +55,9 @@ export default function Home() {
         <div className={styles.overlay}>
           <h1 className={styles.brand}>com&com</h1>
           <p className={styles.subtitel}>
-            Everything you need, all in one place.
+            The social and e-commerce retailers platform
           </p>
+          <p>Buy, sell, post, chat and enjoy AI features</p>
           <Button
             className="mt-2 mb-2"
             variant="warning"
