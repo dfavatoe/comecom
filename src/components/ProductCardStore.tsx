@@ -1,10 +1,7 @@
 "use client";
-import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Card, Col, Container, Row } from "react-bootstrap";
 import { ProductT } from "@/model/types/types";
 import style from "./productcard.module.css";
-import { MouseEvent, useState } from "react";
-import { baseUrl } from "@/app/lib/urls";
-import ModalAlert from "./ModalAlert";
 import Link from "next/link";
 import AddToShoppingListButton from "./addToShoppingListButton";
 
@@ -13,9 +10,6 @@ type ProductCardProps = {
 };
 
 function ProductCardStore({ product }: ProductCardProps) {
-  // const [showAlert, setShowAlert] = useState(false);
-  // const [alertText, setAlertText] = useState("");
-
   const countStars = (productRating: number | null) => {
     if (productRating) {
       const fullStars = "★";
@@ -94,11 +88,6 @@ function ProductCardStore({ product }: ProductCardProps) {
           </Row>
         </Card.Body>
       </Card>
-      {/* <ModalAlert
-        showAlert={showAlert}
-        alertText={alertText}
-        setShowAlert={setShowAlert}
-      /> */}
     </Container>
   );
 }

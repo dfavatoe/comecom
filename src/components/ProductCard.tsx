@@ -1,8 +1,6 @@
-import { Button, Card, Stack } from "react-bootstrap";
+import { Card, Stack } from "react-bootstrap";
 
 import style from "./productcard.module.css";
-import { MouseEvent, useState } from "react";
-import ModalAlert from "./ModalAlert";
 import { ProductT } from "@/model/types/types";
 import Link from "next/link";
 import AddToShoppingListButton from "./addToShoppingListButton";
@@ -12,9 +10,6 @@ type ProductCardProps = {
 };
 
 function ProductCard({ product }: ProductCardProps) {
-  // const [showAlert, setShowAlert] = useState(false);
-  // const [alertText, setAlertText] = useState("");
-
   return (
     <>
       <Card
@@ -44,11 +39,6 @@ function ProductCard({ product }: ProductCardProps) {
           <AddToShoppingListButton productId={product._id} />
         </Card.Body>
       </Card>
-      {/* <ModalAlert
-        showAlert={showAlert}
-        alertText={alertText}
-        setShowAlert={setShowAlert}
-      /> */}
     </>
   );
 }

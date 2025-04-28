@@ -3,6 +3,7 @@ import {
   addProductT,
   GETSellersProdutsResponse,
   ProductT,
+  Reservation,
 } from "@/model/types/types";
 import React, {
   ChangeEvent,
@@ -16,7 +17,6 @@ import {
   Col,
   Container,
   Form,
-  Image,
   InputGroup,
   Modal,
   Row,
@@ -34,6 +34,9 @@ export default function SellerProductsList() {
   const [selectedFile, setSelectedFile] = useState<File | string>("");
 
   const [sellerProducts, setSellerProducts] = useState<ProductT[]>([]);
+  const [sellerReservations, setSellerReservations] = useState<Reservation[]>(
+    []
+  );
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -41,6 +44,28 @@ export default function SellerProductsList() {
     Record<string, Partial<ProductT>>
   >({});
   const { showToast } = useToast();
+
+  //?======================================================================
+
+  //Fetch seller's reservations
+  const getSellerReservations = async () => {
+    if (!session?.user?.id) return;
+
+    const response = await fetch(
+      `${baseUrl}/api/reservations/seller?sellerId=${session.user.id}`
+    );
+    const result = await response.json();
+
+    if (response.ok) {
+      setSellerReservations(result.reservations as Reservation[]);
+    } else {
+      showToast(result.error || "Error fetching reservations", "danger");
+    }
+  };
+
+  useEffect(() => {
+    getSellerReservations();
+  }, [session]);
 
   //?======================================================================
 
@@ -120,9 +145,7 @@ export default function SellerProductsList() {
 
     if (!session?.user) {
       console.log("user has to log in first");
-      alert("user has to log in first");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first!", "warning");
       return;
     }
 
@@ -144,13 +167,11 @@ export default function SellerProductsList() {
 
     if (response.ok) {
       console.log("Product added successfully!");
-      alert("Product added successfully!");
-      // setAlertText("Product successfully added!");
-      // setShowAlert(true);
+      showToast("Product successfully added!", "success");
       setNewProduct(null);
     } else {
       console.log(result.error || "Failed to add the product.");
-      alert("Error adding products!");
+      showToast("Error adding products!", "danger");
     }
   };
 
@@ -255,6 +276,27 @@ export default function SellerProductsList() {
     }
   };
 
+  //* ====================================================================
+
+  const handleCancelReservation = async (reservationId: string) => {
+    const response = await fetch(`${baseUrl}/api/reservations/cancel`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reservationId }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      showToast("Reservation cancelled!", "success");
+      setSellerReservations((prev) =>
+        prev.filter((r) => r._id !== reservationId)
+      );
+    } else {
+      showToast(result.error || "Failed to cancel reservation", "danger");
+    }
+  };
+
   useEffect(() => {
     getSellersProducts();
   }, []);
@@ -301,8 +343,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="description"
                   id="product-description"
-                  // value={email}
-                  // onChange={handleEmailChange}
                   placeholder="Describe the product"
                   onChange={handleNewProductInputChange}
                 />
@@ -314,8 +354,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="category"
                   id="product-category"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Set the product's category"
                   onChange={handleNewProductInputChange}
                 />
@@ -327,8 +365,6 @@ export default function SellerProductsList() {
                   type="text"
                   name="price"
                   id="product-price"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Set a price"
                   onChange={handleNewProductInputChange}
                 />
@@ -340,8 +376,6 @@ export default function SellerProductsList() {
                   type="number"
                   name="stock"
                   id="product-stock"
-                  // value={password}
-                  // onChange={handlePasswordChange}
                   placeholder="Number of product's in stock"
                   onChange={handleNewProductInputChange}
                 />
@@ -686,6 +720,43 @@ export default function SellerProductsList() {
             </Button>
           </Modal.Footer>
         </Modal>
+      </Container>
+      <hr />
+      {/* Reservation List */}
+      <Container>
+        <h2 className="ml-0 mb-4">Reservations</h2>
+        <Table responsive striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Product Name</th>
+              <th>Buyer ID</th> {/* Substitute for email */}
+              <th>Status</th>
+              <th>Expiration Time</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sellerReservations.map((reservation, index) => (
+              <tr key={reservation._id}>
+                <td>{index + 1}</td>
+                <td>{reservation.productId.title}</td>
+                <td>{reservation.buyerId}</td> {/* Substitute for email */}
+                <td>{reservation.status}</td>
+                <td>{new Date(reservation.expiresAt).toLocaleString()}</td>
+                <td>
+                  <Button
+                    onClick={() => {
+                      handleCancelReservation(reservation._id);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
       </Container>
     </>
   );

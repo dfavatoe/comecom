@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { GetShopInfo, ProductT, UserFull } from "@/model/types/types";
-import { Col, Container, Image, Row } from "react-bootstrap";
+import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import ProductCardStore from "@/components/ProductCardStore";
 import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
@@ -9,6 +9,8 @@ import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useSession } from "next-auth/react";
 import StartChatButton from "@/components/StartChatButton";
+import "@/app/globals.css";
+
 
 const MapClient = dynamic(() => import("@/components/MapClient"), {
   ssr: false,
@@ -71,23 +73,6 @@ export default function Store() {
     }
   };
 
-  // Lade die Nachrichten, wenn die chatroomId vorhanden ist
-  // useEffect(() => {
-  //   if (chatroomId) {
-  //     fetchChat();
-  //   }
-  // }, [chatroomId]);
-
-  // Polling für das Abrufen der Nachrichten alle 3 Sekunden
-  // useEffect(() => {
-  //   const interval = setInterval(() => {
-  //     fetchChat(); // Ruft alle 3 Sekunden die Nachrichten ab
-  //   }, 1000);
-
-  //   // Cleanup: Wenn der Component unmounted wird, das Intervall aufräumen
-  //   return () => clearInterval(interval);
-  // }, [chatroomId]); // Polling läuft nur, wenn sich die chatroomId ändert
-
   useEffect(() => {
     handleGetSellerShopInfo();
   }, []);
@@ -100,12 +85,20 @@ export default function Store() {
     ? `${seller.address.streetName} ${seller.address.streetNumber}, ${seller.address.postalcode} ${seller.address.city}`
     : "";
 
+  if (!products)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
+
   return (
     <>
       {console.log("seller>>>>>", seller)}
       {seller && (
         <>
-          <Container>
+          <div>
             <Row
               className="align-content-center mb-4"
               style={{ height: "auto" }}
@@ -114,7 +107,7 @@ export default function Store() {
                 <Image
                   className="mb-4"
                   src={seller.storeCoverImage}
-                  style={{ height: "300px", objectFit: "cover" }}
+                  style={{ height: "350px", objectFit: "cover" }}
                 />
               ) : (
                 <Image
@@ -124,63 +117,74 @@ export default function Store() {
                 />
               )}
 
-              <div className="second-header" style={{ textAlign: "center" }}>
+              <h1 className="second-header" style={{ textAlign: "center" }}>
                 {seller.name}
-              </div>
-              <div className="third-header" style={{ textAlign: "center" }}>
+              </h1>
+              <h2 className="third-header" style={{ textAlign: "center" }}>
                 Store
-              </div>
+              </h2>
             </Row>
             <hr />
-            <Row>
-              <Col
-                sm={6}
-                className="d-block mb-2"
-                style={{ textAlign: "left" }}
-              >
-                <h4>Contacts</h4>
-                <h5>{seller.email}</h5>
-                {sellerAddress && (
-                  <Link
-                    className="mb-2"
-                    href={`https://maps.google.com/?q=${sellerAddress}`}
-                    target="_blank"
-                  >
-                    {sellerAddress}
-                  </Link>
-                )}
-              </Col>
-              <Col>
-                <MapClient
-                  lat={seller.address?.latitude ?? 52.5200066}
-                  lng={seller.address?.longitude ?? 13.404954}
-                  label={
-                    seller.address
-                      ? seller.name
-                      : "No location shared by seller"
-                  }
-                />
-              </Col>
-            </Row>
+            <Container>
+              <Row>
+                <Col
+                  sm={6}
+                  className="d-block mb-2"
+                  style={{ textAlign: "left" }}
+                >
+                  <h4>Contacts</h4>
+                  <h5>{seller.email}</h5>
+                  {sellerAddress && (
+                    <Link
+                      className="mb-2"
+                      href={`https://maps.google.com/?q=${sellerAddress}`}
+                      target="_blank"
+                    >
+                      {sellerAddress}
+                    </Link>
+                  )}
+                </Col>
+                <Col>
+                  <MapClient
+                    lat={seller.address?.latitude ?? 52.5200066}
+                    lng={seller.address?.longitude ?? 13.404954}
+                    label={
+                      seller.address
+                        ? seller.name
+                        : "No location shared by seller"
+                    }
+                  />
+                </Col>
+              </Row>
+            </Container>
             <hr />
-            <div className="second-header mb-4" style={{ textAlign: "center" }}>
+            <h2 className="second-header mb-4" style={{ textAlign: "center" }}>
               Products
+            </h2>
+            <div
+              style={{
+                width: "auto",
+                height: "auto",
+                textAlign: "left",
+                paddingInline: "30px",
+                background: "var(--secondary)",
+              }}
+            >
+              {products ? (
+                products.map((product) => {
+                  return (
+                    <Row
+                      className="d-flex justify-content-center"
+                      key={product._id}
+                    >
+                      <ProductCardStore key={product._id} product={product} />
+                    </Row>
+                  );
+                })
+              ) : (
+                <h2>Seller still didn't share the products</h2>
+              )}
             </div>
-            {products ? (
-              products.map((product) => {
-                return (
-                  <Row
-                    className="d-flex justify-content-center"
-                    key={product._id}
-                  >
-                    <ProductCardStore key={product._id} product={product} />
-                  </Row>
-                );
-              })
-            ) : (
-              <h2>Seller still didn't share the products</h2>
-            )}
-          </Container>
           <div style={{ padding: "2rem" }}>
             {sellerId && <StartChatButton sellerId={sellerId} />}
           </div>

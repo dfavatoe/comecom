@@ -11,12 +11,11 @@ export function SignOut() {
         onClick={() => {
           signOut().then(() => {
             console.log("👋 User has been signed out!");
-            alert("Signed out successfully!");
           });
         }}
         style={{
           textDecoration: "none",
-          color: "orange",
+          color: "var(--primary)",
           padding: 0,
         }}
       >
