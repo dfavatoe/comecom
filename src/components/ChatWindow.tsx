@@ -266,8 +266,9 @@ export default function Chat({
                 className={styles.messageBox}
                 sx={{
                   backgroundColor: isOwnMessage
-                    ? "var(--secondary)"
-                    : "var(--grey-bg)",
+                    ? "#fbedb7"
+                    : // "var(--secondary)"
+                      "var(--grey-bg)",
                 }}
               >
                 <Typography
@@ -296,9 +297,24 @@ export default function Chat({
           placeholder="Type a message"
           onChange={handleMessageTextChange}
           value={messageText}
+          sx={{
+            backgroundColor: "#fff",
+            borderRadius: "8px",
+            marginRight: "0.4rem",
+          }}
         />
-        <Button type="submit">
-          <SendIcon style={{ color: "var(--btn-blue)" }} />
+        <Button
+          type="submit"
+          variant="contained"
+          sx={{
+            bgcolor: "var(--btn-yellow)",
+            color: "#000",
+            "&:hover": {
+              bgcolor: "#e6b800",
+            },
+          }}
+        >
+          {/* <SendIcon style={{ color: "var(--btn-blue)" }} /> */}Send
         </Button>
 
         <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
