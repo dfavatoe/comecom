@@ -1,3 +1,4 @@
+import { ObjectId } from "mongoose";
 import { Dispatch } from "react";
 import { Role } from "../../../nextauth";
 
@@ -207,3 +208,21 @@ export interface GetReviewsResponse {
   reviews: ReviewT[];
   error: string;
 }
+
+export type Chatroom = {
+  _id: string;
+  messageId: ObjectId | null;
+  participants: [{}];
+  created_at: string;
+  updated_at: string;
+};
+
+export type Message = {
+  _id: string;
+  chatroomId: ObjectId;
+  messageText: string;
+  authorId: ObjectId | null;
+  authorName?: string;
+  created_at: string;
+  updated_at: string;
+};
