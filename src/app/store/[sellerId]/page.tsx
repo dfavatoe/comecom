@@ -11,7 +11,6 @@ import { useSession } from "next-auth/react";
 import StartChatButton from "@/components/StartChatButton";
 import "@/app/globals.css";
 
-
 const MapClient = dynamic(() => import("@/components/MapClient"), {
   ssr: false,
 });
@@ -185,8 +184,9 @@ export default function Store() {
                 <h2>Seller still didn't share the products</h2>
               )}
             </div>
-          <div style={{ padding: "2rem" }}>
-            {sellerId && <StartChatButton sellerId={sellerId} />}
+            <div style={{ padding: "2rem" }}>
+              {sellerId && <StartChatButton sellerId={sellerId} />}
+            </div>
           </div>
         </>
       )}
