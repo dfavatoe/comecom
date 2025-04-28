@@ -2,15 +2,8 @@
 
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Typography,
-  Paper,
-  Stack,
-  Button,
-  Divider,
-  Dialog,
-} from "@mui/material";
+import { Box, Typography, Paper, Stack, Button, Divider } from "@mui/material";
+import Dialog from "@mui/material/Dialog";
 import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import "@/app/globals.css";
@@ -183,6 +176,7 @@ export default function SellerChatDashboard() {
             chatroomId={openChat}
             onClose={handleCloseChat}
             refreshChatrooms={refreshChatrooms}
+            variant="dashboard"
           />
         )}
       </Dialog>

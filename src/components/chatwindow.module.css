@@ -1,16 +1,56 @@
-.chatContainer {
+.dashboardChatWindow {
+  width: 100%;
+  height: 100%;
+  background-color: white;
   display: flex;
   flex-direction: column;
-  height: 100%;
+}
+
+.dashboardChatWindow .chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
   margin-left: 10px;
-  position: fixed; /* Feste Position */
-  top: 10px; /* Kleine Anpassung vom oberen Rand */
-  left: 10px; /* Kleine Anpassung vom linken Rand */
   z-index: 1000;
+  background-color: white;
+}
+
+.storeChatWindow {
+  position: fixed;
+  bottom: 100px;
+  right: 5%;
+  width: 360px;
+  height: 400px;
+  background-color: white;
+  padding: 5px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.storeChatWindow .chatContainer {
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  margin-left: 10px;
+  /* position: fixed; */
+  /* z-index: 1000; */
+  background-color: white;
+}
+
+.storeChatWindow .chatFooter {
+  display: flex;
+  padding: 0.5rem;
+  border-top: 1px solid #eee;
+  position: relative;
 }
 
 .chatHeader {
-  padding: 0.5rem;
+  padding: 0.4rem;
+  margin-top: 0.3rem;
   background-color: var(--grey-bg);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -36,7 +76,7 @@
 
 .menu {
   position: absolute;
-  top: 50px; /* Beispielwert */
+  top: 50px;
   right: 0;
   max-width: calc(100% - 20px);
   width: auto;
@@ -55,4 +95,13 @@
   float: right;
   margin-top: 4px;
   color: gray;
+}
+
+@media (max-width: 420px) {
+  .storeChatWindow {
+    left: 5%;
+    right: 5%;
+    width: auto;
+    max-width: 90%;
+  }
 }

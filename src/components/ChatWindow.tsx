@@ -21,19 +21,20 @@ import { Message } from "@/model/types/types";
 import { useRouter } from "next/navigation";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "@/app/globals.css";
-import styles from "./ChatWindow.module.css";
-import { relative } from "path";
+import styles from "./chatwindow.module.css";
 
 interface ChatProps {
   chatroomId: string;
   onClose?: () => void;
   refreshChatrooms: (deletedRoomId: string) => void;
+  variant: "dashboard" | "store";
 }
 
 export default function Chat({
   chatroomId,
   onClose,
   refreshChatrooms,
+  variant,
 }: ChatProps) {
   const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -59,7 +60,7 @@ export default function Chat({
 
     const interval = setInterval(() => {
       fetchChat();
-    }, 5000); // oder z. B. 3000ms für weniger Netzwerktraffic
+    }, 2000);
 
     return () => clearInterval(interval);
   }, [chatroomId]);
@@ -136,11 +137,11 @@ export default function Chat({
     messages: Message[],
     currentUserId: string
   ): string {
-    console.log("Messages:", messages);
-    console.log("Current User ID:", currentUserId);
+    // console.log("Messages:", messages);
+    // console.log("Current User ID:", currentUserId);
 
     if (messages.length === 0) {
-      console.log("No messages found, returning Unknown User");
+      // console.log("No messages found, returning Unknown User");
       return "Unknown User";
     }
 
@@ -149,11 +150,11 @@ export default function Chat({
     );
 
     if (partnerMsg) {
-      console.log("Partner found:", partnerMsg);
+      // console.log("Partner found:", partnerMsg);
       return partnerMsg.authorName || "Unknown User";
     }
 
-    console.log("No partner found, returning Unknown User");
+    // console.log("No partner found, returning Unknown User");
     return "Unknown User";
   }
 
@@ -196,7 +197,14 @@ export default function Chat({
   };
 
   return (
-    <div className={styles.chatContainer}>
+    <div
+      // className={styles.chatContainer}
+      className={`${styles.chatContainer} ${
+        variant === "dashboard"
+          ? styles.dashboardChatWindow
+          : styles.storeChatWindow
+      }`}
+    >
       <Box className={styles.chatHeader}>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           Chat with {chatPartnerName}
@@ -288,7 +296,6 @@ export default function Chat({
           placeholder="Type a message"
           onChange={handleMessageTextChange}
           value={messageText}
-          //sx={{ height: "1em" }}
         />
         <Button type="submit">
           <SendIcon style={{ color: "var(--btn-blue)" }} />
