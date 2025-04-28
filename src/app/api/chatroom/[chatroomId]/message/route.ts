@@ -58,9 +58,10 @@ export async function POST(
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { chatroomId: string } }
+  // { params }: { params: { chatroomId: string } }
+  context: { params: { chatroomId: string } }
 ) {
-  const { chatroomId } = params;
+  const { chatroomId } = await context.params;
   await dbConnect();
 
   const url = new URL(req.url);
