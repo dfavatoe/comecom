@@ -21,7 +21,7 @@
   position: fixed;
   bottom: 100px;
   /* right: 5%; */
-  right: calc(100% - 850px - 20px);
+  right: 100px;
   width: 360px;
   height: 400px;
   /* background-color: white; */

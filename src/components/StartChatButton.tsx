@@ -84,37 +84,21 @@ export default function StartChatButton({ sellerId }: Props) {
 
   return (
     <>
-      {/* <div
-        style={{ position: "fixed", bottom: "90px", right: "5%", zIndex: 1002 }}
-      ></div>
-      <Button
-        variant="contained"
-        onClick={startChat}
-        color="warning"
-        sx={{ mb: 3, fontWeight: "bold" }}
-        style={{
-          position: "fixed",
-          right: "5%",
-          bottom: "20px",
-          zIndex: 1001,
-        }}
-      >
-        {showChat ? "Close Chat" : "Contact Seller"}
-      </Button> */}
       <Box
         sx={{
           position: "fixed",
           bottom: 24,
-          right: "calc(100% - 850px - 20px)",
+          right: "100px",
           zIndex: 1000,
           display: "flex",
           flexDirection: "column",
           gap: 2,
           alignItems: "center",
-          "@media (max-width: 768px)": {
-            right: "calc(100% - 275px - 20px)",
-            gap: 2,
-          },
+          // "@media (max-width: 490px)": {
+          //   // right: "calc(100% - 275px - 20px)",
+          //   right: "calc(100% - 16rem - 20px)",
+          //   gap: 2,
+          // },
         }}
       >
         <IconButton
@@ -145,6 +129,7 @@ export default function StartChatButton({ sellerId }: Props) {
               chatroomId={chatroomId}
               onClose={() => setShowChat(false)}
               refreshChatrooms={() => {}}
+              variant="store"
             />
           </div>
         </>
