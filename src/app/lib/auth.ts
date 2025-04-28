@@ -5,7 +5,7 @@ import UserModel from "@/model/usersModel";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import dbConnect from "./dbConnect";
-import { JWTToken, UserFull } from "@/model/types/types";
+import { JWTToken } from "@/model/types/types";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [

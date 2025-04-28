@@ -7,6 +7,7 @@ import { register } from "@/app/lib/actions";
 import { baseUrl } from "../lib/urls";
 import { useToast } from "@/hooks/useToast";
 import { useSession } from "next-auth/react";
+import "@/app/globals.css";
 
 export default function Register() {
   const { data: session } = useSession();
@@ -96,130 +97,139 @@ export default function Register() {
 
   return (
     <>
+      {/* <div
+        style={{
+          background: "var(--secondary)",
+          padding: "2rem",
+          border: "3px solid var(--primary)",
+          borderRadius: "25px",
+        }}
+      ></div> */}
       <Container
         className="justify-content-center"
         style={{ maxWidth: "600px" }}
       >
-        <h1 className="mb-4" style={{ textAlign: "center" }}>
+        <h1 className="m-4 mb-2" style={{ textAlign: "center" }}>
           Sign Up
         </h1>
         <br />
-
-        {!session?.user ? (
-          <p>
-            Join us today for exclusive deals, fast checkout, and a seamless
-            shopping experience!
-          </p>
-        ) : (
-          <div>
-            <h2>Welcome!</h2>
-            <h3>
-              Congratulations, you have successfully created an account!!! 🙌
-            </h3>
-          </div>
-        )}
-
-        <Form ref={ref} onSubmit={handleSubmit}>
-          {imagePreview && (
-            <Image className="mb-4" width={200} src={imagePreview} rounded />
+        <div className="combox mb-2">
+          {!session?.user ? (
+            <p>
+              Join us today for exclusive deals, fast checkout, and a seamless
+              shopping experience!
+            </p>
+          ) : (
+            <div>
+              <h2>Welcome!</h2>
+              <h3>
+                Congratulations, you have successfully created an account!!! 🙌
+              </h3>
+            </div>
           )}
 
-          <Form.Group className="mb-3 justify-content-center">
-            <Form.Label>User name</Form.Label>
-            <Form.Control
-              type="text"
-              name="name"
-              id="signup-user-name"
-              placeholder="Enter a user name"
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3 justify-content-center">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control
-              type="email"
-              name="email"
-              id="signup-email"
-              placeholder="Enter your email"
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              name="password"
-              id="signup-password"
-              placeholder="Choose a password"
-              onChange={handleInputChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group>
-            <Form.Label>Upload your profile picture</Form.Label>
-            <Form.Group controlId="formFile" className="mb-3">
-              <InputGroup className="mb-4">
-                <Form.Control
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </InputGroup>
-            </Form.Group>
-          </Form.Group>
-
-          <Form.Group className="mb-2">
-            <Form.Label className="d-block">Sign up as:</Form.Label>
-            <Form.Check
-              inline
-              type="radio"
-              label="Buyer"
-              name="role"
-              value="buyer"
-              checked={formData.role === "buyer"}
-              onChange={handleInputChange}
-            />
-            <Form.Check
-              inline
-              type="radio"
-              label="Seller"
-              name="role"
-              value="seller"
-              checked={formData.role === "seller"}
-              onChange={handleInputChange}
-            />
-          </Form.Group>
-          <Form.Text className="d-block mb-4" muted>
-            Selecting 'Buyer' allows you to browse products and create a
-            shopping list. <br /> As a 'Seller' you can register your physical
-            store and list products on our online platform.
-          </Form.Text>
-
-          <Button
-            type="submit"
-            className="mb-4"
-            variant="warning"
-            disabled={isLoading}
-          >
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Registering...
-              </>
-            ) : (
-              "Register"
+          <Form ref={ref} onSubmit={handleSubmit}>
+            {imagePreview && (
+              <Image className="mb-4" width={200} src={imagePreview} rounded />
             )}
-          </Button>
-        </Form>
+
+            <Form.Group className="mb-3 justify-content-center">
+              <Form.Label>User name</Form.Label>
+              <Form.Control
+                type="text"
+                name="name"
+                id="signup-user-name"
+                placeholder="Enter a user name"
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3 justify-content-center">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control
+                type="email"
+                name="email"
+                id="signup-email"
+                placeholder="Enter your email"
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                name="password"
+                id="signup-password"
+                placeholder="Choose a password"
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Upload your profile picture</Form.Label>
+              <Form.Group controlId="formFile" className="mb-3">
+                <InputGroup className="mb-4">
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+            </Form.Group>
+
+            <Form.Group className="mb-2">
+              <Form.Label className="d-block">Sign up as:</Form.Label>
+              <Form.Check
+                inline
+                type="radio"
+                label="Buyer"
+                name="role"
+                value="buyer"
+                checked={formData.role === "buyer"}
+                onChange={handleInputChange}
+              />
+              <Form.Check
+                inline
+                type="radio"
+                label="Seller"
+                name="role"
+                value="seller"
+                checked={formData.role === "seller"}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+            <Form.Text className="d-block mb-4" muted>
+              Selecting 'Buyer' allows you to browse products and create a
+              shopping list. <br /> As a 'Seller' you can register your physical
+              store and list products on our online platform.
+            </Form.Text>
+
+            <Button
+              type="submit"
+              className="mb-4"
+              variant="warning"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Registering...
+                </>
+              ) : (
+                "Register"
+              )}
+            </Button>
+          </Form>
+        </div>
       </Container>
     </>
   );

@@ -3,7 +3,7 @@ import SellerChatDashboard from "@/components/SellerChatDashboard";
 import { useSession } from "next-auth/react";
 import "@/app/globals.css";
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Container, Spinner } from "react-bootstrap";
 import Link from "next/link";
 
 export default function SellerChatPage() {
@@ -16,7 +16,14 @@ export default function SellerChatPage() {
     }
   }, [status]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
+
   if (status === "unauthenticated")
     return (
       <Container className="d-block">

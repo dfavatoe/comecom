@@ -25,9 +25,9 @@ export async function POST(req: NextRequest) {
 
     // 4. Generate image with OpenAI
     const imageResponse = await openai.images.generate({
-      model: "dall-e-2",
+      model: "dall-e-3",
       prompt: improvedPrompt,
-      size: "512x512",
+      size: "1792x1024",
       response_format: "url",
     });
 

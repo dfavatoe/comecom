@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import {
   Address,
@@ -8,18 +8,29 @@ import {
   UserFull,
 } from "@/model/types/types";
 import { baseUrl } from "../lib/urls";
-import { Button, Col, Form, Image, Row } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Form,
+  Image,
+  Row,
+  Spinner,
+} from "react-bootstrap";
 import Link from "next/link";
+import { useToast } from "@/hooks/useToast";
+import { useRouter } from "next/navigation";
 import "@/app/globals.css";
 
 const AccountPage = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const [user, setUser] = useState<UserFull | null>(null);
   const [loading, setLoading] = useState(true);
   const [newUserName, setNewUserName] = useState("");
   const [newAddress, setNewAddress] = useState<Address | null>(null);
-  const [messageName, setMessageName] = useState("");
-  const [messageAddress, setMessageAddress] = useState("");
+  const router = useRouter();
+
+  const { showToast } = useToast();
 
   //======================================================================
 
@@ -35,9 +46,8 @@ const AccountPage = () => {
     e.preventDefault();
     if (!session!.user) {
       console.log("user has to log in first");
-      alert("You have to log in first.");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first.", "warning");
+
       return;
     }
 
@@ -56,10 +66,10 @@ const AccountPage = () => {
     const result = await response.json();
     if (response.ok) {
       setUser(result.user);
-      setMessageName("Name updated successfully!");
+      showToast("Name updated successfully!", "success");
       setNewUserName("");
     } else {
-      setMessageName(result.error || "Failed to update name.");
+      showToast(result.error || "Failed to update name.", "danger");
     }
   };
 
@@ -79,16 +89,13 @@ const AccountPage = () => {
   const submitAddress = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!session!.user) {
-      alert("You have to log in first.");
-      // setAlertText("You have to log in first.");
-      // setShowAlert(true);
+      showToast("You have to log in first.", "warning");
       return;
     }
 
     if (!newAddress) {
-      alert("Complete all fields");
-      // setAlertText("Complete all fields");
-      // setShowAlert(true);
+      showToast("Complete all fields", "warning");
+
       return;
     }
 
@@ -108,17 +115,44 @@ const AccountPage = () => {
 
       if (response.ok) {
         setUser(result.user);
-        setMessageAddress("Address updated successfully!");
+        showToast("Address updated successfully!", "success");
         setNewAddress(null);
+        await update();
       } else {
-        setMessageAddress(result.error || "Failed to update address.");
+        showToast(result.error || "Failed to update address.", "danger");
       }
     } catch (error) {
       console.error("Error updating address:", error);
-      setMessageAddress("Something went wrong.");
+      showToast("Something went wrong.", "danger");
     }
-    // Router.reload();
   };
+
+  //============================================================
+
+  const deleteAddress = async (e: MouseEvent<HTMLButtonElement>) => {
+    if (!session!.user) {
+      showToast("You have to log in first", "warning");
+      return;
+    }
+
+    const response = await fetch(
+      `${baseUrl}/api/users/profile/delete-address`,
+      { method: "DELETE" }
+    );
+
+    const result = (await response.json()) as UpdateAddressOkResponse;
+
+    if (response.ok) {
+      console.log("delete address result", result);
+      showToast("Address deleted successfully!", "success");
+      setNewAddress(null);
+      await update();
+    } else {
+      showToast(result.error || "Failed to delete address.", "danger");
+    }
+  };
+
+  //============================================================
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -142,9 +176,29 @@ const AccountPage = () => {
     }
   }, [status]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="d-flex flex-column align-items-center justify-content-center">
+        <Spinner animation="border" variant="warning" />
+        <p className="mt-2">Loading...</p>
+      </div>
+    );
 
-  if (!session) return <p>You must be signed in to view your account.</p>;
+  if (status === "unauthenticated")
+    return (
+      <Container className="d-block">
+        <h4>You must be signed in to view your account.</h4>
+        <div className="d-block mb-4">
+          <Link className="d-inline" href={"/signup"}>
+            Sign up{" "}
+          </Link>
+          <span>or </span>
+          <Link className="d-inline" href={"/login"}>
+            Log in{" "}
+          </Link>
+        </div>
+      </Container>
+    );
 
   return (
     <>
@@ -176,7 +230,6 @@ const AccountPage = () => {
                   onChange={handleUserNameChange}
                   required
                 />
-                {messageName && <p>{messageName}</p>}
                 <Button type="submit" className="d-block ml-2 mb-3">
                   Update
                 </Button>
@@ -186,7 +239,7 @@ const AccountPage = () => {
               </div>
               {user.role === "seller" && (
                 <div className="mb-4">
-                  <b>comBay Store: </b>
+                  <b>com&com Store: </b>
                   {user.address ? (
                     <Link className="mb-2" href={`/store/${user._id}`}>
                       My Store
@@ -277,15 +330,11 @@ const AccountPage = () => {
                     onChange={handleAddress}
                     required
                   />{" "}
-                  {messageAddress && <p>{messageAddress}</p>}
                 </div>
                 <Button type="submit" className="d-inline mb-3">
                   Update
                 </Button>
-                <Button
-                  //onClick={deleteUserAddress}
-                  className="d-inline mx-2 mb-3"
-                >
+                <Button onClick={deleteAddress} className="d-inline mx-2 mb-3">
                   Delete
                 </Button>
               </Form>

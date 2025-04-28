@@ -78,6 +78,22 @@ export type ReviewT = {
   _id: string;
 };
 
+export type Reservation = {
+  _id: string;
+  buyerId: string;
+  sellerId: string;
+  productId: ProductT;
+  startTime: string;
+  expiresAt: string;
+  status: Status;
+};
+
+export enum Status {
+  active = "active",
+  completed = "completed",
+  cancelled = "cancelled",
+}
+
 export type addProductT = Pick<
   ProductT,
   | "title"
@@ -110,12 +126,6 @@ export type JWTToken = {
   image?: string;
   role?: Role;
   avatar?: string;
-};
-
-export type ModalAlertProps = {
-  showAlert: boolean;
-  setShowAlert: Dispatch<React.SetStateAction<boolean>>;
-  alertText: string;
 };
 
 export interface UpdateAddressOkResponse {
