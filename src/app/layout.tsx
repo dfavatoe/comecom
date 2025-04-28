@@ -7,7 +7,7 @@ import { ClientProviders } from "@/components/ClientProviders";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: "Com&Com",
+  title: "com&com",
   description: "The Communication E-Commerce Plattform",
 };
 
