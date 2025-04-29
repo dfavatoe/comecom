@@ -136,13 +136,13 @@ export default function Chat({
   function getChatPartnerName(
     messages: Message[],
     currentUserId: string
-  ): string {
+  ): string | undefined {
     // console.log("Messages:", messages);
     // console.log("Current User ID:", currentUserId);
 
     if (messages.length === 0) {
       // console.log("No messages found, returning Unknown User");
-      return "Unknown User";
+      return undefined;
     }
 
     const partnerMsg = messages.find(
@@ -151,17 +151,17 @@ export default function Chat({
 
     if (partnerMsg) {
       // console.log("Partner found:", partnerMsg);
-      return partnerMsg.authorName || "Unknown User";
+      return partnerMsg.authorName;
     }
 
     // console.log("No partner found, returning Unknown User");
-    return "Unknown User";
+    // return "Unknown User";
   }
 
   const chatPartnerName =
     messages.length > 0 && session?.user?.id
       ? getChatPartnerName(messages, session.user.id)
-      : "Unknown User";
+      : undefined;
 
   // Delete Chatroom
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -207,7 +207,7 @@ export default function Chat({
     >
       <Box className={styles.chatHeader}>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
-          Chat with {chatPartnerName}
+          Chat with {chatPartnerName ? chatPartnerName : "Seller"}
         </Typography>
 
         <IconButton
@@ -240,7 +240,6 @@ export default function Chat({
           <MenuItem onClick={handleDeleteClick}>Delete Chat</MenuItem>
         </Menu>
       </Box>
-
       <div className={styles.chatMessages}>
         {messages.map((message) => {
           const isOwnMessage = String(message.authorId) === session?.user?.id;
@@ -294,7 +293,7 @@ export default function Chat({
       >
         <TextField
           fullWidth
-          placeholder="Type a message"
+          placeholder="Contact the seller ..."
           onChange={handleMessageTextChange}
           value={messageText}
           sx={{
