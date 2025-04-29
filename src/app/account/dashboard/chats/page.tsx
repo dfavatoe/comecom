@@ -23,6 +23,7 @@ export default function SellerChatPage() {
         <p className="mt-2">Loading...</p>
       </div>
     );
+
   if (status === "unauthenticated")
     return (
       <Container className="d-block">

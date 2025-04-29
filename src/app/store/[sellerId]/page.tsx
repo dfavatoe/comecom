@@ -184,6 +184,7 @@ export default function Store() {
                 <h2>Seller still didn't share the products</h2>
               )}
             </div>
+
             <div style={{ padding: "2rem" }}>
               {sellerId && <StartChatButton sellerId={sellerId} />}
             </div>

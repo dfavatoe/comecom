@@ -4,6 +4,8 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import Button from "@mui/material/Button";
 import ChatWindow from "@/components/ChatWindow";
+import { Box, IconButton } from "@mui/material";
+import ChatIcon from "@mui/icons-material/Chat";
 
 interface Props {
   sellerId: string;
@@ -13,6 +15,8 @@ export default function StartChatButton({ sellerId }: Props) {
   const { data: session } = useSession();
   const [chatroomId, setChatroomId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   const startChat = async () => {
     if (!session?.user?.id) {
@@ -80,23 +84,43 @@ export default function StartChatButton({ sellerId }: Props) {
 
   return (
     <>
-      <div
-        style={{ position: "fixed", bottom: "90px", right: "5%", zIndex: 1002 }}
-      ></div>
-      <Button
-        variant="contained"
-        onClick={startChat}
-        color="warning"
-        sx={{ mb: 3, fontWeight: "bold" }}
-        style={{
+      <Box
+        sx={{
           position: "fixed",
-          right: "5%",
-          bottom: "20px",
-          zIndex: 1001,
+          bottom: 24,
+          right: "100px",
+          zIndex: 1000,
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          alignItems: "center",
+          // "@media (max-width: 490px)": {
+          //   // right: "calc(100% - 275px - 20px)",
+          //   right: "calc(100% - 16rem - 20px)",
+          //   gap: 2,
+          // },
         }}
       >
-        {showChat ? "Close Chat" : "Contact Seller"}
-      </Button>
+        <IconButton
+          // onClick={() => setOpen(!open)}
+          onClick={startChat}
+          sx={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            backgroundColor: "var(--btn-yellow)",
+            color: "#000",
+            fontSize: 30,
+            boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+            "&:hover": {
+              transform: "scale(1.08)",
+              backgroundColor: "#e6b800",
+            },
+          }}
+        >
+          <ChatIcon />
+        </IconButton>
+      </Box>
 
       {showChat && chatroomId && (
         <>
@@ -105,6 +129,7 @@ export default function StartChatButton({ sellerId }: Props) {
               chatroomId={chatroomId}
               onClose={() => setShowChat(false)}
               refreshChatrooms={() => {}}
+              variant="store"
             />
           </div>
         </>
