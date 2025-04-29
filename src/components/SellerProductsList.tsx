@@ -730,7 +730,7 @@ export default function SellerProductsList() {
             <tr>
               <th>#</th>
               <th>Product Name</th>
-              <th>Buyer ID</th> {/* Substitute for email */}
+              <th>Buyer ID</th>
               <th>Status</th>
               <th>Expiration Time</th>
               <th>Actions</th>
@@ -741,7 +741,7 @@ export default function SellerProductsList() {
               <tr key={reservation._id}>
                 <td>{index + 1}</td>
                 <td>{reservation.productId.title}</td>
-                <td>{reservation.buyerId}</td> {/* Substitute for email */}
+                <td>{reservation.buyerId}</td>
                 <td>{reservation.status}</td>
                 <td>{new Date(reservation.expiresAt).toLocaleString()}</td>
                 <td>

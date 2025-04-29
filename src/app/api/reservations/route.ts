@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     }
 
     const now = new Date();
-    const expiresAt = new Date(now.getTime() + product.reservationTime * 6000); //reservationTime in minutes
+    const expiresAt = new Date(now.getTime() + product.reservationTime * 60000); //reservationTime in minutes
 
     const reservation = await ReservationModel.create({
       buyerId,

@@ -239,7 +239,7 @@ const AccountPage = () => {
               </div>
               {user.role === "seller" && (
                 <div className="mb-4">
-                  <b>comBay Store: </b>
+                  <b>com&com Store: </b>
                   {user.address ? (
                     <Link className="mb-2" href={`/store/${user._id}`}>
                       My Store
