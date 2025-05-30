@@ -137,11 +137,13 @@ ${JSON.stringify(sellersData, null, 2)}
     }
 
     return NextResponse.json({ answer });
-  } catch (error: any) {
+  } catch (error) {
     console.error("AI Chat Error:", error);
-    return NextResponse.json(
-      { error: error.message || "Something went wrong." },
-      { status: 500 }
-    );
+
+    let message = "Something went wrong.";
+    if (error instanceof Error) {
+      message = error.message;
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
