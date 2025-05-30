@@ -1,4 +1,4 @@
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Col } from "react-bootstrap";
 import SideNav from "@/components/sidenav";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

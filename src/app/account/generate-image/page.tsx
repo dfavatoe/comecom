@@ -8,7 +8,7 @@ import Link from "next/link";
 import AvatarGenerator from "@/components/AvatarGenerator";
 import "@/app/globals.css";
 
-function generateImage() {
+function GenerateImagePage() {
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(true);
 
@@ -49,4 +49,4 @@ function generateImage() {
   return <AvatarGenerator />;
 }
 
-export default generateImage;
+export default GenerateImagePage;

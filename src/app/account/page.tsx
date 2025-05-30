@@ -19,7 +19,6 @@ import {
 } from "react-bootstrap";
 import Link from "next/link";
 import { useToast } from "@/hooks/useToast";
-import { useRouter } from "next/navigation";
 import "@/app/globals.css";
 
 const AccountPage = () => {
@@ -28,7 +27,6 @@ const AccountPage = () => {
   const [loading, setLoading] = useState(true);
   const [newUserName, setNewUserName] = useState("");
   const [newAddress, setNewAddress] = useState<Address | null>(null);
-  const router = useRouter();
 
   const { showToast } = useToast();
 
@@ -129,7 +127,7 @@ const AccountPage = () => {
 
   //============================================================
 
-  const deleteAddress = async (e: MouseEvent<HTMLButtonElement>) => {
+  const deleteAddress = async () => {
     if (!session!.user) {
       showToast("You have to log in first", "warning");
       return;

@@ -3,6 +3,7 @@ import { OpenAI } from "openai";
 import dbConnect from "@/app/lib/dbConnect";
 import Product from "@/model/productsModel";
 import UserModel from "@/model/usersModel";
+import { ProductsList, ProductT } from "@/model/types/types";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_SECRET!,
@@ -10,7 +11,10 @@ const openai = new OpenAI({
 
 export async function POST(req: NextRequest) {
   if (!process.env.OPENAI_SECRET) {
-    return NextResponse.json({ error: "Missing OpenAI API Key" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Missing OpenAI API Key" },
+      { status: 500 }
+    );
   }
 
   const { question, user, history } = await req.json();
@@ -18,7 +22,9 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
 
-    const currentUser = await UserModel.findById(user?.id).populate("productsList");
+    const currentUser = await UserModel.findById(user?.id).populate(
+      "productsList"
+    );
     if (!currentUser) {
       return NextResponse.json({ answer: "You have to log in first." });
     }
@@ -26,7 +32,7 @@ export async function POST(req: NextRequest) {
     const allProducts = await Product.find().populate("seller");
     const sellers = await UserModel.find({ role: "seller" });
 
-    const formatProduct = (p: any) => ({
+    const formatProduct = (p: ProductT) => ({
       title: p.title,
       description: p.description,
       category: p.category,
@@ -49,11 +55,11 @@ export async function POST(req: NextRequest) {
       seller: p.seller?.name || "Unknown Seller",
     });
 
-    let productData = allProducts.map(formatProduct);
+    const productData = allProducts.map(formatProduct);
 
     const sellersData = sellers.map((s) => ({
       name: s.name,
-      address: `${s.address?.streetName} ${s.address?.streetNumber}, ${s.address?.city}, ${s.address?.country} (${s.address?.postalcode})`,
+      address: `${s.address?.streetName} ${s.address?.streetNumber}, ${s.address?.city} ${s.address?.postalcode}, ${s.address?.country}`,
       mapsLink: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
         `${s.address?.streetName} ${s.address?.streetNumber} ${s.address?.city} ${s.address?.country} ${s.address?.postalcode}`
       )}`,
@@ -61,16 +67,30 @@ export async function POST(req: NextRequest) {
 
     const lowerCaseQuestion = question.toLowerCase();
 
-    if (["my products", "my list", "my items", "what i have"].some((kw) => lowerCaseQuestion.includes(kw))) {
+    if (
+      [
+        "my products",
+        "my list",
+        "my shopping list",
+        "my items",
+        "what i have",
+      ].some((kw) => lowerCaseQuestion.includes(kw))
+    ) {
       if (!currentUser.productsList || currentUser.productsList.length === 0) {
-        return NextResponse.json({ answer: "You have no products in your list." });
+        return NextResponse.json({
+          answer: "You have no products in your list.",
+        });
       }
 
-      const userProductsFormatted = (currentUser.productsList as any[]).map((p) => {
-        return `${p.title} - $${p.price}`;
-      }).join("\n");
+      const userProductsFormatted = (currentUser.productsList as ProductsList[])
+        .map((p) => {
+          return `${p.title}: ${p.price} €`;
+        })
+        .join("\n");
 
-      return NextResponse.json({ answer: `Here are the products in your list:\n${userProductsFormatted}` });
+      return NextResponse.json({
+        answer: `Here are the products in your list:\n${userProductsFormatted}`,
+      });
     }
 
     const systemPrompt = `
@@ -80,13 +100,13 @@ Rules:
 - Understand user questions even if they have typos or slight mistakes.
 - Use ONLY the provided data. NEVER invent or assume anything not in the data.
 - If multiple products have the same cheapest price, list ALL of them.
-- If user specifies a market/seller, ONLY show products from that exact market.
+- If user specifies a market/seller, ONLY show products from that exact market/seller.
 - NEVER mix products from different markets unless user clearly asks for all.
-- If user mentions "they", assume they refer to the LAST mentioned market unless specified otherwise.
+- If user mentions "they", "them" or "their", assume the user refers to the LAST mentioned market/seller unless specified otherwise.
 - If user asks for "one product" (singular), provide only one (unless multiple products are tied by price).
 - If user asks for "products" (plural), provide multiple products.
 - If user asks for "my products" or "my list", reply has already been handled server-side.
-- If user asks for the cheapest product in a specific market, search ONLY that market.
+- If user asks for the cheapest product in a specific market/seller, search ONLY that market/seller.
 - Strictly match product seller name with market name.
 - When user asks for address, reply ONLY with the plain address text (no links, no extra info).
 - When user asks for a Google Maps link, reply ONLY with the pure link starting with "https://", no text, no brackets, no emojis.
@@ -119,6 +139,9 @@ ${JSON.stringify(sellersData, null, 2)}
     return NextResponse.json({ answer });
   } catch (error: any) {
     console.error("AI Chat Error:", error);
-    return NextResponse.json({ error: error.message || "Something went wrong." }, { status: 500 });
+    return NextResponse.json(
+      { error: error.message || "Something went wrong." },
+      { status: 500 }
+    );
   }
 }

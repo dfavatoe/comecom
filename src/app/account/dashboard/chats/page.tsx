@@ -7,7 +7,7 @@ import { Container, Spinner } from "react-bootstrap";
 import Link from "next/link";
 
 export default function SellerChatPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
