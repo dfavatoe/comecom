@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 
       const userProductsFormatted = (currentUser.productsList as ProductsList[])
         .map((p) => {
-          return `${p.title}: ${p.price} €`;
+          return `${p.title} - ${p.price} €`;
         })
         .join("\n");
 

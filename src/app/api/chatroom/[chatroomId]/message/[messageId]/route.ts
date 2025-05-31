@@ -1,62 +1,61 @@
 import dbConnect from "@/app/lib/dbConnect";
 import { auth } from "@/app/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
-import MessageModel from "@/model/chatMessageModel"; // Dein Message Model
+import MessageModel from "@/model/chatMessageModel";
 
-// PUT api/chatroom/[chatroomId]/message/[messageId] - Bearbeitet eine Nachricht
+// Edits a message
 export async function PUT(req: NextRequest) {
-  //const { chatroomId, messageId } = req.params; // Hole chatroomId und messageId aus der URL
-  // app/api/chatroom/[chatroomId]/message/[messageId].ts
   const url = new URL(req.url);
-  const chatroomId = url.pathname.split("/")[3]; // Extrahiere chatroomId aus der URL
-  const messageId = url.pathname.split("/")[5]; // Extrahiere messageId aus der URL
+  //const chatroomId = url.pathname.split("/")[3]; // Extrahiere chatroomId aus der URL
+  const messageId = url.pathname.split("/")[5]; // Extract messageId on the 5th position of the URL
 
   await dbConnect();
 
-  const session = await auth(); // auth() gibt die Session zurück
+  const session = await auth();
   if (!session?.user) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
   try {
-    const { messageText } = await req.json(); // Hole den neuen Nachrichtentext aus der Anfrage
+    const { messageText } = await req.json(); // get the new messageText from the request
     const updatedMessage = await MessageModel.findByIdAndUpdate(
       messageId,
-      { messageText }, // Update den Nachrichtentext
-      { new: true } // Gibt die aktualisierte Nachricht zurück
+      { messageText }, // Update the messageText
+      { new: true } // returns the updated messageText
     );
     if (!updatedMessage) {
-      return new NextResponse("Nachricht nicht gefunden", { status: 404 });
+      return new NextResponse("Message not found.", { status: 404 });
     }
     return new NextResponse(JSON.stringify(updatedMessage), { status: 200 });
   } catch (error) {
-    return new NextResponse("Fehler beim Bearbeiten der Nachricht", {
+    console.error("Message update error:", error);
+    return new NextResponse("Error while updating the message.", {
       status: 500,
     });
   }
 }
 
-// DELETE api/chatroom/[chatroomId]/message/[messageId] - Löscht eine Nachricht
+// Delete a message
 export async function DELETE(req: NextRequest) {
-  //const { chatroomId, messageId } = req.params; // Hole chatroomId und messageId aus der URL
   const url = new URL(req.url);
-  const chatroomId = url.pathname.split("/")[3]; // Extrahiere chatroomId aus der URL
-  const messageId = url.pathname.split("/")[5]; // Extrahiere messageId aus der URL
+  //const chatroomId = url.pathname.split("/")[3]; // Extrahiere chatroomId aus der URL
+  const messageId = url.pathname.split("/")[5]; // Extracts the messageId from the URL
   await dbConnect();
 
-  const session = await auth(); // auth() gibt die Session zurück
+  const session = await auth();
   if (!session?.user) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
   try {
-    const deletedMessage = await MessageModel.findByIdAndDelete(messageId); // Lösche die Nachricht anhand der ID
+    const deletedMessage = await MessageModel.findByIdAndDelete(messageId); // Deletes a message through its ID
     if (!deletedMessage) {
-      return new NextResponse("Nachricht nicht gefunden", { status: 404 });
+      return new NextResponse("Message not found.", { status: 404 });
     }
-    return new NextResponse("Nachricht gelöscht", { status: 200 });
+    return new NextResponse("Message deleted.", { status: 200 });
   } catch (error) {
-    return new NextResponse("Fehler beim Löschen der Nachricht", {
+    console.error("Delete message error:", error);
+    return new NextResponse("Error when deleting the message.", {
       status: 500,
     });
   }

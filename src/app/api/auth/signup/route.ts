@@ -23,7 +23,6 @@ export async function POST(req: Request) {
 
     await newUser.save();
     return NextResponse.json({
-      //! Check if response works
       message: "User registered successfully",
       user: {
         id: newUser._id,
@@ -32,6 +31,7 @@ export async function POST(req: Request) {
       },
     });
   } catch (error) {
+    console.error("Signup error:", error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 }

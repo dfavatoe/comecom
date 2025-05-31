@@ -1,6 +1,6 @@
 import dbConnect from "@/app/lib/dbConnect";
 import { auth } from "@/app/lib/auth";
-import { NextRequest, NextResponse } from "next/server"; // Hier verwenden wir NextRequest und NextResponse
+import { NextRequest, NextResponse } from "next/server";
 import ChatroomModel from "@/model/chatroomModel";
 import UserModel from "@/model/usersModel";
 import { getSession } from "next-auth/react";
