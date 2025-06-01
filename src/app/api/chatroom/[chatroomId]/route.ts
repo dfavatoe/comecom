@@ -20,7 +20,7 @@ export async function GET(
   try {
     const chatroom = await ChatroomModel.findById(chatroomId);
     if (!chatroom) {
-      return new NextResponse("Chatroom nicht gefunden", { status: 404 });
+      return new NextResponse("Chatroom not found", { status: 404 });
     }
     const messages = await MessageModel.find({
       chatroomId: chatroomId,
@@ -28,8 +28,8 @@ export async function GET(
 
     return NextResponse.json(messages);
   } catch (error) {
-    console.error("Fehler beim Abrufen der Nachrichten:", error);
-    return new NextResponse("Fehler beim Abrufen der Nachrichten", {
+    console.error("Error getting the messages: ", error);
+    return new NextResponse("Error getting the messages.", {
       status: 500,
     });
   }
@@ -50,11 +50,12 @@ export async function DELETE(
   try {
     const deletedChatroom = await ChatroomModel.findByIdAndDelete(chatroomId);
     if (!deletedChatroom) {
-      return new NextResponse("Chatroom nicht gefunden", { status: 404 });
+      return new NextResponse("Chatroom not found", { status: 404 });
     }
-    return new NextResponse("Chatroom gelöscht", { status: 200 });
+    return new NextResponse("Chatroom successfully deleted", { status: 200 });
   } catch (error) {
-    return new NextResponse("Fehler beim Löschen des Chatrooms", {
+    console.error("Error deleting the chatroom:", error);
+    return new NextResponse("Error deleting the chatroom:", {
       status: 500,
     });
   }

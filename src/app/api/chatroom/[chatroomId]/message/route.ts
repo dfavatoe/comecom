@@ -12,7 +12,7 @@ export async function POST(
   const { chatroomId } = params; // <-- Hier bekommst du die ID korrekt raus
   await dbConnect();
 
-  const session = await auth(); // auth() gibt die Session zurück
+  const session = await auth();
   if (!session?.user) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
@@ -21,7 +21,7 @@ export async function POST(
 
   // Benutzer in der Datenbank suchen, um die ID zu erhalten
   try {
-    const user = await UserModel.findById(session.user.id); // Finde den Benutzer anhand der ID in der Session
+    const user = await UserModel.findById(session.user.id); // Find the user from the session's ID
     if (!user) {
       return new NextResponse(JSON.stringify({ error: "User not found" }), {
         status: 404,
@@ -29,21 +29,21 @@ export async function POST(
       });
     }
 
-    // Erstelle eine neue Nachricht
+    // Creates a new message
     const newMessage = new MessageModel({
       chatroomId,
       messageText,
-      authorId: user._id, // Setze den Author der Nachricht aus der Datenbank
+      authorId: user._id, // Sets the author from the message retrieved from the database
       authorName: user.name,
     });
 
-    // Speichere die Nachricht
+    // Saves the message
     await newMessage.save();
 
     return new NextResponse(JSON.stringify(newMessage), { status: 201 });
   } catch (error) {
-    console.error("Fehler beim Erstellen der Nachricht:", error);
-    return new NextResponse("Fehler beim Erstellen der Nachricht", {
+    console.error("Error creating the message: ", error);
+    return new NextResponse("Error creating the message.", {
       status: 500,
     });
   }
@@ -61,10 +61,10 @@ export async function GET(
   const after = url.searchParams.get("after");
 
   try {
-    const query: Record<string, unknown> = { chatroomId }; //corrected any type to Record
+    const query: Record<string, unknown> = { chatroomId }; //corrected "any" type to "Record".
 
     if (after) {
-      const afterDate = new Date(Number(after)); // "after" als Zahl (Zeitstempel)
+      const afterDate = new Date(Number(after)); // "after" an number (Timestamp)
       query.createdAt = { $gt: afterDate };
     }
 
@@ -73,9 +73,9 @@ export async function GET(
 
     return new NextResponse(JSON.stringify(messages), { status: 200 });
   } catch (error) {
-    console.error("Fehler beim Abrufen der Nachrichten:", error);
+    console.error("Error getting the message:", error);
     return new NextResponse(
-      JSON.stringify({ error: "Fehler beim Abrufen der Nachrichten" }),
+      JSON.stringify({ error: "Error getting the message." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
