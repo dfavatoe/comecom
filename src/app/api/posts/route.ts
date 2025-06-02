@@ -13,6 +13,7 @@ export async function GET() {
 
     return NextResponse.json(posts, { status: 200 });
   } catch (err) {
+    console.error("Error fetching posts: ", err);
     return NextResponse.json(
       { error: "Failed to fetch posts" },
       { status: 500 }

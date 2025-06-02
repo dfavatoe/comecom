@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
         message: "Product successfully added to the shopping list",
         user: {
           _id: user._id,
-          name: user.userName,
+          name: user.name,
           email: user.email,
           role: user.role,
           image: user.image,
@@ -52,11 +52,8 @@ export async function POST(req: NextRequest) {
       },
       { status: 200 }
     );
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error adding product to list", error);
-    return NextResponse.json(
-      { error: error.message || "Server Error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }

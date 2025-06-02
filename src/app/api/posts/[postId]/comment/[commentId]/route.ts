@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import dbConnect from "@/app/lib/dbConnect";
 import Post from "@/model/postModel";
+import { Comment } from "@/model/types/types";
 
 export async function DELETE(
   req: NextRequest,
@@ -21,7 +22,7 @@ export async function DELETE(
     }
 
     const comment = post.comments.find(
-      (c: any) => c._id.toString() === params.commentId
+      (c: Comment) => c._id.toString() === params.commentId
     );
 
     if (!comment) {
@@ -33,18 +34,17 @@ export async function DELETE(
     }
 
     post.comments = post.comments.filter(
-      (c: any) => c._id.toString() !== params.commentId
+      (c: Comment) => c._id.toString() !== params.commentId
     );
 
     await post.save();
 
     return NextResponse.json({ message: "Comment deleted" });
-  } catch (error: any) {
+  } catch (error) {
     console.error(" DELETE COMMENT ERROR:", error);
     return NextResponse.json(
       {
         error: "Server error",
-        details: error.message || "Unknown error",
       },
       { status: 500 }
     );

@@ -21,7 +21,7 @@ export async function POST(
     }
 
     const userId = session.user.id;
-    const hasLiked = post.likes.some((id: any) => id.toString() === userId);
+    const hasLiked = post.likes.some((id: string) => id.toString() === userId);
 
     if (hasLiked) {
       post.likes.pull(userId);

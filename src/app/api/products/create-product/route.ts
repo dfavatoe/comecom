@@ -93,12 +93,11 @@ export async function PUT(req: NextRequest) {
         depth: savedProduct.depth,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error adding the product:", error);
     return NextResponse.json(
       {
         error: "Something went wrong during product's register.",
-        errorStack: error.message,
       },
       { status: 500 }
     );

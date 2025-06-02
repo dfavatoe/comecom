@@ -39,7 +39,7 @@ export async function GET(
       message: "Successfully fetched reviews.",
       reviews: sortedReviews,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching reviews: ", error);
     return NextResponse.json(
       { message: "Internal server error" },
@@ -98,7 +98,7 @@ export async function POST(
       message: "Review added successfully",
       product,
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error adding review", error);
     return NextResponse.json(
       { error: "Internal Server Error" },

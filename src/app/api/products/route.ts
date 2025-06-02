@@ -1,8 +1,8 @@
 import dbConnect from "@/app/lib/dbConnect";
 import ProductModel from "@/model/productsModel";
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   console.log(`Fetching all records from ${ProductModel}`);
 
   try {

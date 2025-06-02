@@ -209,6 +209,8 @@ export interface GetReviewsResponse {
   error: string;
 }
 
+//Chat with Seller
+
 export type Chatroom = {
   _id: string;
   messageId: ObjectId | null;
@@ -226,3 +228,29 @@ export type Message = {
   created_at: string;
   updated_at: string;
 };
+
+//Post - Social
+
+export interface Comment {
+  _id: string;
+  user: {
+    _id: string;
+    name: string;
+  } | null;
+  text: string;
+}
+
+export interface Post {
+  _id: string;
+  imageUrl: string;
+  caption: string;
+  user: {
+    _id: string;
+    name: string;
+    image?: string;
+    avatar?: string;
+  };
+  likes: string[];
+  comments: Comment[];
+  createdAt: string;
+}
