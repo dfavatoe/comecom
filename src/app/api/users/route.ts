@@ -3,7 +3,7 @@ import UserModel from "@/model/usersModel";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     // Connect to the database
     await dbConnect();
@@ -20,13 +20,13 @@ export async function GET(req: Request) {
     return Response.json(
       {
         message: "Internal Server Error",
-        error: error,
       },
       { status: 500 }
     );
   }
 }
 
+//test registering new user: real signup at api/auth/signup
 export async function POST() {
   try {
     await dbConnect();

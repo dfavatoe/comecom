@@ -3,6 +3,7 @@ import { auth } from "@/app/lib/auth";
 import dbConnect from "@/app/lib/dbConnect";
 import cloudinary from "@/app/lib/cloudinary";
 import Post from "@/model/postModel";
+import { UploadApiResponse, UploadApiErrorResponse } from "cloudinary";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -25,14 +26,19 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(bytes);
 
   try {
-    const result: any = await new Promise((resolve, reject) => {
-      (cloudinary.uploader.upload_stream as any)(
-        { folder: "posts" },
-        (error: any, result: any) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      ).end(buffer);
+    const result: UploadApiResponse = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream(
+          { folder: "posts" },
+          (
+            error: UploadApiErrorResponse | null,
+            result: UploadApiResponse | undefined
+          ) => {
+            if (error || !result) return reject(error);
+            resolve(result);
+          }
+        )
+        .end(buffer);
     });
 
     const newPost = new Post({
@@ -48,6 +54,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
+    console.error("Post upload error: ", error);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 }

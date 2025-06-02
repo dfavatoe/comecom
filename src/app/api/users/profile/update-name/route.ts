@@ -38,10 +38,8 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     return NextResponse.json({ user });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Server Error" },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error("Error updating name: ", error);
+    return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }

@@ -1,5 +1,5 @@
 //* This is the seller's product's list
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import dbConnect from "@/app/lib/dbConnect";
 import ProductModel from "@/model/productsModel";
 import { auth } from "@/app/lib/auth";

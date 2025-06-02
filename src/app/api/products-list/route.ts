@@ -1,12 +1,12 @@
 //* This is the client's shopping-list
 import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import dbConnect from "@/app/lib/dbConnect";
 import ProductModel from "@/model/productsModel";
 import UserModel from "@/model/usersModel";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   console.log("get products from shopping list running");
 
   await dbConnect();

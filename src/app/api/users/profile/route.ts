@@ -24,12 +24,11 @@ export async function GET() {
     }
 
     return NextResponse.json({ user });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(
       {
         message: "Internal Server Error",
-        error: error.message,
       },
       { status: 500 }
     );

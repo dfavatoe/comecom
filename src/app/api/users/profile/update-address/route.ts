@@ -69,7 +69,7 @@ export async function PUT(req: NextRequest) {
       message: "Complete address updated successfully",
       user: {
         _id: updatedUser._id,
-        userName: updatedUser.userName,
+        name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
         image: updatedUser.image,
@@ -77,12 +77,11 @@ export async function PUT(req: NextRequest) {
         address: updatedUser.address,
       },
     });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error updating address:", error);
     return NextResponse.json(
       {
         error: "Something went wrong while updating the address.",
-        errorStack: error.message,
       },
       { status: 500 }
     );

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import UserModel from "@/model/usersModel";
 import dbConnect from "@/app/lib/dbConnect";
 
-export async function DELETE(req: NextRequest) {
+export async function DELETE() {
   const session = await auth();
 
   if (!session || !session.user?.id) {
@@ -34,10 +34,8 @@ export async function DELETE(req: NextRequest) {
         address: user.address,
       },
     });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: "Server Error", errorStack: error.message },
-      { status: 500 }
-    );
+  } catch (error) {
+    console.error("Error deleting the address: ", error);
+    return NextResponse.json({ error: "Server Error" }, { status: 500 });
   }
 }
