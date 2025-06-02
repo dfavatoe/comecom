@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
       response_format: "url",
     });
 
-    const openaiImageUrl = imageResponse.data[0]?.url!;
+    const openaiImageUrl = imageResponse.data[0]?.url;
     if (!openaiImageUrl) {
       throw new Error("OpenAI did not return an image URL.");
     }
