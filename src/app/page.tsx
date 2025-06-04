@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Carousel, Container, Spinner } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import ProductCarousel from "../components/ProductCarousel";
 import { ProductT } from "@/model/types/types";
 import { baseUrl } from "./lib/urls";
@@ -18,7 +18,6 @@ export interface ProductsRoot {
 
 export default function Home() {
   const router = useRouter();
-  const { data: session } = useSession();
   const [products, setProducts] = useState<ProductT[]>([]);
 
   useEffect(() => {

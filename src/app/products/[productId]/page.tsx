@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
-import { Button, Col, Container, Image, Row, Spinner } from "react-bootstrap";
+import { Button, Col, Image, Row, Spinner } from "react-bootstrap";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import AddToShoppingListButton from "@/components/addToShoppingListButton";
@@ -122,7 +122,12 @@ export default function SingleProductPage() {
 
                 <h4 style={{ color: "rgba(0, 0, 0)" }}>{product.price} €</h4>
                 <h6>{discount(product)} </h6>
-                <Image src={product.images[0]} rounded fluid />
+                <Image
+                  src={product.images[0]}
+                  alt="product's picture"
+                  rounded
+                  fluid
+                />
               </Col>
 
               <Col className="mb-4" sm="6">

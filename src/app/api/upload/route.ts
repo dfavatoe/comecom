@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
         .upload_stream(
           { folder: "posts" },
           (
-            error: UploadApiErrorResponse | null,
+            error: UploadApiErrorResponse | undefined,
             result: UploadApiResponse | undefined
           ) => {
             if (error || !result) return reject(error);

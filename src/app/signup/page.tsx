@@ -24,7 +24,7 @@ export default function Register() {
     image: null as File | null, // Store the selected image file
   });
 
-  const handleInputChange = (e: React.ChangeEvent<any>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -85,11 +85,13 @@ export default function Register() {
       setTimeout(() => {
         router.push("/login");
       }, 3000);
-    } catch (err: any) {
-      showToast(
-        err.message || "An error occurred during registration.",
-        "danger"
-      );
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "An error occurred during registration.";
+
+      showToast(errorMessage, "danger");
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +132,13 @@ export default function Register() {
 
           <Form ref={ref} onSubmit={handleSubmit}>
             {imagePreview && (
-              <Image className="mb-4" width={200} src={imagePreview} rounded />
+              <Image
+                className="mb-4"
+                width={200}
+                src={imagePreview}
+                alt="user's image preview"
+                rounded
+              />
             )}
 
             <Form.Group className="mb-3 justify-content-center">
@@ -204,9 +212,10 @@ export default function Register() {
               />
             </Form.Group>
             <Form.Text className="d-block mb-4" muted>
-              Selecting 'Buyer' allows you to browse products and create a
-              shopping list. <br /> As a 'Seller' you can register your physical
-              store and list products on our online platform.
+              Selecting &apos;Buyer&apos; allows you to browse products and
+              create a shopping list. <br /> As a &apos;Seller&apos; you can
+              register your physical store and list products on our online
+              platform.
             </Form.Text>
 
             <Button

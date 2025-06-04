@@ -55,7 +55,6 @@ export default function PostPage() {
   const { data: session } = useSession();
   const [file, setFile] = useState<File | null>(null);
   const [caption, setCaption] = useState("");
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [posts, setPosts] = useState<Post[]>([]);
   const [commentMap, setCommentMap] = useState<Record<string, string>>({});
@@ -183,11 +182,6 @@ export default function PostPage() {
           >
             {loading ? <CircularProgress size={24} color="warning" /> : "Post"}
           </Button>
-          {message && (
-            <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-              {message}
-            </Typography>
-          )}
         </Card>
       </Collapse>
 

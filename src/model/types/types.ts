@@ -117,7 +117,10 @@ export type addProductT = Pick<
 
 export type LoginCredentials = Pick<UserFull, "name" | "password" | "email">; // Attention '|' means 'and' here
 
-export type RegisterCredentials = Omit<UserFull, "id">;
+export type RegisterValues = Pick<
+  UserFull,
+  "name" | "password" | "email" | "image" | "role"
+>;
 
 export type JWTToken = {
   id: string;

@@ -3,7 +3,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { baseUrl } from "../lib/urls";
 import { ProductT } from "@/model/types/types";
-import { Alert, Container, Spinner } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
 import Grid from "@/components/Grid";
 import Link from "next/link";
 import "@/app/globals.css";

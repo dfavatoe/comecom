@@ -3,13 +3,13 @@
 import { auth } from "./auth";
 import { baseUrl } from "./urls";
 import dbConnect from "@/app/lib/dbConnect";
+import { RegisterValues } from "@/model/types/types";
 import UserModel from "@/model/usersModel";
 import bcrypt from "bcryptjs";
-import cloudinary from "@/app/lib/cloudinary";
 
 // Registration =============================================================
 
-export const register = async (values: any) => {
+export const register = async (values: RegisterValues) => {
   const { email, password, name, image, role } = values;
 
   try {
