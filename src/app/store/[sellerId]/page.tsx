@@ -24,7 +24,7 @@ export default function Store() {
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
 
-  // Wrap handleGetSellerShopInfo in useCallback to memoize the function (and avoid warnings in Vercel)
+  // Wrap handleGetSellerShopInfo in useCallback to memoize the function (and avoid warnings in Vercel). useEffect technically depends on this function, but before I was passing an empty dependency array ([]), which tells React to run the effect only once on mount.
   const handleGetSellerShopInfo = useCallback(async () => {
     if (sellerId) {
       try {
@@ -44,7 +44,7 @@ export default function Store() {
     } else {
       console.log("A seller's ID is necessary in the URL");
     }
-  }, [sellerId, baseUrl]);
+  }, [sellerId]);
 
   useEffect(() => {
     handleGetSellerShopInfo();
