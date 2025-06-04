@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GetShopInfo, ProductT, UserFull } from "@/model/types/types";
 import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import ProductCardStore from "@/components/ProductCardStore";
@@ -24,13 +24,15 @@ export default function Store() {
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
 
-  const handleGetSellerShopInfo = async () => {
+  // Wrap handleGetSellerShopInfo in useCallback to memoize the function (and avoid warnings in Vercel)
+  const handleGetSellerShopInfo = useCallback(async () => {
     if (sellerId) {
       try {
         const response = await fetch(`${baseUrl}/api/store/${sellerId}`);
         console.log("response :>> ", response);
         if (!response.ok) {
           console.log("Something went wrong");
+          return;
         }
         const result = (await response.json()) as GetShopInfo;
         console.log("result Shop :>> ", result);
@@ -42,11 +44,11 @@ export default function Store() {
     } else {
       console.log("A seller's ID is necessary in the URL");
     }
-  };
+  }, [sellerId, baseUrl]);
 
   useEffect(() => {
     handleGetSellerShopInfo();
-  }, [sellerId]);
+  }, [handleGetSellerShopInfo]);
 
   if (!session?.user) {
     return <div>Not authenticated</div>;
@@ -155,7 +157,7 @@ export default function Store() {
                   );
                 })
               ) : (
-                <h2>Seller still didn&apos;'t share any product.</h2>
+                <h2>Seller didn&apos;t share any product yet.</h2>
               )}
             </div>
 
