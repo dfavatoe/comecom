@@ -19,11 +19,7 @@ export default function Store() {
   const { sellerId } = useParams<{ sellerId: string }>();
   console.log("sellerId :>> ", sellerId);
 
-  const [messages, setMessages] = useState<any[]>([]); // Zustand für Nachrichten
-  const [lastTimestamp, setLastTimestamp] = useState<number | null>(null);
-
-  const { data: session } = useSession(); // Authentifizierte Session holen
-  const [chatroomId, setChatroomId] = useState<string | null>(null); // Zustand für die chatroomId
+  const { data: session } = useSession();
 
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
@@ -48,33 +44,9 @@ export default function Store() {
     }
   };
 
-  const fetchChat = async () => {
-    if (!chatroomId) return;
-
-    try {
-      const query = lastTimestamp ? `?after=${lastTimestamp}` : "";
-      const res = await fetch(`/api/chatroom/${chatroomId}/message${query}`);
-      if (!res.ok) {
-        console.error("Fehler beim Abrufen der Nachrichten");
-        return;
-      }
-
-      const newMessages = await res.json();
-
-      if (newMessages.length > 0) {
-        setMessages((prev) => [...prev, ...newMessages]);
-
-        const latest = newMessages[newMessages.length - 1];
-        setLastTimestamp(new Date(latest.createdAt).getTime());
-      }
-    } catch (err) {
-      console.error("fetchChat error:", err);
-    }
-  };
-
   useEffect(() => {
     handleGetSellerShopInfo();
-  }, []);
+  }, [sellerId]);
 
   if (!session?.user) {
     return <div>Not authenticated</div>;
@@ -106,12 +78,14 @@ export default function Store() {
                 <Image
                   className="mb-4"
                   src={seller.storeCoverImage}
+                  alt="Store's cover image"
                   style={{ height: "350px", objectFit: "cover" }}
                 />
               ) : (
                 <Image
                   className="mb-4"
                   src={seller.image}
+                  alt="Store's logo"
                   style={{ height: "300px", objectFit: "cover" }}
                 />
               )}
@@ -181,7 +155,7 @@ export default function Store() {
                   );
                 })
               ) : (
-                <h2>Seller still didn't share the products</h2>
+                <h2>Seller still didn&apos;'t share any product.</h2>
               )}
             </div>
 
