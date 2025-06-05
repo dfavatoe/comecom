@@ -16,7 +16,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
 import { Message } from "@/model/types/types";
 import { useRouter } from "next/navigation";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -36,7 +35,6 @@ export default function Chat({
   refreshChatrooms,
   variant,
 }: ChatProps) {
-  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>("");
   const { data: session } = useSession();
@@ -191,7 +189,7 @@ export default function Chat({
         alert("Error deleting chatroom");
       }
     } catch (error) {
-      // console.error("Error deleting:", error);
+      console.error("Error deleting chatroom:", error);
       alert("Something went wrong.");
     }
   };
