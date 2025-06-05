@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
 import { useToast } from "@/hooks/useToast";
+import Image from "next/image";
 
 function AvatarGenerator() {
   const [prompt, setPrompt] = useState("");
@@ -25,8 +26,12 @@ function AvatarGenerator() {
       if (!res.ok) throw new Error(data.error || "Something went wrong");
 
       setImageUrl(data.avatarUrl);
-    } catch (error: any) {
-      showToast(error.message || "Something went wrong!", "danger");
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error
+          ? err.message
+          : "Something went wrong generating the avatar!";
+      showToast(errorMessage, "danger");
     } finally {
       setLoading(false);
     }
@@ -44,9 +49,9 @@ function AvatarGenerator() {
       <div style={{ maxWidth: "50vw" }}>
         <p>
           It is very simple, just write below a short description of your avatar
-          and press the "Generate Avatar" button. You will have a preview of the
-          result and after that it will automatically substitute your profile's
-          picture.
+          and press the &quot;Generate Avatar&quot; button. You will have a
+          preview of the result and after that it will automatically substitute
+          your profile&apos;s picture.
         </p>
       </div>
 
@@ -74,12 +79,12 @@ function AvatarGenerator() {
         {/* Toast */}
         {imageUrl && (
           <div className="mt-4">
-            <h5>Here's your new avatar:</h5>
-            <img
-              src={imageUrl}
-              alt="Generated Avatar"
+            <h5>Here&apos;s your new avatar:</h5>
+            <Image
               className="img-fluid rounded mb-3"
+              src={imageUrl}
               style={{ maxWidth: "200px" }}
+              alt="Generated Avatar's Image"
             />
           </div>
         )}
