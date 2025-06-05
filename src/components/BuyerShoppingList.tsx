@@ -15,7 +15,7 @@ export default function BuyerShoppingList() {
   const [productsList, setProductsList] = useState<ProductsList[] | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [reservations, setReservations] = useState<Reservation[] | null>(null);
+  //const [reservations, setReservations] = useState<Reservation[] | null>(null);
   const [reservationStatuses, setReservationStatuses] = useState<
     Record<string, string>
   >({});
@@ -57,8 +57,8 @@ export default function BuyerShoppingList() {
         return;
       }
       const data = await response.json();
-      console.log("Fetched buyer reservations", data);
-      setReservations(data.reservations);
+      console.log("Fetched buyer reservations", data.reservations);
+      //setReservations(data.reservations);
     } catch (error) {
       console.error("Error fetching buyer reservations", error);
     }
