@@ -17,7 +17,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Message } from "@/model/types/types";
-import { useRouter } from "next/navigation";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import "@/app/globals.css";
 import styles from "./chatwindow.module.css";

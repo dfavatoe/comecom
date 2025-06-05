@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { baseUrl } from "@/app/lib/urls";
-import {
-  GetProductsListResponse,
-  ProductsList,
-  Reservation,
-} from "@/model/types/types";
+import { GetProductsListResponse, ProductsList } from "@/model/types/types";
 import { Button, Container, Row, Spinner } from "react-bootstrap";
 import { useRouter } from "next/navigation";
 import ProductCardList from "@/components/ProductCardList";
@@ -48,6 +44,7 @@ export default function BuyerShoppingList() {
   const handleGetBuyerReservations = async () => {
     try {
       if (!session?.user!.id) return;
+      // GET is used here for the "Auto-Cancel expired reservations" function" from the API. Not necessarily to obtain a reservation's list, like for the seller.
       const response = await fetch(
         `${baseUrl}/api/reservations?buyerId=${session?.user!.id}`,
         { method: "GET" }
