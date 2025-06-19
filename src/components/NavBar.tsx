@@ -2,7 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import React from "react";
 import Link from "next/link";
-import { Container, Nav, Navbar, NavDropdown, Button } from "react-bootstrap";
+import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { useSession } from "next-auth/react";
 import { SignOut } from "./sign-out";
 import "@/app/globals.css";

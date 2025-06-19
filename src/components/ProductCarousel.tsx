@@ -5,6 +5,7 @@ import { ProductT } from "@/model/types/types";
 import { Stack } from "react-bootstrap";
 import Link from "next/link";
 import AddToShoppingListButton from "./addToShoppingListButton";
+import Image from "next/image";
 
 interface ProductCarouselProps {
   productsRecords: ProductT[];
@@ -79,10 +80,10 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({
 
       {/* Scrollable Container */}
       <div ref={scrollContainerRef} className={styles["scroll-container"]}>
-       {Array.isArray(productsRecords) && productsRecords.map((product, index) => (
-  <ProductCard key={product._id} product={product} index={index} />
-))}
-
+        {Array.isArray(productsRecords) &&
+          productsRecords.map((product, index) => (
+            <ProductCard key={product._id} product={product} index={index} />
+          ))}
       </div>
 
       {/* Right Button */}

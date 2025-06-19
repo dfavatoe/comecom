@@ -26,7 +26,7 @@ interface ReviewsProp {
 function Reviews({ productId }: ReviewsProp) {
   // console.log("productId :>> ", productId);
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const router = useRouter();
 
   const [reviews, setReviews] = useState<ReviewT[] | null>(null);
@@ -171,7 +171,7 @@ function Reviews({ productId }: ReviewsProp) {
     <>
       <Container style={{ width: "auto", height: "auto", textAlign: "left" }}>
         {session?.user ? (
-          <p>Please, write below your product's review.</p>
+          <p>Please, write below your product&apos;s review.</p>
         ) : (
           <div>
             <p>

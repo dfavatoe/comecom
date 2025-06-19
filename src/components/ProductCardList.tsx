@@ -1,10 +1,8 @@
 "use client";
 import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import { ProductsList } from "@/model/types/types";
-import style from "./productcard.module.css";
 import Link from "next/link";
 import { useCountdown } from "@/hooks/useCountdown";
-import { useSession } from "next-auth/react";
 import { baseUrl } from "@/app/lib/urls";
 import { useToast } from "@/hooks/useToast";
 import { useEffect } from "react";
@@ -16,7 +14,6 @@ type ProductCardProps = {
 
 function ProductCardList({ product, reservationStatus }: ProductCardProps) {
   const { showToast } = useToast();
-  const { data: session, status } = useSession();
 
   const shouldRunCountdown =
     product.reservation && reservationStatus !== "cancelled";

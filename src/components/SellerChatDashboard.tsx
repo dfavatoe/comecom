@@ -8,21 +8,22 @@ import CloseIcon from "@mui/icons-material/Close";
 import IconButton from "@mui/material/IconButton";
 import "@/app/globals.css";
 import Chat from "./ChatWindow";
+import { Chatroom, UserFull } from "@/model/types/types";
 
 export default function SellerChatDashboard() {
   const { data: session } = useSession();
-  const [chatrooms, setChatrooms] = useState<any[]>([]);
+  const [chatrooms, setChatrooms] = useState<Chatroom[]>([]);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [roomToDelete, setRoomToDelete] = useState<any>(null);
+  //const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  //const [roomToDelete, setRoomToDelete] = useState<any>(null);
 
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  //const [confirmOpen, setConfirmOpen] = useState(false);
 
   const [openChat, setOpenChat] = useState<string | null>(null);
-  const [chatroomId, setChatroomId] = useState<string | null>(null);
+  // const [chatroomId, setChatroomId] = useState<string | null>(null);
 
   const handleOpenChat = (id: string) => {
-    setChatroomId(id);
+    //setChatroomId(id);
     setOpenChat(id);
   };
 
@@ -34,52 +35,52 @@ export default function SellerChatDashboard() {
     setChatrooms((prev) => prev.filter((room) => room._id !== deletedRoomId));
   };
 
-  const handleMenuOpen = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    roomId: string
-  ) => {
-    setAnchorEl(event.currentTarget);
-    setRoomToDelete(roomId);
-    console.log("roomToDelete set:", roomId);
-  };
+  // const handleMenuOpen = (
+  //   event: React.MouseEvent<HTMLButtonElement>,
+  //   roomId: string
+  // ) => {
+  //   setAnchorEl(event.currentTarget);
+  //   setRoomToDelete(roomId);
+  //   console.log("roomToDelete set:", roomId);
+  // };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  // const handleMenuClose = () => {
+  //   setAnchorEl(null);
+  // };
 
-  const deleteChatroom = async (chatroomId: string) => {
-    const res = await fetch(`/api/chatroom/${chatroomId}`, {
-      method: "DELETE",
-    });
-    return res.ok;
-  };
+  // const deleteChatroom = async (chatroomId: string) => {
+  //   const res = await fetch(`/api/chatroom/${chatroomId}`, {
+  //     method: "DELETE",
+  //   });
+  //   return res.ok;
+  // };
 
-  const handleDeleteClick = () => {
-    console.log("roomToDelete inside handleDeleteClick:", roomToDelete);
-    setConfirmOpen(true);
-    handleMenuClose();
-  };
+  // const handleDeleteClick = () => {
+  //   console.log("roomToDelete inside handleDeleteClick:", roomToDelete);
+  //   setConfirmOpen(true);
+  //   handleMenuClose();
+  // };
 
-  const confirmDelete = async () => {
-    console.log("roomToDelete before delete:", roomToDelete);
+  // const confirmDelete = async () => {
+  //   console.log("roomToDelete before delete:", roomToDelete);
 
-    if (!roomToDelete) {
-      console.error("No chatroom found to delete or invalid ID");
-      return;
-    }
+  //   if (!roomToDelete) {
+  //     console.error("No chatroom found to delete or invalid ID");
+  //     return;
+  //   }
 
-    const res = await fetch(`/api/chatroom/${roomToDelete}`, {
-      method: "DELETE",
-    });
+  //   const res = await fetch(`/api/chatroom/${roomToDelete}`, {
+  //     method: "DELETE",
+  //   });
 
-    if (res.ok) {
-      refreshChatrooms(roomToDelete);
-      setConfirmOpen(false);
-      setRoomToDelete(null);
-    } else {
-      alert("Error deleting chatroom");
-    }
-  };
+  //   if (res.ok) {
+  //     refreshChatrooms(roomToDelete);
+  //     setConfirmOpen(false);
+  //     setRoomToDelete(null);
+  //   } else {
+  //     alert("Error deleting chatroom");
+  //   }
+  // };
 
   useEffect(() => {
     const fetchChatrooms = async () => {
@@ -89,8 +90,8 @@ export default function SellerChatDashboard() {
         const res = await fetch("/api/chatroom");
         const allRooms = await res.json();
 
-        const myRooms = allRooms.filter((room: any) =>
-          room.participants.some((user: any) => user._id === session.user.id)
+        const myRooms = allRooms.filter((room: Chatroom) =>
+          room.participants.some((user: any) => user._id === session?.user!.id)
         );
 
         setChatrooms(myRooms);
