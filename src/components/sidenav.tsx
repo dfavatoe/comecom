@@ -1,6 +1,5 @@
-import Link from "next/link";
 import NavLinks from "@/components/sidenav-links";
-import { Col, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 import "@/app/globals.css";
 
 export default function SideNav() {

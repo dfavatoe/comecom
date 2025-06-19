@@ -2,6 +2,9 @@ import Person2Icon from "@mui/icons-material/Person2";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
+import PriceChangeIcon from "@mui/icons-material/PriceChange";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { Nav } from "react-bootstrap";
 
 // Navigation link data
@@ -21,6 +24,16 @@ const links = [
     name: "Chats",
     href: "/account/dashboard/chats",
     icon: ChatBubbleIcon,
+  },
+  {
+    name: "Price Analysis",
+    href: "/account/price-analysis",
+    icon: PriceChangeIcon,
+  },
+  {
+    name: "Shopping Analysis",
+    href: "/account/price-shopping",
+    icon: ShowChartIcon,
   },
 ];
 

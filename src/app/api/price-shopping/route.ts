@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-interface SearchResult {
+interface ShoppingResult {
   title: string;
   link: string;
-  snippet: string;
+  price?: string;
+  extracted_price?: number;
+  store: string;
+  source?: string;
+  product_link: string;
 }
 
 const SERPAPI_KEY = process.env.SERPAPI_KEY!;
@@ -22,11 +26,14 @@ const countryMap: Record<
   // add more as needed
 };
 
-async function searchWithSerpAPI(query: string, country: string) {
+async function searchWithSerpAPI(
+  query: string,
+  country: string
+): Promise<ShoppingResult[]> {
   const { location, gl, hl } = countryMap[country] || countryMap["Germany"];
 
   const params = new URLSearchParams({
-    engine: "google",
+    engine: "google_shopping",
     q: query,
     location,
     gl,
@@ -41,17 +48,21 @@ async function searchWithSerpAPI(query: string, country: string) {
   }
   const data = await res.json();
 
-  const results =
-    data.organic_results?.slice(0, 10).map((item: SearchResult) => ({
+  const results: ShoppingResult[] =
+    data.shopping_results?.slice(0, 10).map((item: ShoppingResult) => ({
       title: item.title,
-      snippet: item.snippet,
-      link: item.link,
+      price: item.extracted_price ? `$${item.extracted_price}` : item.price, //first number, second string
+      store: item.source || "Unknown",
+      link: item.product_link,
     })) || [];
 
   return results;
 }
 
-async function analyzeWithOpenAI(query: string, searchResults: SearchResult[]) {
+async function analyzeWithOpenAI(
+  query: string,
+  ShoppingResults: ShoppingResult[]
+) {
   const messages = [
     {
       role: "system",
@@ -63,13 +74,14 @@ async function analyzeWithOpenAI(query: string, searchResults: SearchResult[]) {
       content: `
       Query: "${query}"
       Results:
-      ${searchResults
-        .map((r) => `Title: ${r.title}\nSnippet: ${r.snippet}\nLink: ${r.link}`)
-        .join("\n\n")}
+      ${ShoppingResults.map(
+        (r) =>
+          `Title: ${r.title}\nPrice: ${r.price}\nStore: ${r.store}\nLink: ${r.link}`
+      ).join("\n\n")}
         
       Format the output as:
       [
-        {"store": "Store Name", "price": "$199.99", "url": "https://..."}
+        {"title": "Product Title, ""store": "Store Name", "price": "$199.99", "url": "https://..."}
       ]  `.trim(),
     },
   ];
