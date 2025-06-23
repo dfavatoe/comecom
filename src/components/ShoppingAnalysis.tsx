@@ -11,6 +11,15 @@ import {
   Alert,
   Table,
 } from "react-bootstrap";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
 
 /**
  * Type representing a single seller result returned by the API.
@@ -25,11 +34,6 @@ interface SellerResult {
 /**
  * `PriceAnalysis` – Page component that lets a seller enter a product name
  * and retrieve a price‑comparison list via the `/api/price-comparison` route.
- *
- * Requirements:
- * – Next.js App Router client component (hence the "use client" pragma).
- * – React‑Bootstrap UI elements for consistent styling.
- * – Typescript for type safety.
  */
 export default function ShoppingAnalysis() {
   const [query, setQuery] = useState<string>("");
@@ -64,7 +68,12 @@ export default function ShoppingAnalysis() {
       }
 
       const data = (await res.json()) as { result?: SellerResult[] };
-      setResults(data.result ?? []);
+      //Convert price string to number
+      const parsedResults = (data.result ?? []).map((item) => ({
+        ...item,
+        numericPrice: parseFloat(item.price.replace(/[^0-9.]/g, "")), //Matches any character that is not a digit or period. g: global flag, do it for the whole string.
+      }));
+      setResults(parsedResults);
     } catch (err) {
       console.error(err);
       setError("Failed to fetch price analysis. Try again later.");
@@ -178,6 +187,24 @@ export default function ShoppingAnalysis() {
                 ))}
               </tbody>
             </Table>
+          </Col>
+        </Row>
+      )}
+
+      {/* Results Chart */}
+      {results.length > 0 && (
+        <Row className="mt-4">
+          <Col>
+            <h5>Price Comparison</h5>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={results}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="store" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="numericPrice" fill="#007bff" />
+              </BarChart>
+            </ResponsiveContainer>
           </Col>
         </Row>
       )}

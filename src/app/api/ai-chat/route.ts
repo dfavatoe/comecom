@@ -17,6 +17,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // User Query (Prompt Input): natural language question
   const { question, user, history } = await req.json();
 
   try {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ answer: "You have to log in first." });
     }
 
+    // Retrieval (Database Query): fetches product and seller info from MongoDB
     const allProducts = await Product.find().populate("seller");
     const sellers = await UserModel.find({ role: "seller" });
 
@@ -55,6 +57,7 @@ export async function POST(req: NextRequest) {
       seller: p.seller?.name || "Unknown Seller",
     });
 
+    // formats the retrieved products and sellers data in the given structure
     const productData = allProducts.map(formatProduct);
 
     const sellersData = sellers.map((s) => ({
@@ -66,7 +69,7 @@ export async function POST(req: NextRequest) {
     }));
 
     const lowerCaseQuestion = question.toLowerCase();
-
+    // definitions for answers related to user's products/shopping lists
     if (
       [
         "my products",
@@ -93,6 +96,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
+    // Augmented Prompt Construction: retrieved product and seller data into the system prompt
     const systemPrompt = `
 You are a smart AI assistant for an online marketplace.
 
@@ -126,6 +130,7 @@ ${JSON.stringify(sellersData, null, 2)}
       { role: "user", content: question },
     ];
 
+    // Generation Phase (LLM Answer in natural language)
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages,
