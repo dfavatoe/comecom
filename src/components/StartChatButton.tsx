@@ -2,10 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import Button from "@mui/material/Button";
 import ChatWindow from "@/components/ChatWindow";
 import { Box, IconButton } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
+import { ChatroomAsString } from "@/model/types/types";
 
 interface Props {
   sellerId: string;
@@ -15,8 +15,6 @@ export default function StartChatButton({ sellerId }: Props) {
   const { data: session } = useSession();
   const [chatroomId, setChatroomId] = useState<string | null>(null);
   const [showChat, setShowChat] = useState(false);
-
-  const [open, setOpen] = useState(false);
 
   const startChat = async () => {
     if (!session?.user?.id) {
@@ -43,7 +41,7 @@ export default function StartChatButton({ sellerId }: Props) {
       const allChatrooms = await res.json();
 
       const existingChat = allChatrooms.find(
-        (room: any) =>
+        (room: ChatroomAsString) =>
           room.participants.includes(buyerId) &&
           room.participants.includes(sellerId)
       );
@@ -78,7 +76,7 @@ export default function StartChatButton({ sellerId }: Props) {
       setChatroomId(newChatroom._id);
       setShowChat(true);
     } catch (err) {
-      // console.error("Chat could not be started", err);
+      console.error("Chat could not be started", err);
     }
   };
 

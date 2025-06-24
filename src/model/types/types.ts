@@ -217,7 +217,15 @@ export interface GetReviewsResponse {
 export type Chatroom = {
   _id: string;
   messageId: ObjectId | null;
-  participants: [{}];
+  participants: UserFull[];
+  created_at: string;
+  updated_at: string;
+};
+
+export type ChatroomAsString = {
+  _id: string;
+  messageId: ObjectId | null;
+  participants: string[];
   created_at: string;
   updated_at: string;
 };

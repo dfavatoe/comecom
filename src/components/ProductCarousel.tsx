@@ -5,7 +5,6 @@ import { ProductT } from "@/model/types/types";
 import { Stack } from "react-bootstrap";
 import Link from "next/link";
 import AddToShoppingListButton from "./addToShoppingListButton";
-import Image from "next/image";
 
 interface ProductCarouselProps {
   productsRecords: ProductT[];

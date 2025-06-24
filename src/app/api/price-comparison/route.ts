@@ -93,6 +93,7 @@ async function analyzeWithOpenAI(query: string, searchResults: SearchResult[]) {
   try {
     return JSON.parse(content);
   } catch (err) {
+    console.error(err);
     return { error: "Failed to parse OpenAI response", raw: content };
   }
 }

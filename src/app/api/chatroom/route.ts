@@ -42,7 +42,7 @@ export async function POST(req: NextRequest) {
   if (!chatroomId || !participants || participants.length < 2) {
     return new NextResponse(
       JSON.stringify({
-        message: "Chatroom ID and 2 participents are required",
+        message: "Chatroom ID and 2 participants are required",
       }),
       { status: 400 }
     );

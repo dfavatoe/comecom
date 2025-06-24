@@ -91,7 +91,9 @@ export default function SellerChatDashboard() {
         const allRooms = await res.json();
 
         const myRooms = allRooms.filter((room: Chatroom) =>
-          room.participants.some((user: any) => user._id === session?.user!.id)
+          room.participants.some(
+            (user: UserFull) => user._id === session?.user!.id
+          )
         );
 
         setChatrooms(myRooms);
