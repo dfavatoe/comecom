@@ -5,11 +5,14 @@ import MessageModel from "@/model/chatMessageModel";
 import UserModel from "@/model/usersModel";
 
 // Creates a new message in the chatroom
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { chatroomId: string } }
-) {
-  const { chatroomId } = params; // <-- Hier bekommst du die ID korrekt raus
+export async function POST(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+  const chatroomId = pathname.split("/")[4];
+
+  if (!chatroomId) {
+    return new NextResponse("Chatroom ID is missing", { status: 400 });
+  }
+
   await dbConnect();
 
   const session = await auth();
