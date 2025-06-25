@@ -7,7 +7,7 @@ import UserModel from "@/model/usersModel";
 // Creates a new message in the chatroom
 export async function POST(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const chatroomId = pathname.split("/")[4];
+  const chatroomId = pathname.split("/")[3];
 
   if (!chatroomId) {
     return new NextResponse("Chatroom ID is missing", { status: 400 });
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  const chatroomId = pathname.split("/")[4]; // Adjust this index if needed
+  const chatroomId = pathname.split("/")[3]; // Adjust this index if needed
 
   if (!chatroomId) {
     return new NextResponse("Chatroom ID is missing", { status: 400 });
