@@ -170,7 +170,9 @@ export default function ChatWidget() {
                   }}
                   src={
                     msg.sender === "user"
-                      ? session?.user?.image ?? "/images/defaultProfile.jpg"
+                      ? session?.user?.avatar ??
+                        session?.user?.image ??
+                        "/images/defaultProfile.jpg"
                       : undefined
                   }
                 >

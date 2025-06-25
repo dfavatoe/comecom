@@ -3,7 +3,6 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import PriceChangeIcon from "@mui/icons-material/PriceChange";
-import BarChartIcon from "@mui/icons-material/BarChart";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { Nav } from "react-bootstrap";
 

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import { UserFull, Address } from "@/model/types/types";
 
 const addressSchema = new Schema<Address>({

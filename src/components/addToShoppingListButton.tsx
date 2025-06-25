@@ -27,11 +27,9 @@ export default function AddToShoppingListButton({
     try {
       await addProductToList(productId);
       showToast("Product added to your shopping list!", "success");
-    } catch (err: unknown | any | string) {
-      showToast(
-        err.message || "Failed to add product to the shopping list.",
-        "danger"
-      );
+    } catch (err) {
+      console.error("Error: ", err);
+      showToast("Failed to add product to the shopping list.", "danger");
     } finally {
       setLoading(false);
     }

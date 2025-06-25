@@ -48,9 +48,9 @@ export default function StoreCoverGenerator() {
       <div style={{ maxWidth: "50vw" }}>
         <p>
           It is very simple, just write below a short image description, that
-          you wish as a cover on the top of your store and press the "Generate
-          Cover" button. You will have a preview of the result and after that it
-          will automatically add it to the store.
+          you wish as a cover on the top of your store and press the
+          &quot;Generate Cover&quot; button. You will have a preview of the
+          result and after that it will automatically add it to the store.
         </p>
       </div>
 

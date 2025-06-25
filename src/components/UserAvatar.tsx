@@ -9,7 +9,11 @@ export default async function UserAvatar() {
   return (
     <div>
       <img
-        src={session!.user!.avatar! || session?.user?.image!}
+        src={
+          session?.user?.avatar ??
+          session?.user?.image ??
+          "/images/defaultProfile.jpg"
+        }
         alt="User Avatar"
         width="250px"
       />

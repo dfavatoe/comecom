@@ -1,5 +1,4 @@
 import { ObjectId } from "mongoose";
-import { Dispatch } from "react";
 import { Role } from "../../../nextauth";
 
 export type UserFull = {
