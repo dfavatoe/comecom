@@ -52,33 +52,33 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(
-  req: NextRequest,
-  // { params }: { params: { chatroomId: string } }
-  context: { params: { chatroomId: string } }
-) {
-  const { chatroomId } = await context.params;
+export async function GET(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
+  const chatroomId = pathname.split("/")[4]; // Adjust this index if needed
+
+  if (!chatroomId) {
+    return new NextResponse("Chatroom ID is missing", { status: 400 });
+  }
+
   await dbConnect();
 
-  const url = new URL(req.url);
-  const after = url.searchParams.get("after");
+  const after = req.nextUrl.searchParams.get("after");
 
   try {
-    const query: Record<string, unknown> = { chatroomId }; //corrected "any" type to "Record".
+    const query: Record<string, unknown> = { chatroomId };
 
     if (after) {
-      const afterDate = new Date(Number(after)); // "after" an number (Timestamp)
+      const afterDate = new Date(Number(after));
       query.createdAt = { $gt: afterDate };
     }
 
     const messages = await MessageModel.find(query).sort({ createdAt: 1 });
-    console.log(messages);
 
     return new NextResponse(JSON.stringify(messages), { status: 200 });
   } catch (error) {
-    console.error("Error getting the message:", error);
+    console.error("Error getting the messages:", error);
     return new NextResponse(
-      JSON.stringify({ error: "Error getting the message." }),
+      JSON.stringify({ error: "Error getting the messages." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json" },
