@@ -1,19 +1,18 @@
 // /app/api/reservations/[reservationId]/route.ts
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ReservationModel } from "@/model/reservationModel";
 import dbConnect from "@/app/lib/dbConnect";
 
-interface Params {
-  params: {
-    reservationId: string;
-  };
+function extractParams(req: NextRequest): string | null {
+  const parts = req.nextUrl.pathname.split("/");
+  return parts[2] || null;
 }
 
-export async function GET(req: Request, { params }: Params) {
+export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const { reservationId } = params;
+    const reservationId = extractParams(req);
 
     const reservation = await ReservationModel.findById(reservationId);
 
