@@ -3,15 +3,17 @@ import dbConnect from "@/app/lib/dbConnect";
 import ProductModel from "@/model/productsModel";
 import UserModel from "@/model/usersModel";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { sellerId: string } }
-) {
+function extractParams(req: NextRequest): string | null {
+  const parts = req.nextUrl.pathname.split("/");
+  return parts[3] || null;
+}
+
+export async function GET(req: NextRequest) {
   await dbConnect();
 
-  const { sellerId } = await params;
-  console.log("getSellersProducts running");
-  console.log("sellerId :>> ", sellerId);
+  const sellerId = extractParams(req);
+  //console.log("getSellersProducts running");
+  //console.log("sellerId :>> ", sellerId);
 
   try {
     const productsBySeller = await ProductModel.find({ seller: sellerId });

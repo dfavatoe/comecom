@@ -3,12 +3,13 @@ import ProductModel from "@/model/productsModel";
 import "@/model/usersModel"; // Ensure the User model is registered
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+function extractParams(req: NextRequest): string | null {
+  const parts = req.nextUrl.pathname.split("/");
+  return parts[3] || null;
+}
 
-  const { id } = await params; // Access the id directly
+export async function GET(req: NextRequest) {
+  const id = extractParams(req);
 
   try {
     // Connect to the database

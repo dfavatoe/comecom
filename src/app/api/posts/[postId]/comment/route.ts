@@ -1,13 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/app/lib/auth";
 import dbConnect from "@/app/lib/dbConnect";
-
 import Post from "@/model/postModel";
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { postId: string } }
-) {
+function extractParams(req: NextRequest): string | null {
+  const parts = req.nextUrl.pathname.split("/");
+  return parts[3] || null;
+}
+
+export async function POST(req: NextRequest) {
+  const postId = extractParams(req);
+
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -16,12 +19,15 @@ export async function POST(
 
     const { text } = await req.json();
     if (!text || !text.trim()) {
-      return NextResponse.json({ error: "Comment text is required" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Comment text is required" },
+        { status: 400 }
+      );
     }
 
     await dbConnect();
 
-    const post = await Post.findById(params.postId);
+    const post = await Post.findById(postId);
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }

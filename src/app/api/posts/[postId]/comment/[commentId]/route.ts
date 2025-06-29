@@ -4,10 +4,17 @@ import dbConnect from "@/app/lib/dbConnect";
 import Post from "@/model/postModel";
 import { Comment } from "@/model/types/types";
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { postId: string; commentId: string } }
-) {
+function extractParams(req: NextRequest) {
+  const parts = req.nextUrl.pathname.split("/");
+  return {
+    postId: parts[3],
+    commentId: parts[5],
+  };
+}
+
+export async function DELETE(req: NextRequest) {
+  const { postId, commentId } = extractParams(req);
+
   try {
     const session = await auth();
     if (!session || !session.user?.id) {
@@ -16,13 +23,13 @@ export async function DELETE(
 
     await dbConnect();
 
-    const post = await Post.findById(params.postId);
+    const post = await Post.findById(postId);
     if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
     const comment = post.comments.find(
-      (c: Comment) => c._id.toString() === params.commentId
+      (c: Comment) => c._id.toString() === commentId
     );
 
     if (!comment) {
@@ -34,7 +41,7 @@ export async function DELETE(
     }
 
     post.comments = post.comments.filter(
-      (c: Comment) => c._id.toString() !== params.commentId
+      (c: Comment) => c._id.toString() !== commentId
     );
 
     await post.save();

@@ -4,13 +4,14 @@ import dbConnect from "@/app/lib/dbConnect";
 import ProductModel from "@/model/productsModel";
 import { ReviewT } from "@/model/types/types";
 
+function extractParams(req: NextRequest): string | null {
+  const parts = req.nextUrl.pathname.split("/");
+  return parts[3] || null;
+}
+
 //GET reviews
-export async function GET(
-  req: NextRequest,
-  context: { params: { productId: string } }
-) {
-  // context plus await avoids an error when trying to directly access params without awaiting
-  const { productId } = await context.params;
+export async function GET(req: NextRequest) {
+  const productId = extractParams(req);
   await dbConnect();
 
   try {
@@ -49,12 +50,8 @@ export async function GET(
 }
 
 // Post a review
-export async function POST(
-  req: NextRequest,
-  context: { params: { productId: string } }
-) {
-  // context plus await avoids an error when trying to directly access params without awaiting
-  const { productId } = await context.params;
+export async function POST(req: NextRequest) {
+  const productId = extractParams(req);
   await dbConnect();
 
   const session = await auth();
