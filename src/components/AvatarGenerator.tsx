@@ -83,6 +83,7 @@ function AvatarGenerator() {
             <Image
               className="img-fluid rounded mb-3"
               src={imageUrl}
+              width="200"
               style={{ maxWidth: "200px" }}
               alt="Generated Avatar's Image"
             />
