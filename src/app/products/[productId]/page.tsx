@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { baseUrl } from "@/app/lib/urls";
+//import { baseUrl } from "@/app/lib/urls";
 import { ProductT } from "@/model/types/types";
 import { Button, Col, Image, Row, Spinner } from "react-bootstrap";
 import { useParams } from "next/navigation";
