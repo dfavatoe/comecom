@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { useState, useEffect } from "react";
-//import { baseUrl } from "../lib/urls";
 import { ProductT } from "@/model/types/types";
 import { Spinner } from "react-bootstrap";
 import Grid from "@/components/Grid";

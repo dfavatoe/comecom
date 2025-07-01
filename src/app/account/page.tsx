@@ -7,7 +7,6 @@ import {
   UpdateAddressOkResponse,
   UserFull,
 } from "@/model/types/types";
-import { baseUrl } from "../lib/urls";
 import {
   Button,
   Col,
@@ -58,7 +57,7 @@ const AccountPage = () => {
     };
 
     const response = await fetch(
-      `${baseUrl}/api/users/profile/update-name`,
+      `/api/users/profile/update-name`,
       requestOptions
     );
     const result = await response.json();
@@ -98,16 +97,13 @@ const AccountPage = () => {
     }
 
     try {
-      const response = await fetch(
-        `${baseUrl}/api/users/profile/update-address`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newAddress),
-        }
-      );
+      const response = await fetch(`/api/users/profile/update-address`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newAddress),
+      });
 
       const result = (await response.json()) as UpdateAddressOkResponse;
 
@@ -133,10 +129,9 @@ const AccountPage = () => {
       return;
     }
 
-    const response = await fetch(
-      `${baseUrl}/api/users/profile/delete-address`,
-      { method: "DELETE" }
-    );
+    const response = await fetch(`/api/users/profile/delete-address`, {
+      method: "DELETE",
+    });
 
     const result = (await response.json()) as UpdateAddressOkResponse;
 
@@ -156,7 +151,7 @@ const AccountPage = () => {
     if (status === "authenticated") {
       const fetchUser = async () => {
         try {
-          const res = await fetch(`${baseUrl}/api/users/profile`);
+          const res = await fetch(`/api/users/profile`);
           if (!res.ok) throw new Error("Failed to fetch profile");
           const data = await res.json();
           setUser(data.user);

@@ -1,6 +1,5 @@
 "use client";
 
-import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
@@ -17,7 +16,7 @@ export default function StoreCoverGenerator() {
   const generateCoverImage = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${baseUrl}/api/generate-cover`, {
+      const response = await fetch(`/api/generate-cover`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

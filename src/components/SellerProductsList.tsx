@@ -23,7 +23,6 @@ import {
   Table,
 } from "react-bootstrap";
 import { useSession } from "next-auth/react";
-import { baseUrl } from "@/app/lib/urls";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useToast } from "@/hooks/useToast";
 
@@ -52,7 +51,7 @@ export default function SellerProductsList() {
     if (!session?.user?.id) return;
 
     const response = await fetch(
-      `${baseUrl}/api/reservations/seller?sellerId=${session.user.id}`
+      `/api/reservations/seller?sellerId=${session.user.id}`
     );
     const result = await response.json();
 
@@ -116,10 +115,7 @@ export default function SellerProductsList() {
     };
 
     try {
-      const response = await fetch(
-        `${baseUrl}/api/upload/image-product`,
-        requestOptions
-      );
+      const response = await fetch(`/api/upload/image-product`, requestOptions);
 
       const result = await response.json();
 
@@ -158,7 +154,7 @@ export default function SellerProductsList() {
     };
 
     const response = await fetch(
-      `${baseUrl}/api/products/create-product`,
+      `/api/products/create-product`,
       requestOptions
     );
 
@@ -178,7 +174,7 @@ export default function SellerProductsList() {
   //* ====================================================================
 
   const getSellersProducts = async () => {
-    const response = await fetch(`${baseUrl}/api/products-list/seller`, {
+    const response = await fetch(`/api/products-list/seller`, {
       method: "GET",
     });
 
@@ -250,7 +246,7 @@ export default function SellerProductsList() {
     const updates = editedProducts[productId];
     if (!updates) return;
 
-    const res = await fetch(`${baseUrl}/api/products-list/update`, {
+    const res = await fetch(`/api/products-list/update`, {
       method: "PUT",
       headers: { "Content-Type": "aplication/json" },
       body: JSON.stringify({ id: productId, updates }),
@@ -279,7 +275,7 @@ export default function SellerProductsList() {
   //* ====================================================================
 
   const handleCancelReservation = async (reservationId: string) => {
-    const response = await fetch(`${baseUrl}/api/reservations/cancel`, {
+    const response = await fetch(`/api/reservations/cancel`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ reservationId }),

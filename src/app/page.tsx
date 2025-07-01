@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { Button, Container, Spinner } from "react-bootstrap";
 import ProductCarousel from "../components/ProductCarousel";
 import { ProductT } from "@/model/types/types";
-//import { baseUrl } from "./lib/urls";
 import styles from "./page.module.css";
 import "@/app/globals.css";
 

@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { GetShopInfo, ProductT, UserFull } from "@/model/types/types";
 import { Col, Container, Image, Row, Spinner } from "react-bootstrap";
 import ProductCardStore from "@/components/ProductCardStore";
-import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -28,7 +27,7 @@ export default function Store() {
   const handleGetSellerShopInfo = useCallback(async () => {
     if (sellerId) {
       try {
-        const response = await fetch(`${baseUrl}/api/store/${sellerId}`);
+        const response = await fetch(`/api/store/${sellerId}`);
         console.log("response :>> ", response);
         if (!response.ok) {
           console.log("Something went wrong");

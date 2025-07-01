@@ -1,7 +1,6 @@
 "use server";
 
 import { auth } from "./auth";
-import { baseUrl } from "./urls";
 import dbConnect from "@/app/lib/dbConnect";
 import { RegisterValues } from "@/model/types/types";
 import UserModel from "@/model/usersModel";
@@ -80,7 +79,7 @@ export async function addProductToList(productId: string): Promise<void> {
 
   try {
     const response = await fetch(
-      `${baseUrl}/api/products-list/add-product-to-list`,
+      `/api/products-list/add-product-to-list`,
       requestOptions
     );
 

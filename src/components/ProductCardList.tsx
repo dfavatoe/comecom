@@ -3,7 +3,6 @@ import { Button, Card, Col, Container, Row, Stack } from "react-bootstrap";
 import { ProductsList } from "@/model/types/types";
 import Link from "next/link";
 import { useCountdown } from "@/hooks/useCountdown";
-import { baseUrl } from "@/app/lib/urls";
 import { useToast } from "@/hooks/useToast";
 import { useEffect } from "react";
 
@@ -29,7 +28,7 @@ function ProductCardList({ product, reservationStatus }: ProductCardProps) {
 
   const handleReserve = async () => {
     try {
-      const response = await fetch(`${baseUrl}/api/reservations`, {
+      const response = await fetch(`/api/reservations`, {
         method: "POST",
         body: JSON.stringify({
           productId: product._id,
@@ -52,7 +51,7 @@ function ProductCardList({ product, reservationStatus }: ProductCardProps) {
 
   const handleCancelReservation = async () => {
     try {
-      const response = await fetch(`${baseUrl}/api/reservations`, {
+      const response = await fetch(`/api/reservations`, {
         method: "DELETE",
         body: JSON.stringify({
           productId: product._id,

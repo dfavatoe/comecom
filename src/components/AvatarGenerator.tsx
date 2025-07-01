@@ -1,6 +1,5 @@
 "use client";
 
-import { baseUrl } from "@/app/lib/urls";
 import Link from "next/link";
 import { useState } from "react";
 import { Button, Container, Spinner } from "react-bootstrap";
@@ -16,7 +15,7 @@ function AvatarGenerator() {
   const generateAvatar = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${baseUrl}/api/generate-avatar`, {
+      const res = await fetch(`/api/generate-avatar`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt }),

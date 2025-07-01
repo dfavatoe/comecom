@@ -17,7 +17,6 @@ import {
 } from "@/model/types/types";
 
 import { useToast } from "@/hooks/useToast";
-import { baseUrl } from "@/app/lib/urls";
 
 interface ReviewsProp {
   productId: string;
@@ -39,7 +38,7 @@ function Reviews({ productId }: ReviewsProp) {
   const getReviews = async () => {
     if (productId) {
       try {
-        const response = await fetch(`${baseUrl}/api/reviews/${productId}`, {
+        const response = await fetch(`/api/reviews/${productId}`, {
           method: "GET",
         });
         console.log("response reviews :>> ", response);
@@ -141,10 +140,7 @@ function Reviews({ productId }: ReviewsProp) {
       body: JSON.stringify(newReview),
     };
 
-    const response = await fetch(
-      `${baseUrl}/api/reviews/${productId}`,
-      requestOptions
-    );
+    const response = await fetch(`/api/reviews/${productId}`, requestOptions);
 
     const result = (await response.json()) as PostNewReviewResponse;
     console.log("result :>> ", result);

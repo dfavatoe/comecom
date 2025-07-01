@@ -4,7 +4,6 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Container, Form, Image, InputGroup } from "react-bootstrap";
 import { register } from "@/app/lib/actions";
-import { baseUrl } from "../lib/urls";
 import { useToast } from "@/hooks/useToast";
 import { useSession } from "next-auth/react";
 import "@/app/globals.css";
@@ -45,7 +44,7 @@ export default function Register() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const response = await fetch(`${baseUrl}/api/upload/image-users`, {
+    const response = await fetch(`/api/upload/image-users`, {
       method: "POST",
       body: formData,
     });
