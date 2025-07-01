@@ -1,7 +1,3 @@
-// import {
-//   CloudinaryUploadError,
-//   CloudinaryUploadResult,
-// } from "@/model/types/types";
 import cloudinary from "./cloudinary";
 import {
   UploadApiResponse,

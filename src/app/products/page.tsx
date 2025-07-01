@@ -13,7 +13,7 @@ export default function Products() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch(`${baseUrl}/api/products`);
+      const res = await fetch(`/api/products`);
       const data = await res.json();
       setProducts(data);
     }

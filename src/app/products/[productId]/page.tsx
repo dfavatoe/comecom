@@ -70,7 +70,7 @@ export default function SingleProductPage() {
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await fetch(`${baseUrl}/api/products/${productId}`);
+        const res = await fetch(`/api/products/${productId}`);
         const data = await res.json();
         setProduct(data);
         console.log("data :>> ", data);
