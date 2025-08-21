@@ -25,6 +25,7 @@ import {
 import { useSession } from "next-auth/react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useToast } from "@/hooks/useToast";
+import Link from "next/link";
 
 export default function SellerProductsList() {
   const { data: session } = useSession();
@@ -305,248 +306,267 @@ export default function SellerProductsList() {
         <Row>
           <Col sm={6} className="mx-0 px-0 g-0" style={{ textAlign: "left" }}>
             <h5>Specifications:</h5>
-            <Form onSubmit={submitNewProduct}>
-              <Row>
-                <Col>
-                  <Form.Group className="mb-3 justify-content-center">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="title"
-                      id="product-title"
-                      placeholder="Enter the product's title"
-                      onChange={handleNewProductInputChange}
-                    />
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group className="mb-3 justify-content-center">
-                    <Form.Label>Brand</Form.Label>
-                    <Form.Control
-                      type="text"
-                      name="brand"
-                      id="product-brand"
-                      placeholder="Enter the product's brand"
-                      onChange={handleNewProductInputChange}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
 
-              <Form.Group className="mb-3 justify-content-center">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="description"
-                  id="product-description"
-                  placeholder="Describe the product"
-                  onChange={handleNewProductInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Category</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="category"
-                  id="product-category"
-                  placeholder="Set the product's category"
-                  onChange={handleNewProductInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Price</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="price"
-                  id="product-price"
-                  placeholder="Set a price"
-                  onChange={handleNewProductInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Stock</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="stock"
-                  id="product-stock"
-                  placeholder="Number of product's in stock"
-                  onChange={handleNewProductInputChange}
-                />
-              </Form.Group>
-
-              <Form.Group>
-                <Form.Label>Image</Form.Label>
-                <Form.Group controlId="formFile" className="mb-3">
-                  <InputGroup className="mb-4">
-                    <Form.Control
-                      type="file"
-                      accept="image/*"
-                      onChange={handleAttachFile}
-                    />
-                    <Button
-                      type="submit"
-                      variant="outline-secondary"
-                      id="button-addon2"
-                      onClick={handleImageUpload}
-                    >
-                      Upload
-                    </Button>
-                  </InputGroup>
-                  <div>
-                    {imagePreview && (
-                      <img
-                        src={imagePreview}
-                        alt="image preview"
-                        style={{
-                          width: "70px",
-                          height: "auto",
-                          border: "solid",
-                        }}
-                      />
-                    )}
-                  </div>
+            <Row>
+              <Col>
+                <Form.Group className="mb-3 justify-content-center">
+                  <Form.Label>Title</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="title"
+                    id="product-title"
+                    placeholder="Enter the product's title"
+                    onChange={handleNewProductInputChange}
+                  />
                 </Form.Group>
-              </Form.Group>
-              <Button
-                type="submit"
-                className="d-flex ml-2 mb-3 justify-content-end"
-              >
-                Add Product
-              </Button>
-            </Form>
-          </Col>
-          <Col sm={6} style={{ textAlign: "left" }}>
-            <h5>Product Details:</h5>
-            <Form.Group
-              className="mx-0 mb-3 px-0 g-0"
-              style={{ textAlign: "left" }}
-            >
-              <Form.Label>Warranty</Form.Label>
-              <Form.Control
-                type="text"
-                name="warranty"
-                id="product-warranty"
-                placeholder="Warranty conditions"
-                onChange={handleNewProductInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group
-              className="mx-0 mb-3 px-0 g-0"
-              style={{ textAlign: "left" }}
-            >
-              <Form.Label>Return policy</Form.Label>
-              <Form.Control
-                type="text"
-                name="returnPolicy"
-                id="product-return"
-                placeholder="Return conditions"
-                onChange={handleNewProductInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group
-              className="mx-0 mb-3 px-0 g-0"
-              style={{ textAlign: "left" }}
-            >
-              <Form.Label>Minimum Reservation Amount</Form.Label>
-              <Form.Control
-                type="number"
-                name="minReservationQty"
-                id="product-minorder"
-                placeholder="Minimum ammount of items for reservation"
-                onChange={handleNewProductInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group
-              className="mx-0 mb-3 px-0 g-0"
-              style={{ textAlign: "left" }}
-            >
-              <Form.Label className="d-block">Dimensions (mm)</Form.Label>
-              <Form.Control
-                className="d-inline mx-2"
-                style={{ maxWidth: "30%" }}
-                type="text"
-                name="width"
-                id="product-width"
-                placeholder="Width"
-                onChange={handleNewProductInputChange}
-              />
-              <Form.Control
-                className="d-inline"
-                style={{ maxWidth: "30%" }}
-                type="text"
-                name="height"
-                id="product-height"
-                placeholder="Height"
-                onChange={handleNewProductInputChange}
-              />
-              <Form.Control
-                className="d-inline mx-2"
-                style={{ maxWidth: "30%" }}
-                type="text"
-                name="depth"
-                id="product-depth"
-                placeholder="Depth"
-                onChange={handleNewProductInputChange}
-              />
-            </Form.Group>
-            <Row className="mb-3" style={{ textAlign: "left" }}>
-              <Col style={{ maxWidth: "50%" }}>
-                <Form.Label>Discount</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="discountPercentage"
-                  id="product-discount"
-                  placeholder="Discount percentage"
-                  onChange={handleNewProductInputChange}
-                />
               </Col>
-              <Col style={{ maxWidth: "50%" }}>
-                <Form.Label>Rating</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="rating"
-                  id="product-rating"
-                  placeholder="Self-Rating"
-                  max={5}
-                  onChange={handleNewProductInputChange}
-                />
+              <Col>
+                <Form.Group className="mb-3 justify-content-center">
+                  <Form.Label>Brand</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="brand"
+                    id="product-brand"
+                    placeholder="Enter the product's brand"
+                    onChange={handleNewProductInputChange}
+                  />
+                </Form.Group>
               </Col>
             </Row>
 
-            <Form.Group className="mb-4" style={{ textAlign: "left" }}>
+            <Form.Group className="mb-3 justify-content-center">
+              <Form.Label>Description</Form.Label>
+              <Form.Control
+                type="text"
+                name="description"
+                id="product-description"
+                placeholder="Describe the product"
+                onChange={handleNewProductInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <Form.Control
+                type="text"
+                name="category"
+                id="product-category"
+                placeholder="Set the product's category"
+                onChange={handleNewProductInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Price</Form.Label>
+              <Form.Control
+                type="text"
+                name="price"
+                id="product-price"
+                placeholder="Set a price"
+                onChange={handleNewProductInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Stock</Form.Label>
+              <Form.Control
+                type="number"
+                name="stock"
+                id="product-stock"
+                placeholder="Number of product's in stock"
+                onChange={handleNewProductInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group>
+              <Form.Label>Image</Form.Label>
+              <Form.Group controlId="formFile" className="mb-3">
+                <InputGroup className="mb-4">
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAttachFile}
+                  />
+                  <Button
+                    type="submit"
+                    variant="outline-secondary"
+                    id="button-addon2"
+                    onClick={handleImageUpload}
+                  >
+                    Upload
+                  </Button>
+                </InputGroup>
+                <div>
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="image preview"
+                      style={{
+                        width: "70px",
+                        height: "auto",
+                        border: "solid",
+                      }}
+                    />
+                  )}
+                </div>
+              </Form.Group>
+            </Form.Group>
+          </Col>
+
+          <Col sm={6} style={{ textAlign: "left" }}>
+            <Form onSubmit={submitNewProduct}>
+              <h5>Product Details:</h5>
+              <Form.Group
+                className="mx-0 mb-3 px-0 g-0"
+                style={{ textAlign: "left" }}
+              >
+                <Form.Label>Warranty</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="warranty"
+                  id="product-warranty"
+                  placeholder="Warranty conditions"
+                  onChange={handleNewProductInputChange}
+                />
+              </Form.Group>
+
+              <Form.Group
+                className="mx-0 mb-3 px-0 g-0"
+                style={{ textAlign: "left" }}
+              >
+                <Form.Label>Return policy</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="returnPolicy"
+                  id="product-return"
+                  placeholder="Return conditions"
+                  onChange={handleNewProductInputChange}
+                />
+              </Form.Group>
+
+              <Form.Group
+                className="mx-0 mb-3 px-0 g-0"
+                style={{ textAlign: "left" }}
+              >
+                <Form.Label>Minimum Reservation Amount</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="minReservationQty"
+                  id="product-minorder"
+                  placeholder="Minimum ammount of items for reservation"
+                  onChange={handleNewProductInputChange}
+                />
+              </Form.Group>
+
+              <Form.Group
+                className="mx-0 mb-3 px-0 g-0"
+                style={{ textAlign: "left" }}
+              >
+                <Form.Label className="d-block">Dimensions (mm)</Form.Label>
+                <Form.Control
+                  className="d-inline mx-2"
+                  style={{ maxWidth: "30%" }}
+                  type="text"
+                  name="width"
+                  id="product-width"
+                  placeholder="Width"
+                  onChange={handleNewProductInputChange}
+                />
+                <Form.Control
+                  className="d-inline"
+                  style={{ maxWidth: "30%" }}
+                  type="text"
+                  name="height"
+                  id="product-height"
+                  placeholder="Height"
+                  onChange={handleNewProductInputChange}
+                />
+                <Form.Control
+                  className="d-inline mx-2"
+                  style={{ maxWidth: "30%" }}
+                  type="text"
+                  name="depth"
+                  id="product-depth"
+                  placeholder="Depth"
+                  onChange={handleNewProductInputChange}
+                />
+              </Form.Group>
               <Row className="mb-3" style={{ textAlign: "left" }}>
-                <Form.Label className="d-block">
-                  Reservation (in minutes)
-                </Form.Label>
-                <Col style={{ maxWidth: "150px" }}>
-                  <Form.Check
-                    style={{ width: "50px" }}
-                    type="switch"
-                    id="custom-switch"
-                    label="Enable"
-                    onChange={handleReserveButtonChange}
+                <Col style={{ maxWidth: "50%" }}>
+                  <Form.Label>Discount</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="discountPercentage"
+                    id="product-discount"
+                    placeholder="Discount percentage"
+                    onChange={handleNewProductInputChange}
                   />
                 </Col>
-                <Col>
+                <Col style={{ maxWidth: "50%" }}>
+                  <Form.Label>Rating</Form.Label>
                   <Form.Control
-                    className="mx-2"
                     type="number"
-                    name="reservationTime"
+                    name="rating"
                     id="product-rating"
-                    placeholder="Reservation time"
+                    placeholder="Self-Rating"
+                    max={5}
                     onChange={handleNewProductInputChange}
                   />
                 </Col>
               </Row>
-            </Form.Group>
+
+              <Form.Group className="mb-4" style={{ textAlign: "left" }}>
+                <Row className="mb-3" style={{ textAlign: "left" }}>
+                  <Form.Label className="d-block">
+                    Reservation (in minutes)
+                  </Form.Label>
+                  <Col style={{ maxWidth: "150px" }}>
+                    <Form.Check
+                      style={{ width: "50px" }}
+                      type="switch"
+                      id="custom-switch"
+                      label="Enable"
+                      onChange={handleReserveButtonChange}
+                    />
+                  </Col>
+                  <Col>
+                    <Form.Control
+                      className="mx-2"
+                      type="number"
+                      name="reservationTime"
+                      id="product-rating"
+                      placeholder="Reservation time"
+                      onChange={handleNewProductInputChange}
+                    />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <Row>
+                <Button
+                  type="submit"
+                  className="ms-auto mb-5"
+                  style={{ width: "250px" }}
+                >
+                  Add Product
+                </Button>
+              </Row>
+            </Form>
           </Col>
         </Row>
+        <Col style={{ textAlign: "left" }}>
+          {session?.user!.role === "seller" && (
+            <div className="mb-4">
+              <h5 className="mb-2">com&com Store:</h5>
+              {sellerProducts.length > 0 ? (
+                <Link className="mb-2" href={`/store/${session.user!.id}`}>
+                  Click to access your Store
+                </Link>
+              ) : (
+                <p>Add products using the form above to build your store.</p>
+              )}
+            </div>
+          )}
+        </Col>
       </Container>
       <hr />
       {/* Products Table */}

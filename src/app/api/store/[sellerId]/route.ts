@@ -19,14 +19,14 @@ export async function GET(req: NextRequest) {
     const productsBySeller = await ProductModel.find({ seller: sellerId });
     const sellerInfo = await UserModel.findById(sellerId);
 
-    if (!productsBySeller.length) {
-      return NextResponse.json(
-        {
-          message: `No products by seller ${sellerId} found in the database.`,
-        },
-        { status: 400 }
-      );
-    }
+    // if (!productsBySeller.length) {
+    //   return NextResponse.json(
+    //     {
+    //       message: `No products by seller ${sellerId} found in the database.`,
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
 
     return NextResponse.json({
       message: `All products from seller ${sellerId} and additional seller info.`,

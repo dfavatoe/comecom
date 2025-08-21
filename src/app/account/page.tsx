@@ -230,20 +230,6 @@ const AccountPage = () => {
               <div className="mb-4">
                 <b>Email: </b> {user.email}
               </div>
-              {user.role === "seller" && (
-                <div className="mb-4">
-                  <b>com&com Store: </b>
-                  {user.address ? (
-                    <Link className="mb-2" href={`/store/${user._id}`}>
-                      My Store
-                    </Link>
-                  ) : (
-                    <p>
-                      Complete the address and add products to build your store.
-                    </p>
-                  )}
-                </div>
-              )}
             </Col>
             <Col
               sm={6}

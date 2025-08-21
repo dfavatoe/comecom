@@ -29,10 +29,12 @@ export default function Store() {
       try {
         const response = await fetch(`/api/store/${sellerId}`);
         console.log("response :>> ", response);
+
         if (!response.ok) {
           console.log("Something went wrong");
           return;
         }
+
         const result = (await response.json()) as GetShopInfo;
         console.log("result Shop :>> ", result);
         setSeller(result.sellerInfo);
