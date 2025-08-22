@@ -6,7 +6,6 @@ import ProductCardStore from "@/components/ProductCardStore";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useSession } from "next-auth/react";
 import StartChatButton from "@/components/StartChatButton";
 import "@/app/globals.css";
 
@@ -17,8 +16,6 @@ const MapClient = dynamic(() => import("@/components/MapClient"), {
 export default function Store() {
   const { sellerId } = useParams<{ sellerId: string }>();
   console.log("sellerId :>> ", sellerId);
-
-  // const { data: session } = useSession();
 
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
@@ -51,10 +48,6 @@ export default function Store() {
     handleGetSellerShopInfo();
   }, [handleGetSellerShopInfo]);
 
-  // if (!session?.user) {
-  //   return <div>Not authenticated</div>;
-  // }
-
   const sellerAddress = seller?.address
     ? `${seller.address.streetName} ${seller.address.streetNumber}, ${seller.address.postalcode} ${seller.address.city}`
     : "";
@@ -77,22 +70,6 @@ export default function Store() {
               className="align-content-center mb-4"
               style={{ height: "auto" }}
             >
-              {/* {seller.storeCoverImage ? (
-                <Image
-                  className="mb-4"
-                  src={seller.storeCoverImage}
-                  alt="Store's cover image"
-                  style={{ height: "350px", objectFit: "cover" }}
-                />
-              ) : (
-                <Image
-                  className="mb-4"
-                  src={seller.image}
-                  alt="Store's logo"
-                  style={{ height: "300px", objectFit: "cover" }}
-                />
-              )} */}
-
               <Image
                 className="mb-4"
                 style={{ height: "350px", objectFit: "cover" }}
