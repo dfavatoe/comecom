@@ -562,7 +562,7 @@ export default function SellerProductsList() {
                   Click to access your Store
                 </Link>
               ) : (
-                <p>Add products using the form above to build your store.</p>
+                <p>Add products using the form above to complete your store.</p>
               )}
             </div>
           )}

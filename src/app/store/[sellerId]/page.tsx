@@ -77,7 +77,7 @@ export default function Store() {
               className="align-content-center mb-4"
               style={{ height: "auto" }}
             >
-              {seller.storeCoverImage ? (
+              {/* {seller.storeCoverImage ? (
                 <Image
                   className="mb-4"
                   src={seller.storeCoverImage}
@@ -91,7 +91,20 @@ export default function Store() {
                   alt="Store's logo"
                   style={{ height: "300px", objectFit: "cover" }}
                 />
-              )}
+              )} */}
+
+              <Image
+                className="mb-4"
+                style={{ height: "350px", objectFit: "cover" }}
+                src={
+                  seller?.storeCoverImage ||
+                  seller?.image ||
+                  "/images/storePlaceholder.png"
+                }
+                alt="Store cover"
+                width={600}
+                height={350}
+              />
 
               <h1 className="second-header" style={{ textAlign: "center" }}>
                 {seller.name}
@@ -146,7 +159,7 @@ export default function Store() {
                 background: "var(--secondary)",
               }}
             >
-              {products ? (
+              {products.length > 0 ? (
                 products.map((product) => {
                   return (
                     <Row
@@ -158,7 +171,11 @@ export default function Store() {
                   );
                 })
               ) : (
-                <h2>Seller didn&apos;t share any product yet.</h2>
+                <h6 className="d-flex justify-content-center">
+                  Add products to your&nbsp;
+                  <Link href="/account/products-list">Products List</Link>&nbsp;
+                  to complete your store.
+                </h6>
               )}
             </div>
 
