@@ -18,7 +18,7 @@ export default function Store() {
   const { sellerId } = useParams<{ sellerId: string }>();
   console.log("sellerId :>> ", sellerId);
 
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
 
   const [seller, setSeller] = useState<UserFull | null>(null);
   const [products, setProducts] = useState<ProductT[] | null>(null);
