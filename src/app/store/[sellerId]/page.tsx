@@ -51,6 +51,10 @@ export default function Store() {
     handleGetSellerShopInfo();
   }, [handleGetSellerShopInfo]);
 
+  // if (!session?.user) {
+  //   return <div>Not authenticated</div>;
+  // }
+
   const sellerAddress = seller?.address
     ? `${seller.address.streetName} ${seller.address.streetNumber}, ${seller.address.postalcode} ${seller.address.city}`
     : "";
