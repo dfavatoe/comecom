@@ -58,6 +58,8 @@ export const register = async (values: RegisterValues) => {
 // Add Products to the Shopping List =========================================
 
 export async function addProductToList(productId: string): Promise<void> {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
   const session = await auth();
 
   if (!session || !session.user?.id) {
@@ -79,7 +81,7 @@ export async function addProductToList(productId: string): Promise<void> {
 
   try {
     const response = await fetch(
-      `/api/products-list/add-product-to-list`,
+      `${baseUrl}/api/products-list/add-product-to-list`,
       requestOptions
     );
 
