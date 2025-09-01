@@ -58,41 +58,67 @@ export const register = async (values: RegisterValues) => {
 // Add Products to the Shopping List =========================================
 
 export async function addProductToList(productId: string): Promise<void> {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
   const session = await auth();
 
-  if (!session || !session.user?.id) {
-    throw new Error("Log in to add a product to the shopping list");
+  if (!session?.user?.id) {
+    throw new Error("You must log in to add a product.");
   }
 
-  const userId = session.user.id;
+  await dbConnect();
 
-  const requestOptions = {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      userId,
-      productsList: productId,
-    }),
-  };
-
-  try {
-    const response = await fetch(
-      `${baseUrl}/api/products-list/add-product-to-list`,
-      requestOptions
-    );
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.error || "Failed to add product to list");
-    }
-
-    console.log("Product added successfully :>> ", data);
-  } catch (error) {
-    console.log("Error adding product to list :>> ", error);
-    throw error;
+  const user = await UserModel.findById(session.user.id);
+  if (!user) {
+    throw new Error("User not found");
   }
+
+  if (user.productsList.includes(productId)) {
+    throw new Error("This product is already in your shopping list.");
+  }
+
+  user.productsList.push(productId);
+  await user.save();
+
+  console.log("Product added successfully:", productId);
 }
+
+// export async function addProductToList(productId: string): Promise<void> {
+//   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+//   const session = await auth();
+
+//   if (!session || !session.user?.id) {
+//     throw new Error("Log in to add a product to the shopping list");
+//   }
+
+//   const userId = session.user.id;
+
+//   const requestOptions = {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       userId,
+//       productsList: productId,
+//     }),
+//   };
+
+//   try {
+//     const response = await fetch(
+//       `${baseUrl}/api/products-list/add-product-to-list`,
+//       requestOptions
+//     );
+
+//     const data = await response.json();
+//     console.log("API response :>> ", response.status, data);
+
+//     if (!response.ok) {
+//       throw new Error(data.error || "Failed to add product to list");
+//     }
+
+//     console.log("Product added successfully :>> ", data);
+//   } catch (error) {
+//     console.log("Error adding product to list :>> ", error);
+//     throw error;
+//   }
+// }

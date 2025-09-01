@@ -27,9 +27,15 @@ export default function AddToShoppingListButton({
     try {
       await addProductToList(productId);
       showToast("Product added to your shopping list!", "success");
-    } catch (err) {
-      console.error("Error: ", err);
-      showToast("Failed to add product to the shopping list.", "danger");
+    } catch (err: unknown) {
+      console.error("Error adding product: ", err);
+
+      let message = "Failed to add product to the shopping list.";
+      if (err instanceof Error) {
+        message = err.message;
+      }
+
+      showToast(message, "danger");
     } finally {
       setLoading(false);
     }
@@ -42,7 +48,7 @@ export default function AddToShoppingListButton({
         disabled={loading}
         className="btn btn-warning"
       >
-        Add to List
+        {loading ? "Adding..." : "Add to List"}
       </button>
     </div>
   );
