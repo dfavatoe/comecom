@@ -9,7 +9,7 @@ type AddToShoppingListButtonProps = {
   productId: string;
 };
 
-export default async function AddToShoppingListButton({
+export default function AddToShoppingListButton({
   productId,
 }: AddToShoppingListButtonProps) {
   const { data: session } = useSession();
