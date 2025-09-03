@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useSession } from "next-auth/react";
+// import { useSession } from "next-auth/react";
 import { addProductToList } from "@/app/lib/actions";
 import { useToast } from "@/hooks/useToast";
 
@@ -12,7 +12,7 @@ type AddToShoppingListButtonProps = {
 export default function AddToShoppingListButton({
   productId,
 }: AddToShoppingListButtonProps) {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const { showToast } = useToast();
   const [loading, setLoading] = useState(false);
 
