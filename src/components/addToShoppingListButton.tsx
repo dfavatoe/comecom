@@ -17,10 +17,10 @@ export default function AddToShoppingListButton({
   const [loading, setLoading] = useState(false);
 
   const handleAddToList = async () => {
-    if (!session) {
-      showToast("Log in to add products to your shopping list", "warning");
-      return;
-    }
+    // if (!session) {
+    //   showToast("Log in to add products to your shopping list", "warning");
+    //   return;
+    // }
 
     setLoading(true);
 
