@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { addProductToList } from "@/app/lib/actions";
+// import { addProductToList } from "@/app/lib/actions";
 import { useToast } from "@/hooks/useToast";
 
 type AddToShoppingListButtonProps = {
