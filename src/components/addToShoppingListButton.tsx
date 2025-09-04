@@ -46,11 +46,27 @@ export default function AddToShoppingListButton({
       const data = await response.json();
       console.log("API response :>> ", response.status, data);
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to add product to list");
+      if (response.status === 400) {
+        showToast(
+          data.message ||
+            data.error ||
+            "You already have this product in the shopping list.",
+          "warning"
+        );
+        return;
       }
 
-      console.log("Product added successfully :>> ", data);
+      if (response.status === 404) {
+        showToast(data.error || "User not found.", "danger");
+        return;
+      }
+
+      if (!response.ok) {
+        showToast(data.error || "Something went wrong.", "danger");
+        return;
+      }
+
+      showToast(data.message || "Product successfully added!", "success");
     } catch (error) {
       console.log("Error adding product to list :>> ", error);
       throw error;
