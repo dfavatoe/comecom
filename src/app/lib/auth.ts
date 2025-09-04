@@ -50,6 +50,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  session: {
+    strategy: "jwt", // Ensure using JWT sessions
+    maxAge: 60 * 60 * 24 * 7, // 7 days (in seconds)
+    updateAge: 60 * 60 * 24, // Update token every 24h (User stays logged in indefinitely as long as they’re active every ≤1d.)
+  },
+
+  jwt: {
+    maxAge: 60 * 60 * 24 * 7, // Match session maxAge (7 days)
+  },
+
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
