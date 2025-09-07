@@ -24,18 +24,18 @@ export default function AddToShoppingListButton({
 
     setLoading(true);
 
-    const userId = session?.user?.id;
+    // const userId = session?.user?.id;
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId,
-        productsList: productId,
-      }),
-    };
+    // const requestOptions = {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     userId,
+    //     productsList: productId,
+    //   }),
+    // };
 
     // try {
     //   const response = await fetch(
