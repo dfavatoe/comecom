@@ -19,7 +19,7 @@ export function SignOut() {
           padding: 0,
         }}
       >
-        <b>Log Out</b>
+        <b>&nbsp; Log Out</b>
       </Button>
     </>
   );

@@ -35,14 +35,16 @@ function NavBar() {
             <Nav.Link href="/account" as={Link}>
               Account
             </Nav.Link>
-            <NavDropdown title="Register" id="navbarScrollingDropdown">
-              <NavDropdown.Item href="/login" as={Link}>
-                Login
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/signup" as={Link}>
-                Sign up
-              </NavDropdown.Item>
-            </NavDropdown>
+            {!session?.user && (
+              <NavDropdown title="Register" id="navbarScrollingDropdown">
+                <NavDropdown.Item href="/login" as={Link}>
+                  Login
+                </NavDropdown.Item>
+                <NavDropdown.Item href="/signup" as={Link}>
+                  Sign up
+                </NavDropdown.Item>
+              </NavDropdown>
+            )}
           </Nav>
 
           <div className="d-lg-flex justify-content-end align-items-center">

@@ -27,13 +27,16 @@ function Login() {
 
     if (result?.error) {
       showToast("Invalid credentials. Please try again.", "danger");
-    } else if (result?.ok) {
+    } else {
       showToast("Successfully logged in!", "success");
 
-      //Reset form
+      // Reset form
       if (ref.current) {
         ref.current.reset();
       }
+
+      //Redirect to home
+      router.push("/products");
     }
   };
 
