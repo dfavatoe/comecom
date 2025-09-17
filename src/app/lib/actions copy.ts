@@ -66,6 +66,11 @@ type AddProductResult = {
 export async function addProductToList(
   productId: string
 ): Promise<AddProductResult> {
+  const baseUrl =
+    typeof window === "undefined"
+      ? process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      : "";
+
   const session = await auth();
 
   if (!session || !session.user?.id) {
@@ -79,37 +84,41 @@ export async function addProductToList(
   const userId = session.user.id;
 
   try {
-    await dbConnect();
+    const response = await fetch(
+      `${baseUrl}/api/products-list/add-product-to-list`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          productsList: productId,
+        }),
+      }
+    );
 
-    const user = await UserModel.findById(userId);
+    const data = await response.json();
 
-    if (!user) {
-      return { ok: false, status: 404, message: "User not found." };
-    }
-
-    // Check if already in list
-    if (user.productsList.includes(productId)) {
+    if (!response.ok) {
       return {
         ok: false,
-        status: 400,
-        message: "You already have this product in your shopping list.",
+        status: response.status,
+        message: data.error || data.message || "Failed to add product to list",
       };
     }
-
-    user.productsList.push(productId);
-    await user.save();
 
     return {
       ok: true,
       status: 200,
-      message: "Product successfully added!",
+      message: data.message || "Product successfully added!",
     };
   } catch (error) {
-    console.error("DB error adding product to list :>> ", error);
+    console.error("Error adding product to list :>> ", error);
     return {
       ok: false,
       status: 500,
-      message: "Something went wrong. Please try again later.",
+      message: "Something went wrong. Please try again.",
     };
   }
 }

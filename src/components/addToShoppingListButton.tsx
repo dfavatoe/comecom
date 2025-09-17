@@ -29,14 +29,13 @@ export default function AddToShoppingListButton({
 
       if (!result.ok) {
         if (result.status === 400) {
-          showToast(
-            result.message || "You already have this product.",
-            "warning"
-          );
+          showToast(result.message, "warning");
         } else if (result.status === 404) {
-          showToast(result.message || "User not found.", "danger");
+          showToast(result.message, "danger");
+        } else if (result.status === 401) {
+          showToast(result.message, "warning");
         } else {
-          showToast(result.message || "Something went wrong.", "danger");
+          showToast(result.message, "danger");
         }
         return;
       }
